@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
-class IndexPage extends StatelessWidget {
+class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('indexpage'),
+        title: Text('登录'),
       ),
       body: Center(
-        child: Text('indexpage'),
+        child: Text('登录'),
       ),
     );
   }

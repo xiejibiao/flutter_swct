@@ -1,8 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_swcy/pages/index_page.dart';
+import 'package:flutter_swcy/pages/init_page.dart';
+import 'package:flutter_swcy/pages/login/login_page.dart';
+import 'package:flutter_swcy/provide/init_page_provide.dart';
 import 'package:oktoast/oktoast.dart';
+import 'package:provide/provide.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  var initPageProvide = InitPageProvide();
+  var providers = Providers();
+  providers..provide(Provider<InitPageProvide>.value(initPageProvide));
+  runApp(
+    ProviderNode(
+      child: MyApp(),
+      providers: providers,
+    )
+  );
+}
 
 class MyApp extends StatelessWidget{
   @override
@@ -20,7 +34,12 @@ class MyApp extends StatelessWidget{
           theme: ThemeData(
               primaryColor: Colors.blue
           ),
-          home: IndexPage(),
+          initialRoute: '/',
+          routes: <String, WidgetBuilder>{
+            '/': (BuildContext context) => InitPage(),
+            '/loginPage': (BuildContext context) => LoginPage(),
+            '/indexPage': (BuildContext context) => IndexPage(),
+          },
         ),
       ),
     );
