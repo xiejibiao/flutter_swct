@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_swcy/pages/index_page.dart';
-import 'package:flutter_swcy/pages/init_page.dart';
-import 'package:flutter_swcy/pages/login/login_page.dart';
+import 'package:flutter_swcy/provide/index_page_provide.dart';
 import 'package:flutter_swcy/provide/init_page_provide.dart';
+import 'package:flutter_swcy/provide/person/person_info_provide.dart';
+import 'package:flutter_swcy/router/route_map.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:provide/provide.dart';
 
 void main() {
   var initPageProvide = InitPageProvide();
+  var personInfoProvide = PersonInfoProvide();
+  var indexPageProvide = IndexPageProvide();
   var providers = Providers();
-  providers..provide(Provider<InitPageProvide>.value(initPageProvide));
+  providers
+  ..provide(Provider<InitPageProvide>.value(initPageProvide))
+  ..provide(Provider<IndexPageProvide>.value(indexPageProvide))
+  ..provide(Provider<PersonInfoProvide>.value(personInfoProvide));
   runApp(
     ProviderNode(
       child: MyApp(),
@@ -35,11 +40,7 @@ class MyApp extends StatelessWidget{
               primaryColor: Colors.blue
           ),
           initialRoute: '/',
-          routes: <String, WidgetBuilder>{
-            '/': (BuildContext context) => InitPage(),
-            '/loginPage': (BuildContext context) => LoginPage(),
-            '/indexPage': (BuildContext context) => IndexPage(),
-          },
+          routes: routeMap,
         ),
       ),
     );

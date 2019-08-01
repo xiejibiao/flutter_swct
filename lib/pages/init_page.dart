@@ -10,6 +10,7 @@ class InitPage extends StatelessWidget {
     ScreenUtil.instance = ScreenUtil(width: 750, height: 1334)..init(context);
     Provide.value<InitPageProvide>(context).init(context);
     return Scaffold(
+      backgroundColor: Color.fromRGBO(244, 245, 245, 1.0),
       appBar: AppBar(
         title: Text('三维创业'),
       ),
