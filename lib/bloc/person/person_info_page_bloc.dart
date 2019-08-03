@@ -31,10 +31,9 @@ class PersonInfoPageBloc extends BlocBase {
       if (token == null) {
         Navigator.pushAndRemoveUntil(context, CupertinoPageRoute(builder: (context) => LoginPage()), (route) => route == null);
       } else {
-        requestPost('getPersonInfo', token: token, context: context).then((val) async {
-          PersonInfoVo personInfoVo = PersonInfoVo.fromJson(val);
+        getPerson(context, token).then((val) async {
+          PersonInfoVo personInfoVo = val;
           if (personInfoVo.code == '200') {
-            _personInfoVoSink.add(personInfoVo);
             Navigator.pushAndRemoveUntil(context, CupertinoPageRoute(builder: (context) => BlocProvider(bloc: IndexPageBloc(), child: IndexPage())), (route) => route == null);
           } else {
             cleanToken();
@@ -61,9 +60,20 @@ class PersonInfoPageBloc extends BlocBase {
         CommenVo commenVo = CommenVo.fromJson(val);
         if (commenVo.code == '200') {
           showToast('上传成功');
+          getPerson(context, token);
         }
         return commenVo;
       });
+    });
+  }
+
+  Future getPerson(BuildContext context, String token) async {
+    return await requestPost('getPersonInfo', token: token, context: context).then((val) {
+      PersonInfoVo personInfoVo = PersonInfoVo.fromJson(val);
+        if (personInfoVo.code == '200') {
+          _personInfoVoSink.add(personInfoVo);
+        }
+        return personInfoVo;
     });
   }
 

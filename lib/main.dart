@@ -4,7 +4,7 @@ import 'package:flutter_swcy/bloc/bloc_provider.dart';
 import 'package:flutter_swcy/bloc/home_page_bloc.dart';
 import 'package:flutter_swcy/bloc/order_page_bloc.dart';
 import 'package:flutter_swcy/bloc/person/person_info_page_bloc.dart';
-import 'package:flutter_swcy/bloc/person_bloc.dart';
+import 'package:flutter_swcy/bloc/person_page_bloc.dart';
 import 'package:flutter_swcy/common/shared_preferences.dart';
 import 'package:flutter_swcy/pages/init_page.dart';
 import 'package:oktoast/oktoast.dart';
@@ -18,7 +18,7 @@ void main() {
         child: BlocProvider(
           bloc: OrderPageBloc(),
           child: BlocProvider(
-            bloc: PersonBloc(),
+            bloc: PersonPageBloc(),
             child: MyApp(),
           ),
         ),

@@ -1,8 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_swcy/bloc/bloc_provider.dart';
+import 'package:flutter_swcy/bloc/person/person_info_page_bloc.dart';
 import 'package:flutter_swcy/pages/person/person_share_page.dart';
 import 'package:flutter_swcy/vo/home/home_vo.dart';
+import 'package:flutter_swcy/vo/person/person_info_vo.dart';
 
 class HomeHeadTop extends StatelessWidget {
   final HomePageVo homePageVo;
@@ -11,21 +14,22 @@ class HomeHeadTop extends StatelessWidget {
   );
   @override
   Widget build(BuildContext context) {
+    final PersonInfoPageBloc _personInfoBloc = BlocProvider.of<PersonInfoPageBloc>(context);
     return Card(
       child: Padding(
         padding: EdgeInsets.all(10.0),
-        child: _head(context),
+        child: _head(context, _personInfoBloc),
       ),
     );
   }
 
-  Widget _head (BuildContext context) {
+  Widget _head (BuildContext context, PersonInfoPageBloc personInfoBloc) {
     return Column(
       children: <Widget>[
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            _heanTop(),
+            _heanTop(context, personInfoBloc),
             _qrCode(context)
           ],
         ),
@@ -42,29 +46,39 @@ class HomeHeadTop extends StatelessWidget {
   }
 
   // 头像昵称
-  Widget _heanTop () {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        ClipRRect(
-          borderRadius: BorderRadius.circular(6.0),
-          child: Image.network(
-            homePageVo.data.avatar,
-            width: ScreenUtil().setWidth(170),
-            height: ScreenUtil().setWidth(170),
-            fit: BoxFit.fill,
-          ),
-        ),
-        SizedBox(
-          width: ScreenUtil().setWidth(10),
-        ),
-        Text(
-          homePageVo.data.nikeName,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(32)
-          ),
-        ),
-      ],
+  Widget _heanTop (BuildContext context, PersonInfoPageBloc personInfoBloc) {
+    return StreamBuilder(
+      stream: personInfoBloc.personInfoVoStream,
+      builder: (context, snapshop) {
+        if (snapshop.hasData) {
+          PersonInfoVo personInfoVo = snapshop.data;
+          return Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              ClipRRect(
+                borderRadius: BorderRadius.circular(6.0),
+                child: Image.network(
+                  personInfoVo.data.avatar,
+                  width: ScreenUtil().setWidth(170),
+                  height: ScreenUtil().setWidth(170),
+                  fit: BoxFit.fill,
+                ),
+              ),
+              SizedBox(
+                width: ScreenUtil().setWidth(10),
+              ),
+              Text(
+                personInfoVo.data.nikeName,
+                style: TextStyle(
+                  fontSize: ScreenUtil().setSp(32)
+                ),
+              ),
+            ],
+          );
+        } else {
+          return Text('');
+        }
+      },
     );
   }
 

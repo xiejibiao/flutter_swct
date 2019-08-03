@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_swcy/bloc/bloc_provider.dart';
-import 'package:flutter_swcy/bloc/person_bloc.dart';
+import 'package:flutter_swcy/bloc/person_page_bloc.dart';
 import 'package:flutter_swcy/common/loading.dart';
 import 'package:flutter_swcy/pages/person/person_page_hand.dart';
 import 'package:flutter_swcy/pages/person/person_page_item_buttom.dart';
@@ -11,7 +11,7 @@ class PersonPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final PersonBloc _bloc = BlocProvider.of<PersonBloc>(context);
+    final PersonPageBloc _bloc = BlocProvider.of<PersonPageBloc>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('我的'),
