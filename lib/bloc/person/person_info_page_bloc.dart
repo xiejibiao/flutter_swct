@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_swcy/bloc/bloc_provider.dart';
@@ -18,16 +19,16 @@ class PersonInfoPageBloc extends BlocBase {
   getPersonInfo(BuildContext context) {
     getToken().then((token) {
       if (token == null) {
-        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => LoginPage()), (route) => route == null);
+        Navigator.pushAndRemoveUntil(context, CupertinoPageRoute(builder: (context) => LoginPage()), (route) => route == null);
       } else {
         requestPost('getPersonInfo', token: token, context: context).then((val) async {
           PersonInfoVo personInfoVo = PersonInfoVo.fromJson(val);
           if (personInfoVo.code == '200') {
             _personInfoVoSink.add(personInfoVo);
-            Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => BlocProvider(bloc: IndexPageBloc(), child: IndexPage())), (route) => route == null);
+            Navigator.pushAndRemoveUntil(context, CupertinoPageRoute(builder: (context) => BlocProvider(bloc: IndexPageBloc(), child: IndexPage())), (route) => route == null);
           } else {
             cleanToken();
-            Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => LoginPage()), (route) => route == null);
+            Navigator.pushAndRemoveUntil(context, CupertinoPageRoute(builder: (context) => LoginPage()), (route) => route == null);
           }
         });
       }
