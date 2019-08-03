@@ -10,13 +10,13 @@ import 'package:qr_flutter/qr_flutter.dart';
 class PersonSharePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final PersonInfoPageBloc bloc = BlocProvider.of<PersonInfoPageBloc>(context);
+    final PersonInfoPageBloc _bloc = BlocProvider.of<PersonInfoPageBloc>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('我的分享码'),
       ),
       body: StreamBuilder(
-        stream: bloc.personInfoVoStream,
+        stream: _bloc.personInfoVoStream,
         builder: (context, sanpshop) {
           if (sanpshop.hasData) {
             PersonInfoVo personInfoVo = sanpshop.data;

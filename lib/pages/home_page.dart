@@ -10,16 +10,16 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final HomePageBloc bloc = BlocProvider.of<HomePageBloc>(context);
+    final HomePageBloc _bloc = BlocProvider.of<HomePageBloc>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('三维创业'),
       ),
       body: FutureBuilder(
-        future: bloc.getHomePage(context),
+        future: _bloc.getHomePage(context),
         builder: (context, sanpshop) {
           return StreamBuilder(
-            stream: bloc.homeVoStream,
+            stream: _bloc.homeVoStream,
             builder: (context, blocSanpshop) {
               if (blocSanpshop.hasData) {
                 HomePageVo homePageVo = blocSanpshop.data;

@@ -39,10 +39,10 @@ class IndexPage extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
-    final IndexPageBloc bloc = BlocProvider.of<IndexPageBloc>(context);
+    final IndexPageBloc _bloc = BlocProvider.of<IndexPageBloc>(context);
     return StreamBuilder(
       initialData: 0,
-      stream: bloc.indexPageStream,
+      stream: _bloc.indexPageStream,
       builder: (context, sanpshop) {
         return Scaffold(
           backgroundColor: Color.fromRGBO(244, 245, 245, 1.0),
@@ -57,7 +57,7 @@ class IndexPage extends StatelessWidget {
             type: BottomNavigationBarType.fixed,
             currentIndex: sanpshop.data,
             onTap: (index) {
-              bloc.thisCurrentIndex(index);
+              _bloc.thisCurrentIndex(index);
             },
           ),
         );

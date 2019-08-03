@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swcy/bloc/bloc_provider.dart';
 import 'package:flutter_swcy/bloc/home_page_bloc.dart';
+import 'package:flutter_swcy/bloc/order_page_bloc.dart';
 import 'package:flutter_swcy/bloc/person/person_info_page_bloc.dart';
 import 'package:flutter_swcy/common/shared_preferences.dart';
 import 'package:flutter_swcy/pages/init_page.dart';
@@ -13,7 +14,10 @@ void main() {
       bloc: PersonInfoPageBloc(),
       child: BlocProvider(
         bloc: HomePageBloc(),
-        child: MyApp(),
+        child: BlocProvider(
+          bloc: OrderPageBloc(),
+          child: MyApp(),
+        ),
       ),
     )
   );
