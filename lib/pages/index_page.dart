@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_swcy/bloc/bloc_provider.dart';
+import 'package:flutter_swcy/bloc/index_page_bloc.dart';
 import 'package:flutter_swcy/pages/home_page.dart';
 import 'package:flutter_swcy/pages/shop_page.dart';
 import 'package:flutter_swcy/pages/order_page.dart';
 import 'package:flutter_swcy/pages/person_page.dart';
-import 'package:flutter_swcy/provide/index_page_provide.dart';
-import 'package:provide/provide.dart';
 
 class IndexPage extends StatelessWidget {
   // 底部导航
@@ -39,12 +39,15 @@ class IndexPage extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
-    return Provide<IndexPageProvide>(
-      builder: (context, child, indexPageProvide) {
+    final IndexPageBloc bloc = BlocProvider.of<IndexPageBloc>(context);
+    return StreamBuilder(
+      initialData: 0,
+      stream: bloc.indexPageStream,
+      builder: (context, sanpshop) {
         return Scaffold(
           backgroundColor: Color.fromRGBO(244, 245, 245, 1.0),
           body: IndexedStack(
-            index: indexPageProvide.currentIndex,
+            index: sanpshop.data,
             children: bottomTabView,
           ),
           bottomNavigationBar: BottomNavigationBar(
@@ -52,9 +55,9 @@ class IndexPage extends StatelessWidget {
             unselectedFontSize: ScreenUtil().setSp(26),
             items: bottomTabs,
             type: BottomNavigationBarType.fixed,
-            currentIndex: indexPageProvide.currentIndex,
+            currentIndex: sanpshop.data,
             onTap: (index) {
-              indexPageProvide.bottomNavigationBarIndex(index);
+              bloc.thisCurrentIndex(index);
             },
           ),
         );

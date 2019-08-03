@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_swcy/bloc/bloc_provider.dart';
+import 'package:flutter_swcy/bloc/person/person_info_page_bloc.dart';
 import 'package:flutter_swcy/common/loading.dart';
-import 'package:flutter_swcy/provide/init_page_provide.dart';
-import 'package:provide/provide.dart';
 
 class InitPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ScreenUtil.instance = ScreenUtil(width: 750, height: 1334)..init(context);
-    Provide.value<InitPageProvide>(context).init(context);
+    BlocProvider.of<PersonInfoPageBloc>(context).getPersonInfo(context);
     return Scaffold(
       backgroundColor: Color.fromRGBO(244, 245, 245, 1.0),
       appBar: AppBar(

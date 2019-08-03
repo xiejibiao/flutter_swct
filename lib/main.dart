@@ -1,24 +1,20 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_swcy/provide/index_page_provide.dart';
-import 'package:flutter_swcy/provide/init_page_provide.dart';
-import 'package:flutter_swcy/provide/person/person_info_provide.dart';
-import 'package:flutter_swcy/router/route_map.dart';
+import 'package:flutter_swcy/bloc/bloc_provider.dart';
+import 'package:flutter_swcy/bloc/home_page_bloc.dart';
+import 'package:flutter_swcy/bloc/person/person_info_page_bloc.dart';
+import 'package:flutter_swcy/common/shared_preferences.dart';
+import 'package:flutter_swcy/pages/init_page.dart';
 import 'package:oktoast/oktoast.dart';
-import 'package:provide/provide.dart';
 
 void main() {
-  var initPageProvide = InitPageProvide();
-  var personInfoProvide = PersonInfoProvide();
-  var indexPageProvide = IndexPageProvide();
-  var providers = Providers();
-  providers
-  ..provide(Provider<InitPageProvide>.value(initPageProvide))
-  ..provide(Provider<IndexPageProvide>.value(indexPageProvide))
-  ..provide(Provider<PersonInfoProvide>.value(personInfoProvide));
   runApp(
-    ProviderNode(
-      child: MyApp(),
-      providers: providers,
+    BlocProvider(
+      bloc: PersonInfoPageBloc(),
+      child: BlocProvider(
+        bloc: HomePageBloc(),
+        child: MyApp(),
+      ),
     )
   );
 }
@@ -26,6 +22,7 @@ void main() {
 class MyApp extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
+    saveToken('98fc13f7-6f17-4f30-aa38-e4855772789c');
     return Container(
       child: OKToast(
         dismissOtherOnShow: true,
@@ -39,8 +36,7 @@ class MyApp extends StatelessWidget{
           theme: ThemeData(
               primaryColor: Colors.blue
           ),
-          initialRoute: '/',
-          routes: routeMap,
+          home: InitPage(),
         ),
       ),
     );

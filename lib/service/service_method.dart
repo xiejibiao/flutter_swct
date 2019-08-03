@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_swcy/common/shared_preferences.dart';
+import 'package:flutter_swcy/pages/login/login_page.dart';
 import 'package:oktoast/oktoast.dart';
 import 'dart:async';
 import 'service_url.dart';
@@ -44,7 +46,7 @@ Future requestPost(url, {formData, token, context}) async {
     } else if (e.type == DioErrorType.RESPONSE) {
       showToast('10004：请求异常');
       cleanToken();
-      Navigator.pushNamedAndRemoveUntil(context, '/loginPage', (route) => route == null);
+      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => LoginPage()), (route) => route == null);
     } else if (e.type == DioErrorType.CANCEL) {
       showToast('10005：请求取消');
     } else {
