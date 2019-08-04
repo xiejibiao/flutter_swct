@@ -7,18 +7,24 @@ import 'package:rxdart/rxdart.dart';
 
 class PersonPageBloc extends BlocBase {
 
+  bool _isFirst = true;
+
   BehaviorSubject<PersonVo> _personVoController = BehaviorSubject<PersonVo>();
   Sink<PersonVo> get _homeVoSink => _personVoController.sink;
   Stream<PersonVo> get homeVoStream => _personVoController.stream;
 
   getPersonAndAdList(BuildContext context) {
-    return getToken().then((token) async {
-      return await requestPost('getPersonAndAdList', token: token, context: context).then((val) {
-        PersonVo personVo = PersonVo.fromJson(val);
-        _homeVoSink.add(personVo);
-        return personVo;
+    if (_isFirst) {
+      return getToken().then((token) async {
+        return await requestPost('getPersonAndAdList', token: token, context: context).then((val) {
+          PersonVo personVo = PersonVo.fromJson(val);
+          _homeVoSink.add(personVo);
+          this._isFirst = false;
+          return personVo;
+        });
       });
-    });
+    }
+  
   }
 
   @override

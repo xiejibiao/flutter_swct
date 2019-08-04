@@ -6,6 +6,7 @@ import 'package:flutter_swcy/vo/order/order_vo.dart';
 import 'package:rxdart/rxdart.dart';
 
 class OrderPageBloc extends BlocBase {
+  bool _isFirst = true;
   
   BehaviorSubject<OrderPageVo> _orderPageController = BehaviorSubject<OrderPageVo>();
   Sink<OrderPageVo> get _orderPageSink => _orderPageController.sink;
@@ -21,19 +22,22 @@ class OrderPageBloc extends BlocBase {
   bool isEnd = false;
   
   getOrderPage(BuildContext context) async {
-    return await getToken().then((token) async {
-      this.pageNumber = 0;
-      var formData = {
-        'pageNumber': pageNumber,
-        'pageSize': pageSize,
-      };
-      var response = await requestPost('getOrderPage', token: token, formData: formData, context: context);
-      OrderPageVo orderPageVo = OrderPageVo.fromJson(response);
-      _orderPageSink.add(orderPageVo);
-      setIsEnd(orderPageVo.data.totalPage);
-      this.orderPageVo = orderPageVo;
-      return orderPageVo;
-    });
+    if (_isFirst) {
+      return await getToken().then((token) async {
+        this.pageNumber = 0;
+        var formData = {
+          'pageNumber': pageNumber,
+          'pageSize': pageSize,
+        };
+        var response = await requestPost('getOrderPage', token: token, formData: formData, context: context);
+        OrderPageVo orderPageVo = OrderPageVo.fromJson(response);
+        _orderPageSink.add(orderPageVo);
+        setIsEnd(orderPageVo.data.totalPage);
+        this.orderPageVo = orderPageVo;
+        this._isFirst = false;
+        return orderPageVo;
+      });
+    }
   }
 
   loadMoreOrderPage(BuildContext context) async {

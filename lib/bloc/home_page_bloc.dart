@@ -6,19 +6,23 @@ import 'package:flutter_swcy/vo/home/home_vo.dart';
 import 'package:rxdart/rxdart.dart';
 
 class HomePageBloc extends BlocBase {
+  bool _isFirst = true;
 
   BehaviorSubject<HomePageVo> _homeVoController = BehaviorSubject<HomePageVo>();
   Sink<HomePageVo> get _homeVoSink => _homeVoController.sink;
   Stream<HomePageVo> get homeVoStream => _homeVoController.stream;
 
   getHomePage(BuildContext context) {
-    return getToken().then((token) async {
-      return await requestPost('getHomePage', token: token, context: context).then((val) {
-        HomePageVo homePageVo = HomePageVo.fromJson(val);
-        _homeVoSink.add(homePageVo);
-        return homePageVo;
+    if (_isFirst) {
+      return getToken().then((token) async {
+        return await requestPost('getHomePage', token: token, context: context).then((val) {
+          this._isFirst = false;
+          HomePageVo homePageVo = HomePageVo.fromJson(val);
+          _homeVoSink.add(homePageVo);
+          return homePageVo;
+        });
       });
-    });
+    }
   }
 
   @override

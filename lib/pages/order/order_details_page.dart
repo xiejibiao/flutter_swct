@@ -15,32 +15,28 @@ class OrderDetailsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final OrderDetailsBloc _bloc = BlocProvider.of<OrderDetailsBloc>(context);
+    _bloc.getOrderDetailById(orderId, context);
     return Scaffold(
       appBar: AppBar(
         title: Text('订单详情'),
       ),
-      body: FutureBuilder(
-        future: _bloc.getOrderDetailById(orderId, context),
-        builder: (context, sanpshop) {
-          return StreamBuilder(
-            stream: _bloc.orderDetailsStream,
-            builder: (context, blocSanpshop) {
-              if (blocSanpshop.hasData) {
-                OrderDetailsVo orderDetailsVo = blocSanpshop.data;
-                return SingleChildScrollView(
-                  child: Column(
-                    children: <Widget>[
-                      OrderDetailsHand(orderDetailsVo.data.orderPageVo),
-                      OrderDetailsList(orderDetailsVo.data.orderDetailListVo),
-                      OrderDetailsMsg(orderDetailsVo.data.orderPageVo)
-                    ],
-                  ),
-                );
-              } else {
-                return showLoading();
-              }
-            },
-          );
+      body: StreamBuilder(
+        stream: _bloc.orderDetailsStream,
+        builder: (context, blocSanpshop) {
+          if (blocSanpshop.hasData) {
+            OrderDetailsVo orderDetailsVo = blocSanpshop.data;
+            return SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  OrderDetailsHand(orderDetailsVo.data.orderPageVo),
+                  OrderDetailsList(orderDetailsVo.data.orderDetailListVo),
+                  OrderDetailsMsg(orderDetailsVo.data.orderPageVo)
+                ],
+              ),
+            );
+          } else {
+            return showLoading();
+          }
         },
       ),
     );

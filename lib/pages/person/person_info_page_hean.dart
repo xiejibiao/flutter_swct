@@ -1,6 +1,8 @@
 import 'dart:io';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_swcy/bloc/bloc_provider.dart';
 import 'package:flutter_swcy/bloc/person/person_info_page_bloc.dart';
+import 'package:flutter_swcy/pages/person/person_info_edit_nike_name.page.dart';
 import 'package:flutter_swcy/vo/person/person_info_vo.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:flutter/material.dart';
@@ -56,7 +58,7 @@ class PersonInfoPageHead extends StatelessWidget {
   Widget _editNikeNameIcon (BuildContext context) {
     return InkWell(
       onTap: () {
-        // Application.router.navigateTo(context, '/personInfoEditNikeNamePage', transition: TransitionType.inFromRight);
+        Navigator.push(context, CupertinoPageRoute(builder: (context) => PersonInfoEditNikeNamePage()));
       },
       child: Padding(
         padding: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),

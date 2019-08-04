@@ -12,32 +12,28 @@ class PersonPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final PersonPageBloc _bloc = BlocProvider.of<PersonPageBloc>(context);
+    _bloc.getPersonAndAdList(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('我的'),
       ),
-      body: FutureBuilder(
-        future: _bloc.getPersonAndAdList(context),
-        builder: (context, sanpshop) {
-          return StreamBuilder(
-            stream: _bloc.homeVoStream,
-            builder: (context, blocSanpshop) {
-              if (blocSanpshop.hasData) {
-                PersonVo personVo = blocSanpshop.data;
-                return SingleChildScrollView(
-                  child: Column(
-                    children: <Widget>[
-                      PersonPageHand(personVo),
-                      SwiperPage(personVo.data.homeAdVo),
-                      PersonPageItemButtom()
-                    ],
-                  ),
-                );
-              } else {
-                return showLoading();
-              }
-            },
-          );
+      body: StreamBuilder(
+        stream: _bloc.homeVoStream,
+        builder: (context, blocSanpshop) {
+          if (blocSanpshop.hasData) {
+            PersonVo personVo = blocSanpshop.data;
+            return SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  PersonPageHand(personVo),
+                  SwiperPage(personVo.data.homeAdVo),
+                  PersonPageItemButtom()
+                ],
+              ),
+            );
+          } else {
+            return showLoading();
+          }
         },
       ),
     );

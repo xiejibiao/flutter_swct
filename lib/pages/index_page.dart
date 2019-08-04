@@ -9,7 +9,7 @@ import 'package:flutter_swcy/pages/person_page.dart';
 
 class IndexPage extends StatelessWidget {
   // 底部导航
-  final List<BottomNavigationBarItem> bottomTabs = [
+  final List<BottomNavigationBarItem> _bottomTabs = [
     BottomNavigationBarItem(
       icon: ImageIcon(AssetImage('assets/image_icon/icon_home.png')),
       title: Text('首页')
@@ -29,7 +29,7 @@ class IndexPage extends StatelessWidget {
   ];
 
   // 底部导航页
-  final List<Widget> bottomTabView = [
+  final List<Widget> _bottomTabView = [
     HomePage(),
     ShopPage(),
     OrderPage(),
@@ -48,12 +48,12 @@ class IndexPage extends StatelessWidget {
           backgroundColor: Color.fromRGBO(244, 245, 245, 1.0),
           body: IndexedStack(
             index: sanpshop.data,
-            children: bottomTabView,
+            children: _bottomTabView,
           ),
           bottomNavigationBar: BottomNavigationBar(
             selectedFontSize: ScreenUtil().setSp(26),
             unselectedFontSize: ScreenUtil().setSp(26),
-            items: bottomTabs,
+            items: _bottomTabs,
             type: BottomNavigationBarType.fixed,
             currentIndex: sanpshop.data,
             onTap: (index) {

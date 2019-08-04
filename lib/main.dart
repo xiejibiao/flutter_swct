@@ -42,7 +42,7 @@ class MyApp extends StatelessWidget{
           title: '三维创业',
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
-              primaryColor: Colors.blue
+            primaryColor: Colors.blue
           ),
           home: InitPage(),
         ),
