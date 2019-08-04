@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_swcy/pages/person/person_info_authentication_page.dart';
+import 'package:flutter_swcy/pages/person/person_info_edit_mailbox_page.dart';
+import 'package:flutter_swcy/pages/person/person_info_edit_password_page.dart';
 import 'package:flutter_swcy/pages/person/person_share_page.dart';
 import 'package:flutter_swcy/vo/person/person_info_vo.dart';
 
@@ -14,10 +17,10 @@ class PersonInfoPageItem extends StatelessWidget {
     bool isAuthentication = personInfoVo.data.authentication;
     return Column(
       children: <Widget>[
-        _buildItem('assets/image_icon/icon_authentication.png', '实名认证', null, context, value: isAuthentication ? '已认证' : '未认证'),
-        _buildItem('assets/image_icon/icon_mailbox.png', '邮箱', null, context, value: personInfoVo.data.email),
+        _buildItem('assets/image_icon/icon_authentication.png', '实名认证', PersonInfoAuthenticationPage(isAuthentication), context, value: isAuthentication ? '已认证' : '未认证'),
+        _buildItem('assets/image_icon/icon_mailbox.png', '邮箱', PersonInfoEditMailboxPage(), context, value: personInfoVo.data.email),
         _buildItem('assets/image_icon/icon_qr_code.png', '我的分享码', PersonSharePage(), context),
-        _buildItem('assets/image_icon/icon_edit_password.png', '修改密码', null, context),
+        _buildItem('assets/image_icon/icon_edit_password.png', '修改密码', PersonInfoEditPasswordPage(), context),
       ],
     );
   }
