@@ -30,7 +30,7 @@ void main() {
 class MyApp extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
-    saveToken('98fc13f7-6f17-4f30-aa38-e4855772789c');
+    saveToken('e6300078-3e02-4064-b84e-86e8fd4d8cbb');
     return Container(
       child: OKToast(
         dismissOtherOnShow: true,

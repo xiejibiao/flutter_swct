@@ -18,7 +18,7 @@ class PersonPage extends StatelessWidget {
         title: Text('我的'),
       ),
       body: StreamBuilder(
-        stream: _bloc.homeVoStream,
+        stream: _bloc.personVoStream,
         builder: (context, blocSanpshop) {
           if (blocSanpshop.hasData) {
             PersonVo personVo = blocSanpshop.data;

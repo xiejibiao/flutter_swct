@@ -5,20 +5,16 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_swcy/bloc/bloc_provider.dart';
 import 'package:flutter_swcy/bloc/person/person_info_page_bloc.dart';
 
-class PersonInfoAuthenticationPageNot extends StatefulWidget {
-  _PersonInfoAuthenticationPageNotState createState() => _PersonInfoAuthenticationPageNotState();
-}
-
-class _PersonInfoAuthenticationPageNotState extends State<PersonInfoAuthenticationPageNot> {
+class PersonInfoAuthenticationPageNot extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     final PersonInfoPageBloc _bloc = BlocProvider.of<PersonInfoPageBloc>(context);
-    return _authenticationForm(_bloc);
+    return _authenticationForm(_bloc, context);
   }
 
   // 未认证
-  Form _authenticationForm (PersonInfoPageBloc bloc) {
+  Form _authenticationForm (PersonInfoPageBloc bloc, BuildContext context) {
     return Form(
       key: _formKey,
       child: Container(
