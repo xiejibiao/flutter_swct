@@ -5,6 +5,10 @@ import 'package:flutter_swcy/common/loading.dart';
 import 'package:flutter_swcy/vo/person/person_info_vo.dart';
 
 class PersonInfoEditNikeNamePage extends StatelessWidget {
+  final bool isInitNikeName;
+  PersonInfoEditNikeNamePage(
+    this.isInitNikeName
+  );
   @override
   Widget build(BuildContext context) {
     final PersonInfoPageBloc _bloc = BlocProvider.of<PersonInfoPageBloc>(context);
@@ -44,7 +48,7 @@ class PersonInfoEditNikeNamePage extends StatelessWidget {
           ),
           textInputAction: TextInputAction.done,
           onFieldSubmitted: (value) {
-            bloc.upDateNikeName(context, value);
+            bloc.upDateNikeName(context, value, isInitNikeName);
           },
         ),
       ),

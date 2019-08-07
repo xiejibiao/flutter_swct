@@ -6,7 +6,6 @@ import 'package:flutter_swcy/bloc/order_page_bloc.dart';
 import 'package:flutter_swcy/bloc/person/person_info_page_bloc.dart';
 import 'package:flutter_swcy/bloc/person_page_bloc.dart';
 import 'package:flutter_swcy/bloc/shop_page_bloc.dart';
-import 'package:flutter_swcy/common/shared_preferences.dart';
 import 'package:flutter_swcy/pages/init_page.dart';
 import 'package:oktoast/oktoast.dart';
 
@@ -34,7 +33,7 @@ void main() {
 class MyApp extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
-    saveToken('e6300078-3e02-4064-b84e-86e8fd4d8cbb');
+    // saveToken('e6300078-3e02-4064-b84e-86e8fd4d8cbb');
     return Container(
       child: OKToast(
         dismissOtherOnShow: true,

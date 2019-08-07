@@ -7,9 +7,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_swcy/bloc/bloc_provider.dart';
 import 'package:flutter_swcy/bloc/index_page_bloc.dart';
+import 'package:flutter_swcy/bloc/login_page_bloc.dart';
 import 'package:flutter_swcy/common/shared_preferences.dart';
 import 'package:flutter_swcy/pages/index_page.dart';
 import 'package:flutter_swcy/pages/login/login_page.dart';
+import 'package:flutter_swcy/pages/person/person_info_edit_nike_name.page.dart';
 import 'package:flutter_swcy/service/service_method.dart';
 import 'package:flutter_swcy/vo/commen_vo.dart';
 import 'package:flutter_swcy/vo/person/authentication_msg_vo.dart';
@@ -50,15 +52,19 @@ class PersonInfoPageBloc extends BlocBase {
   getPersonInfo(BuildContext context) {
     getToken().then((token) {
       if (token == null) {
-        Navigator.pushAndRemoveUntil(context, CupertinoPageRoute(builder: (context) => LoginPage()), (route) => route == null);
+        Navigator.pushAndRemoveUntil(context, CupertinoPageRoute(builder: (context) => BlocProvider(bloc: LoginPageBloc(), child: LoginPage())), (route) => route == null);
       } else {
         getPerson(context, token).then((val) async {
           PersonInfoVo personInfoVo = val;
           if (personInfoVo.code == '200') {
-            Navigator.pushAndRemoveUntil(context, CupertinoPageRoute(builder: (context) => BlocProvider(bloc: IndexPageBloc(), child: IndexPage())), (route) => route == null);
+            if (personInfoVo.data.nikeName == '' || personInfoVo.data.nikeName == null) {
+              Navigator.pushAndRemoveUntil(context, CupertinoPageRoute(builder: (context) => PersonInfoEditNikeNamePage(true)), (route) => route == null);
+            } else {
+              Navigator.pushAndRemoveUntil(context, CupertinoPageRoute(builder: (context) => BlocProvider(bloc: IndexPageBloc(), child: IndexPage())), (route) => route == null);
+            }            
           } else {
             cleanToken();
-            Navigator.pushAndRemoveUntil(context, CupertinoPageRoute(builder: (context) => LoginPage()), (route) => route == null);
+            Navigator.pushAndRemoveUntil(context, CupertinoPageRoute(builder: (context) => BlocProvider(bloc: LoginPageBloc(), child: LoginPage())), (route) => route == null);
           }
         });
       }
@@ -99,7 +105,7 @@ class PersonInfoPageBloc extends BlocBase {
   }
 
   // 修改昵称
-  upDateNikeName(BuildContext context, String nikeName) {
+  upDateNikeName(BuildContext context, String nikeName, bool isInitNikeName) {
     if (nikeName.isNotEmpty) {    
       getToken().then((token){
         var formData = {
@@ -110,7 +116,11 @@ class PersonInfoPageBloc extends BlocBase {
           if (personInfoCommenVo.code == '200') {
             getPerson(context, token);
             showToast('修改成功');
-            Navigator.pop(context);
+            if (isInitNikeName) {
+              Navigator.pushAndRemoveUntil(context, CupertinoPageRoute(builder: (context) => BlocProvider(bloc: IndexPageBloc(), child: IndexPage())), (route) => route == null);
+            } else {
+              Navigator.pop(context);
+            }
           } else {
             showToast('修改失败');
           }
@@ -177,7 +187,7 @@ class PersonInfoPageBloc extends BlocBase {
             case '200':
               showToast('修改成功， 请重新登录...');
               cleanToken();
-              Navigator.pushAndRemoveUntil(context, CupertinoPageRoute(builder: (context) => LoginPage()), (route) => route == null);
+              Navigator.pushAndRemoveUntil(context, CupertinoPageRoute(builder: (context) => BlocProvider(bloc: LoginPageBloc(), child: LoginPage())), (route) => route == null);
               break;
             default:
               showToast(commenVo.message);

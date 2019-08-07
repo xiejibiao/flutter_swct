@@ -58,7 +58,7 @@ class PersonInfoPageHead extends StatelessWidget {
   Widget _editNikeNameIcon (BuildContext context) {
     return InkWell(
       onTap: () {
-        Navigator.push(context, CupertinoPageRoute(builder: (context) => PersonInfoEditNikeNamePage()));
+        Navigator.push(context, CupertinoPageRoute(builder: (context) => PersonInfoEditNikeNamePage(false)));
       },
       child: Padding(
         padding: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),

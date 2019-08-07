@@ -2,6 +2,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_swcy/bloc/bloc_provider.dart';
+import 'package:flutter_swcy/bloc/login_page_bloc.dart';
 import 'package:flutter_swcy/common/shared_preferences.dart';
 import 'package:flutter_swcy/pages/login/login_page.dart';
 import 'package:oktoast/oktoast.dart';
@@ -47,7 +49,7 @@ Future requestPost(url, {formData, token, context}) async {
     } else if (e.type == DioErrorType.RESPONSE) {
       showToast('10004：请求异常');
       cleanToken();
-      Navigator.pushAndRemoveUntil(context, CupertinoPageRoute(builder: (context) => LoginPage()), (route) => route == null);
+      Navigator.pushAndRemoveUntil(context, CupertinoPageRoute(builder: (context) => BlocProvider(bloc: LoginPageBloc(), child: LoginPage())), (route) => route == null);
     } else if (e.type == DioErrorType.CANCEL) {
       showToast('10005：请求取消');
     } else {
