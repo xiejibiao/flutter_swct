@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_swcy/bloc/bloc_provider.dart';
 import 'package:flutter_swcy/bloc/shop_page_bloc.dart';
 import 'package:flutter_swcy/common/loading.dart';
+import 'package:flutter_swcy/pages/shop/shop_page_search_default_page.dart';
 import 'package:flutter_swcy/pages/shop/shop_page_shop_list.dart';
 import 'package:flutter_swcy/vo/shop/shop_list_vo.dart';
 
@@ -31,9 +32,7 @@ class _ShopPageShopItemBarState extends State<ShopPageShopItemBar> with Automati
         if (sanpshop.hasData) {
           shopListVo = sanpshop.data;
           if (shopListVo.data.list.length == 0) {
-            return Center(
-              child: ImageIcon(AssetImage('assets/image_icon/icon_defect.png'), size: 100, color: Colors.grey),
-            );
+            return ShopPageSearchDefaultPage();
           } else {
             return ShopPageShopList(shopListVo, widget.industryId, widget.latitude, widget.longitude, _bloc);
           }

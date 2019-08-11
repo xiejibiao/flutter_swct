@@ -1,9 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:amap_base/amap_base.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_swcy/bloc/bloc_provider.dart';
 import 'package:flutter_swcy/bloc/shop_page_bloc.dart';
 import 'package:flutter_swcy/common/loading.dart';
+import 'package:flutter_swcy/pages/shop/shop_page_search.dart';
 import 'package:flutter_swcy/pages/shop/shop_page_shop_item_bar.dart';
 import 'package:flutter_swcy/vo/shop/store_industry_list_vo.dart';
 
@@ -44,7 +46,7 @@ class ShopPage extends StatelessWidget {
     List<Widget> widgets = [
       InkWell(
         onTap: () {
-          
+          Navigator.push(context, CupertinoPageRoute(builder: (context) => ShopPageSearch('${location.latitude}', '${location.longitude}')));
         },
         child: Padding(
           child: ImageIcon(AssetImage('assets/image_icon/icon_search.png'), size: 20),
