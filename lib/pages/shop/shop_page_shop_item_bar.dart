@@ -18,7 +18,7 @@ class ShopPageShopItemBar extends StatefulWidget {
   _ShopPageShopItemBarState createState() => _ShopPageShopItemBarState();
 }
 
-class _ShopPageShopItemBarState extends State<ShopPageShopItemBar> with AutomaticKeepAliveClientMixin {
+class _ShopPageShopItemBarState extends State<ShopPageShopItemBar> with AutomaticKeepAliveClientMixin{
   ShopListVo shopListVo;
   int _pageNumber = 0;
   int _pageSize = 10;

@@ -20,6 +20,7 @@ class ShopPage extends StatelessWidget {
       stream: _bloc.locationStream,
       builder: (context, sanpshop) {
         if (sanpshop.hasData) {
+          print('-----------');
           return DefaultTabController(
             length: _bloc.storeIndustryListVo.data.length,
             child: Scaffold(

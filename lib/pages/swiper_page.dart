@@ -12,6 +12,7 @@ class SwiperPage extends StatelessWidget {
     return Container(
       height: ScreenUtil().setHeight(400),
       child: Swiper(
+        autoplay: true,
         onTap: (index) {
           print('轮播点击：${list[index].id}');
         },
