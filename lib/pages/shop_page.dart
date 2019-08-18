@@ -7,37 +7,109 @@ import 'package:flutter_swcy/bloc/shop_page_bloc.dart';
 import 'package:flutter_swcy/common/loading.dart';
 import 'package:flutter_swcy/pages/shop/shop_page_search.dart';
 import 'package:flutter_swcy/pages/shop/shop_page_shop_item_bar.dart';
-import 'package:flutter_swcy/vo/shop/store_industry_list_vo.dart';
 
-class ShopPage extends StatelessWidget {
+class ShopPage extends StatefulWidget {
+  _ShopPageState createState() => _ShopPageState();
+}
+
+class _ShopPageState extends State<ShopPage> with SingleTickerProviderStateMixin {
+  TabController mTabController;
+  PageController mPageController = PageController(initialPage: 0);
+  var currentPage = 0;
+  var isPageCanChanged = true;
+
+  @override
+  void initState() {
+    super.initState();
+    initTabData();
+  }
+
+  initTabData() {
+    ShopPageBloc().getStoreIndustryList().then((data) {
+      mTabController = TabController(
+        length: data.data.length,
+        vsync: this,
+      );
+      mTabController.addListener(() {//TabBar的监听
+        if (mTabController.indexIsChanging) {//判断TabBar是否切换
+          onPageChange(mTabController.index, p: mPageController);
+        }
+      });
+    });
+  }
+  onPageChange(int index, {PageController p, TabController t}) async {
+    if (p != null) {//判断是哪一个切换
+      isPageCanChanged = false;
+      await mPageController.animateToPage(index, duration: Duration(milliseconds: 500), curve: Curves.ease);//等待pageview切换完毕,再释放pageivew监听
+      isPageCanChanged = true;
+    } else {
+      mTabController.animateTo(index);//切换Tabbar
+    }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    mTabController.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final ShopPageBloc _bloc = BlocProvider.of<ShopPageBloc>(context);
     _bloc.initAMapLocation();
     _bloc.getLocation();
-    _bloc.getStoreIndustryList();
     return StreamBuilder(
       stream: _bloc.locationStream,
       builder: (context, sanpshop) {
         if (sanpshop.hasData) {
-          print('-----------');
-          return DefaultTabController(
-            length: _bloc.storeIndustryListVo.data.length,
-            child: Scaffold(
-              appBar: AppBar(
-                title: Text('商家'),
-                actions: _buildActions(context, _bloc.location),
-                bottom: _buildTabBarBottom(_bloc.storeIndustryListVo),
-              ),
-              body: TabBarView(
-                children: _bloc.storeIndustryListVo.data.map((item) {
-                  return ShopPageShopItemBar(item.id, '${_bloc.location.latitude}', '${_bloc.location.longitude}');
-                }).toList(),
-              ),
+          return Scaffold(
+            appBar: AppBar(
+              elevation: 0.0,
+              title: Text('商家'),
+              actions: _buildActions(context, _bloc.location),
+            ),
+            body: Column(
+              children: <Widget>[
+                Container(
+                  color: Colors.blue,
+                  height: 38.0,
+                  child: TabBar(
+                    isScrollable: true,
+                    indicatorColor: Colors.amber[100],
+                    controller: mTabController,
+                    labelStyle: TextStyle(
+                      fontSize: ScreenUtil().setSp(32),
+                    ),
+                    unselectedLabelStyle: TextStyle(
+                      fontSize: ScreenUtil().setSp(32)
+                    ),
+                    tabs: _bloc.storeIndustryListVo.data.map((item) {
+                      return Tab(
+                        text: item.name,
+                      );
+                    }).toList(),
+                  ),
+                ),
+                Expanded(
+                  child: PageView.builder(
+                    itemCount: _bloc.storeIndustryListVo.data.length,
+                    onPageChanged: (index) {
+                      if (isPageCanChanged) {//由于pageview切换是会回调这个方法,又会触发切换tabbar的操作,所以定义一个flag,控制pageview的回调
+                        onPageChange(index);
+                      }
+                    },
+                    controller: mPageController,
+                    itemBuilder: (BuildContext context, int index) {
+                      // return Text(_bloc.storeIndustryListVo.data[index].name);
+                      return ShopPageShopItemBar(_bloc.storeIndustryListVo.data[index].id, '${_bloc.location.latitude}', '${_bloc.location.longitude}');
+                    },
+                  ),
+                )
+              ],
             ),
           );
         } else {
-          return showLoading();
+          return showLoading(); 
         }
       },
     );
@@ -67,20 +139,5 @@ class ShopPage extends StatelessWidget {
       )
     ];
     return widgets;
-  }
-
-  Widget _buildTabBarBottom(StoreIndustryListVo storeIndustryListVo) {
-    return TabBar(
-      isScrollable: true,
-      labelStyle: TextStyle(
-        fontSize: ScreenUtil().setSp(32),
-      ),
-      unselectedLabelStyle: TextStyle(
-        fontSize: ScreenUtil().setSp(32)
-      ),
-      tabs: storeIndustryListVo.data.map((data) {
-        return Tab(text: '${data.name}');
-      }).toList(),
-    );
   }
 }

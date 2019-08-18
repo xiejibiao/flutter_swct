@@ -51,12 +51,13 @@ class ShopPageBloc extends BlocBase {
   }
 
   // 获取商家类型
-  getStoreIndustryList() async {
+  Future getStoreIndustryList() async {
     if (_getStoreIndustryListIsFirst) {
-      await requestPost('getStoreIndustryList').then((val) {
+      return await requestPost('getStoreIndustryList').then((val) {
         this.storeIndustryListVo = StoreIndustryListVo.fromJson(val);
         _storeIndustryListVoSink.add(storeIndustryListVo);
         _getStoreIndustryListIsFirst = false;
+        return this.storeIndustryListVo;
       });
     }
   }
