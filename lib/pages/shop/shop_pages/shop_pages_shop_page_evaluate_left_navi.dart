@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_swcy/bloc/bloc_provider.dart';
 import 'package:flutter_swcy/bloc/shop/shop_pages_bloc.dart';
 import 'package:flutter_swcy/vo/shop/shop_type_and_essential_message_vo.dart';
 
 class ShopPagesShopPageEvaluateLeftNavi extends StatelessWidget {
-  final ShopPagesBloc bloc;
   final List<CommodityTypeList> commodityTypeList;
   ShopPagesShopPageEvaluateLeftNavi(
-    this.bloc,
     this.commodityTypeList
   );
   @override
   Widget build(BuildContext context) {
+    final ShopPagesBloc _bloc = BlocProvider.of<ShopPagesBloc>(context);
     return StreamBuilder(
-      stream: bloc.leftIndexStream,
+      stream: _bloc.leftIndexStream,
       builder: (context, sanpshop) {
         return Container(
           width: ScreenUtil().setWidth(180),
@@ -25,7 +25,7 @@ class ShopPagesShopPageEvaluateLeftNavi extends StatelessWidget {
           child: ListView.builder(
             itemCount: commodityTypeList.length,
             itemBuilder: (context, index) {
-              return _leftInkWellItem(index, commodityTypeList[index], bloc);
+              return _leftInkWellItem(index, commodityTypeList[index], _bloc);
             },
           ),
         );

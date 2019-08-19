@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_swcy/bloc/bloc_provider.dart';
 import 'package:flutter_swcy/bloc/shop/shop_pages_bloc.dart';
 import 'package:flutter_swcy/common/loading.dart';
 import 'package:flutter_swcy/common/the_end_baseline.dart';
@@ -8,17 +9,14 @@ import 'package:flutter_swcy/pages/shop/shop_page_search_default_page.dart';
 import 'package:flutter_swcy/vo/shop/commodity_page_by_commodity_type_vo.dart';
 
 class ShopPagesShopPageEvaluateRightList extends StatelessWidget {
-  final ShopPagesBloc bloc;
-  ShopPagesShopPageEvaluateRightList(
-    this.bloc,
-  );
   final GlobalKey<RefreshFooterState> _footerKey = GlobalKey<RefreshFooterState>();
   @override
   Widget build(BuildContext context) {
+    final ShopPagesBloc _bloc = BlocProvider.of<ShopPagesBloc>(context);
     return Container(
       width: ScreenUtil().setWidth(570),
       child: StreamBuilder(
-        stream: bloc.commodityPageByCommodityTypeVoControllerStream,
+        stream: _bloc.commodityPageByCommodityTypeVoStream,
         builder: (context, sanpshop) {
           if (!sanpshop.hasData) {
             return Container(
@@ -58,7 +56,7 @@ class ShopPagesShopPageEvaluateRightList extends StatelessWidget {
                     ),
                     StreamBuilder(
                       initialData: false,
-                      stream: bloc.isTheEndStream,
+                      stream: _bloc.isTheEndStream,
                       builder: (context, sanpshop) {
                         if (sanpshop.data) {
                           return TheEndBaseline();
@@ -70,7 +68,7 @@ class ShopPagesShopPageEvaluateRightList extends StatelessWidget {
                   ],
                 ),
                 loadMore: () {
-                  bloc.loadMoreCommodityPageByCommodityTypeId();
+                  _bloc.loadMoreCommodityPageByCommodityTypeId();
                 },
               );
             }
@@ -127,70 +125,90 @@ class ShopPagesShopPageEvaluateRightList extends StatelessWidget {
                 fontSize: ScreenUtil().setSp(28)
               ),
             ),
-            _buildGoodsItemNumber()
+            // _buildGoodsItemNumber()
+            _addShopingcar()
           ],
         )
       ],
     );
   }
 
-  Widget _buildGoodsItemNumber() {
-    return Row(
-      children: <Widget>[
-        _buildMinus(),
-        SizedBox(width: ScreenUtil().setWidth(10)),
-        _buildNumber(),
-        SizedBox(width: ScreenUtil().setWidth(10)),
-        _buildPlus(),
-      ],
-    );
-  }
-
-  Widget _buildMinus() {
+  Widget _addShopingcar() {
     return InkWell(
-      child: Container(
-        padding: EdgeInsets.all(5),
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey),
-          borderRadius: BorderRadius.circular(25)
-        ),
-        child: ImageIcon(
-          AssetImage('assets/image_icon/icon_minus.png'),
-          size: 15,
-        ),
-      ),
       onTap: () {
-        print('点击减号');
+        print('添加到购物车');
       },
+      child: Container(
+        padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
+        decoration: BoxDecoration(
+          color: Color.fromRGBO(255,218,68, 1.0),
+          border: Border.all(
+            color: Color.fromRGBO(255,218,68, 1.0)
+          ),
+          borderRadius: BorderRadius.circular(20.0)
+        ),
+        child: Text('加入购物车'),
+      ),
     );
   }
 
-  Widget _buildPlus() {
-    return InkWell(
-      child: Container(
-        padding: EdgeInsets.all(5),
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey),
-          borderRadius: BorderRadius.circular(25)
-        ),
-        child: ImageIcon(
-          AssetImage('assets/image_icon/icon_plus.png'),
-          size: 15,
-        ),
-      ),
-      onTap: () {
-        print('点击加号');
-      },
-    );
-  }
+  // Widget _buildGoodsItemNumber() {
+  //   return Row(
+  //     children: <Widget>[
+  //       _buildMinus(),
+  //       SizedBox(width: ScreenUtil().setWidth(10)),
+  //       _buildNumber(),
+  //       SizedBox(width: ScreenUtil().setWidth(10)),
+  //       _buildPlus(),
+  //     ],
+  //   );
+  // }
 
-  Widget _buildNumber() {
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 15.0),
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.grey),
-      ),
-      child: Text('0'),
-    );
-  }
+  // Widget _buildMinus() {
+  //   return InkWell(
+  //     child: Container(
+  //       padding: EdgeInsets.all(5),
+  //       decoration: BoxDecoration(
+  //         border: Border.all(color: Colors.grey),
+  //         borderRadius: BorderRadius.circular(25)
+  //       ),
+  //       child: ImageIcon(
+  //         AssetImage('assets/image_icon/icon_minus.png'),
+  //         size: 15,
+  //       ),
+  //     ),
+  //     onTap: () {
+  //       print('点击减号');
+  //     },
+  //   );
+  // }
+
+  // Widget _buildPlus() {
+  //   return InkWell(
+  //     child: Container(
+  //       padding: EdgeInsets.all(5),
+  //       decoration: BoxDecoration(
+  //         border: Border.all(color: Colors.grey),
+  //         borderRadius: BorderRadius.circular(25)
+  //       ),
+  //       child: ImageIcon(
+  //         AssetImage('assets/image_icon/icon_plus.png'),
+  //         size: 15,
+  //       ),
+  //     ),
+  //     onTap: () {
+  //       print('点击加号');
+  //     },
+  //   );
+  // }
+
+  // Widget _buildNumber() {
+  //   return Container(
+  //     padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 15.0),
+  //     decoration: BoxDecoration(
+  //       border: Border.all(color: Colors.grey),
+  //     ),
+  //     child: Text('0'),
+  //   );
+  // }
 }

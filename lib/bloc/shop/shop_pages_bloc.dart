@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_swcy/bloc/bloc_provider.dart';
 import 'package:flutter_swcy/common/shared_preferences.dart';
 import 'package:flutter_swcy/service/service_method.dart';
+import 'package:flutter_swcy/vo/commen_vo.dart';
 import 'package:flutter_swcy/vo/shop/commodity_page_by_commodity_type_vo.dart';
 import 'package:flutter_swcy/vo/shop/shop_type_and_essential_message_vo.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:rxdart/subjects.dart';
 
 class ShopPagesBloc extends BlocBase {
@@ -25,13 +27,19 @@ class ShopPagesBloc extends BlocBase {
   int pageSize = 10;
   CommodityPageByCommodityTypeVo commodityPageByCommodityTypeVo;
   BehaviorSubject<CommodityPageByCommodityTypeVo> _commodityPageByCommodityTypeVoController = BehaviorSubject<CommodityPageByCommodityTypeVo>();
-  Sink<CommodityPageByCommodityTypeVo> get _commodityPageByCommodityTypeVoControllerSink => _commodityPageByCommodityTypeVoController.sink;
-  Stream<CommodityPageByCommodityTypeVo> get commodityPageByCommodityTypeVoControllerStream => _commodityPageByCommodityTypeVoController.stream;
+  Sink<CommodityPageByCommodityTypeVo> get _commodityPageByCommodityTypeVoSink => _commodityPageByCommodityTypeVoController.sink;
+  Stream<CommodityPageByCommodityTypeVo> get commodityPageByCommodityTypeVoStream => _commodityPageByCommodityTypeVoController.stream;
 
   // 是否加载全部
   BehaviorSubject<bool> _isTheEndController = BehaviorSubject<bool>();
   Sink<bool> get _isTheEndSink => _isTheEndController.sink;
   Stream<bool> get isTheEndStream => _isTheEndController.stream;
+
+  // 关注，取消关注
+  bool _isFollow = false;
+  BehaviorSubject<bool> _isFollowController = BehaviorSubject<bool>();
+  Sink<bool> get _isFollowSink => _isFollowController.sink;
+  Stream<bool> get isFollowStream => _isFollowController.stream;
 
   // 左侧分类是否被选中
   thisIndexIsSelected(int index) {
@@ -64,6 +72,8 @@ class ShopPagesBloc extends BlocBase {
         commodityTypeList = shopTypeAndEssentialMessageVo.data.commodityTypeList;
         if (shopTypeAndEssentialMessageVo.data.commodityTypeList.length > 0) {
           commodityTypeId = shopTypeAndEssentialMessageVo.data.commodityTypeList[0].id;
+          _isFollow = shopTypeAndEssentialMessageVo.data.follow;
+          _isFollowSink.add(_isFollow);
           await getCommodityPageByCommodityTypeId();
         }
         _shopTypeAndEssentialMessageVoSink.add(shopTypeAndEssentialMessageVo);
@@ -83,7 +93,7 @@ class ShopPagesBloc extends BlocBase {
     await requestPost('getCommodityPageByCommodityTypeId', formData: formData).then((data) {
       this.commodityPageByCommodityTypeVo = CommodityPageByCommodityTypeVo.fromJson(data);
       setIsTheEnd(commodityPageByCommodityTypeVo.data.totalPage);
-      _commodityPageByCommodityTypeVoControllerSink.add(this.commodityPageByCommodityTypeVo);
+      _commodityPageByCommodityTypeVoSink.add(this.commodityPageByCommodityTypeVo);
     });
   }
 
@@ -99,7 +109,7 @@ class ShopPagesBloc extends BlocBase {
         CommodityPageByCommodityTypeVo tempCommodityPageByCommodityTypeVo = CommodityPageByCommodityTypeVo.fromJson(data);
         this.commodityPageByCommodityTypeVo.data.list.addAll(tempCommodityPageByCommodityTypeVo.data.list);
         setIsTheEnd(commodityPageByCommodityTypeVo.data.totalPage);
-        _commodityPageByCommodityTypeVoControllerSink.add(commodityPageByCommodityTypeVo);
+        _commodityPageByCommodityTypeVoSink.add(commodityPageByCommodityTypeVo);
       });
     }
   }
@@ -111,11 +121,27 @@ class ShopPagesBloc extends BlocBase {
     }
   }
 
+  // 收藏
+  followAndCleanFollow(int id, BuildContext context) {
+    getToken().then((token) {
+      var formData = {
+        'id': id
+      };
+      requestPost('followAndCleanFollow', token: token, formData: formData, context: context).then((val) {
+        CommenVo commenVo = CommenVo.fromJson(val);
+        showToast(commenVo.message);
+        _isFollow = !_isFollow;
+        _isFollowSink.add(_isFollow);
+      });
+    });
+  }
+
   @override
   void dispose() {
     _leftIndexController.close();
     _shopTypeAndEssentialMessageVoController.close();
     _commodityPageByCommodityTypeVoController.close();
     _isTheEndController.close();
+    _isFollowController.close();
   }
 }
