@@ -12,6 +12,7 @@ const servicePath = {
   'getShopTypeAndEssentialMessage': serviceBaseUrl + '/store/getShopTypeAndEssentialMessage',         // 门店分类，详情，是否关注
   'followAndCleanFollow': serviceBaseUrl + '/store/followAndCleanFollow',                             // 关注与取消关注
   'getCommodityPageByCommodityTypeId': serviceBaseUrl + '/store/getCommodityPageByCommodityTypeId',   // 获取门店商品列表
+  'getCommodityNewestPrice': serviceBaseUrl + '/store/getCommodityNewestPrice',                       // 获取商品最新价格
   'getPersonAndAdList': serviceBaseUrl + '/person/getPersonAndAdList',                                // 获取基本信息与广告
   'upDateAvatar': serviceBaseUrl + '/person/upDateAvatar',                                            // 修改头像
   'getPersonInfo': serviceBaseUrl + '/person/getPersonInfo',                                          // 获取用户基本信息
