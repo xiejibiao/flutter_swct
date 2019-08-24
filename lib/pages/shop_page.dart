@@ -12,22 +12,24 @@ class ShopPage extends StatefulWidget {
   _ShopPageState createState() => _ShopPageState();
 }
 
-class _ShopPageState extends State<ShopPage> with SingleTickerProviderStateMixin {
+class _ShopPageState extends State<ShopPage> with TickerProviderStateMixin{
   TabController mTabController;
   PageController mPageController = PageController(initialPage: 0);
   var currentPage = 0;
   var isPageCanChanged = true;
+  var tabBarList = [];
 
   @override
-  void initState() {
+  void initState() { 
     super.initState();
     initTabData();
   }
 
   initTabData() {
-    ShopPageBloc().getStoreIndustryList().then((data) {
+    ShopPageBloc().getStoreIndustryListFromCache().then((data) {
+      tabBarList = data;
       mTabController = TabController(
-        length: data.data.length,
+        length: data.length,
         vsync: this,
       );
       mTabController.addListener(() {//TabBar的监听
@@ -37,6 +39,7 @@ class _ShopPageState extends State<ShopPage> with SingleTickerProviderStateMixin
       });
     });
   }
+
   onPageChange(int index, {PageController p, TabController t}) async {
     if (p != null) {//判断是哪一个切换
       isPageCanChanged = false;
@@ -47,11 +50,6 @@ class _ShopPageState extends State<ShopPage> with SingleTickerProviderStateMixin
     }
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-    mTabController.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +81,7 @@ class _ShopPageState extends State<ShopPage> with SingleTickerProviderStateMixin
                     unselectedLabelStyle: TextStyle(
                       fontSize: ScreenUtil().setSp(32)
                     ),
-                    tabs: _bloc.storeIndustryListVo.data.map((item) {
+                    tabs: tabBarList.map((item) {
                       return Tab(
                         text: item.name,
                       );
@@ -92,7 +90,7 @@ class _ShopPageState extends State<ShopPage> with SingleTickerProviderStateMixin
                 ),
                 Expanded(
                   child: PageView.builder(
-                    itemCount: _bloc.storeIndustryListVo.data.length,
+                    itemCount: tabBarList.length,
                     onPageChanged: (index) {
                       if (isPageCanChanged) {//由于pageview切换是会回调这个方法,又会触发切换tabbar的操作,所以定义一个flag,控制pageview的回调
                         onPageChange(index);
@@ -100,8 +98,7 @@ class _ShopPageState extends State<ShopPage> with SingleTickerProviderStateMixin
                     },
                     controller: mPageController,
                     itemBuilder: (BuildContext context, int index) {
-                      // return Text(_bloc.storeIndustryListVo.data[index].name);
-                      return ShopPageShopItemBar(_bloc.storeIndustryListVo.data[index].id, '${_bloc.location.latitude}', '${_bloc.location.longitude}');
+                      return ShopPageShopItemBar(tabBarList[index].id, '${_bloc.location.latitude}', '${_bloc.location.longitude}');
                     },
                   ),
                 )

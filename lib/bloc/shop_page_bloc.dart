@@ -1,14 +1,17 @@
+import 'dart:convert';
+
 import 'package:amap_base/amap_base.dart';
 import 'package:flutter_swcy/bloc/bloc_provider.dart';
 import 'package:flutter_swcy/service/service_method.dart';
 import 'package:flutter_swcy/vo/shop/shop_list_vo.dart';
+import 'package:flutter_swcy/vo/shop/store_industry_list_from_cache_vo.dart';
 import 'package:flutter_swcy/vo/shop/store_industry_list_vo.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ShopPageBloc extends BlocBase {
   bool _getLocationIsFirst = true;
-  bool _getStoreIndustryListIsFirst = true;
   Map<String, bool> getPageStoreIsFirst = Map<String, bool>();
 
   // 定位
@@ -17,11 +20,8 @@ class ShopPageBloc extends BlocBase {
   Sink<Location> get _locationSink => _locationController.sink;
   Stream<Location> get locationStream => _locationController.stream;
 
-  // 商家类型
-  StoreIndustryListVo storeIndustryListVo;
-  BehaviorSubject<StoreIndustryListVo> _storeIndustryListVoController = BehaviorSubject<StoreIndustryListVo>();
-  Sink<StoreIndustryListVo> get _storeIndustryListVoSink => _storeIndustryListVoController.sink;
-  Stream<StoreIndustryListVo> get storeIndustryListVoStream => _storeIndustryListVoController.stream;
+  // 商家类型缓存Key
+  final String storeIndustryListKey = 'STORE_INDUSTRY_LIST';
 
   // 初始化定位
   final _amapLocation = AMapLocation();
@@ -38,7 +38,6 @@ class ShopPageBloc extends BlocBase {
                     );
       if (await Permissions().requestPermission()) {
         var location = _amapLocation.getLocation(options);
-        await getStoreIndustryList();
         location.then((val) {
           _getLocationIsFirst = false;
           this.location = val;
@@ -50,15 +49,34 @@ class ShopPageBloc extends BlocBase {
     }
   }
 
-  // 获取商家类型
-  Future getStoreIndustryList() async {
-    if (_getStoreIndustryListIsFirst) {
-      return await requestPost('getStoreIndustryList').then((val) {
-        this.storeIndustryListVo = StoreIndustryListVo.fromJson(val);
-        _storeIndustryListVoSink.add(storeIndustryListVo);
-        _getStoreIndustryListIsFirst = false;
-        return this.storeIndustryListVo;
+  // 初始化时，获取商家类型列表并缓存化
+  getAndSaveStoreIndustryList() async {
+    await requestPost('getStoreIndustryList').then((val) async {
+      SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+      StoreIndustryListVo temp = StoreIndustryListVo.fromJson(val);
+      List<Map> tempList = [];
+      temp.data.forEach((item){
+        Map<String, dynamic> newStoreIndustry = {
+          'id': item.id,
+          'name': item.name      
+        };
+        tempList.add(newStoreIndustry);
       });
+      String storeIndustryListString = json.encode(tempList).toString();
+      sharedPreferences.setString(storeIndustryListKey, storeIndustryListString);
+    });
+  }
+
+  Future getStoreIndustryListFromCache() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    String storeIndustryListString = sharedPreferences.getString(storeIndustryListKey);
+    List<Map> tempList = (json.decode(storeIndustryListString.toString()) as List).cast();
+    if (tempList != null) {
+      List<StoreIndustryListFromCacheVo> storeIndustryListFromCacheList = [];
+      tempList.forEach((item) {
+        storeIndustryListFromCacheList.add(StoreIndustryListFromCacheVo.fromJson(item));
+      });
+      return storeIndustryListFromCacheList;
     }
   }
 
@@ -91,7 +109,5 @@ class ShopPageBloc extends BlocBase {
   void dispose() {
     _amapLocation.stopLocate();
     _locationController.close();
-    _storeIndustryListVoController.close();
   }
-
 }
