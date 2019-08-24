@@ -86,7 +86,7 @@ class ShopPagesShopPageEvaluateRightList extends StatelessWidget {
         Navigator.push(context, CupertinoPageRoute(builder: (context) => ShopPagesShopPageEvaluateDetails(commodityList.detail)));
       },
       child: Container(
-        height: ScreenUtil().setHeight(200),
+        height: ScreenUtil().setHeight(235),
         child: Card(
           child: Padding(
             padding: EdgeInsets.all(5.0),
@@ -108,7 +108,7 @@ class ShopPagesShopPageEvaluateRightList extends StatelessWidget {
         ),
         SizedBox(width: ScreenUtil().setWidth(20.0)),
         Container(
-          width: ScreenUtil().setWidth(335),
+          width: ScreenUtil().setWidth(327),
           child: _buildGoodsItemGoodsMessage(commodityList, bloc),
         )
       ],
@@ -121,7 +121,7 @@ class ShopPagesShopPageEvaluateRightList extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text(commodityList.name),
-        Text('规格'),
+        Text('规格: ${commodityList.specs}'),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[

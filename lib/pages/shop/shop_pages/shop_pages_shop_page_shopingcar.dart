@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_swcy/bloc/bloc_provider.dart';
 import 'package:flutter_swcy/bloc/shop/shop_pages_bloc.dart';
 import 'package:flutter_swcy/common/loading.dart';
@@ -28,20 +29,23 @@ class ShopPagesShopPageShopingcar extends StatelessWidget {
             return showLoading();
           } else {
             List<CommodityInfoVo> commodityInfoVoList = sanpshop.data;
-            return Stack(
-              children: <Widget>[
-                ListView.builder(
-                  itemCount: commodityInfoVoList.length,
-                  itemBuilder: (context, index) {
-                    return ShopPagesShopPageShopingcarItem(commodityInfoVoList[index]);
-                  },
-                ),
-                Positioned(
-                  bottom: 0,
-                  left: 0,
-                  child: ShopPagesShopPageShopingcarBottom(),
-                )
-              ],
+            return Container(
+              width: ScreenUtil().setWidth(750),
+              child: Stack(
+                children: <Widget>[
+                  ListView.builder(
+                    itemCount: commodityInfoVoList.length,
+                    itemBuilder: (context, index) {
+                      return ShopPagesShopPageShopingcarItem(commodityInfoVoList[index]);
+                    },
+                  ),
+                  Positioned(
+                    bottom: 0,
+                    left: 0,
+                    child: ShopPagesShopPageShopingcarBottom(),
+                  )
+                ],
+              ),
             );
           }
         },

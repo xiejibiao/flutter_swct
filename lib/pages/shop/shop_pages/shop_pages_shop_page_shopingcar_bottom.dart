@@ -27,6 +27,7 @@ class ShopPagesShopPageShopingcarBottom extends StatelessWidget {
       stream: bloc.isAllCheckStream,
       builder: (context, sanpshop) {
         return Container(
+          width: ScreenUtil().setWidth(180),
           child: Row(
             children: <Widget>[
               Checkbox(
@@ -46,12 +47,13 @@ class ShopPagesShopPageShopingcarBottom extends StatelessWidget {
 
   Widget _allPriceArea(ShopPagesBloc bloc) {
     return Container(
-      width: ScreenUtil().setWidth(420),
+      padding: EdgeInsets.only(left: 10),
+      width: ScreenUtil().setWidth(370),
       child: Row(
         children: <Widget>[
           Container(
-            alignment: Alignment.centerRight,
-            width: ScreenUtil().setWidth(130),
+            alignment: Alignment.centerLeft,
+            width: ScreenUtil().setWidth(110),
             child: Text(
               '合计:',
               style: TextStyle(
@@ -65,7 +67,7 @@ class ShopPagesShopPageShopingcarBottom extends StatelessWidget {
             builder: (context, sanpshop) {
               return Container(
                 alignment: Alignment.centerLeft,
-                width: ScreenUtil().setWidth(290),
+                width: ScreenUtil().setWidth(230),
                 child: Text(
                   '￥${sanpshop.data}',
                   softWrap: false,
@@ -89,10 +91,12 @@ class ShopPagesShopPageShopingcarBottom extends StatelessWidget {
       stream: bloc.allCommodityCountStream,
       builder: (context, sanpshop) {
         return Container(
-          width: ScreenUtil().setWidth(160),
+          width: ScreenUtil().setWidth(180),
           padding: EdgeInsets.only(left: 10.0),
           child: InkWell(
-            onTap: () {},
+            onTap: () {
+              print('点击结算');
+            },
             child: Container(
               padding: EdgeInsets.all(10.0),
               alignment: Alignment.center,

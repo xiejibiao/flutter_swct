@@ -57,7 +57,7 @@ class _ShopPageShopListState extends State<ShopPageShopList> {
               crossAxisCount: 2,
               mainAxisSpacing: 10.0,
               crossAxisSpacing: 10.0,
-              childAspectRatio: 1.0
+              childAspectRatio: 0.9
             ),
             itemCount: widget.shopListVo.data.list.length,
             itemBuilder: (context, index) {

@@ -79,7 +79,7 @@ class ShopPagesShopPageShopingcarItem extends StatelessWidget {
   // 商品价格
   Widget _commodityPrice(ShopPagesBloc bloc, BuildContext context) {
     return Container(
-      width: ScreenUtil().setWidth(150),
+      width: ScreenUtil().setWidth(130),
       alignment: Alignment.centerRight,
       child: Column(
         children: <Widget>[

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_swcy/bloc/bloc_provider.dart';
 import 'package:flutter_swcy/bloc/shop/shop_pages_bloc.dart';
 import 'package:flutter_swcy/pages/shop/shop_pages/shop_pages_shop_page.dart';
@@ -24,7 +25,7 @@ class ShopPageShopListItem extends StatelessWidget {
             Image.network(
               shopData.photo,
               width: MediaQuery.of(context).size.width,
-              height: 110.0,
+              height: ScreenUtil().setHeight(280),
               fit: BoxFit.cover,
             ),
             Text(shopData.name),
@@ -36,8 +37,7 @@ class ShopPageShopListItem extends StatelessWidget {
                   child: Text('${shopData.juli / 1000} 公里'),
                 )
               ],
-            ),
-            SizedBox()
+            )
           ],
         ),
       ),
