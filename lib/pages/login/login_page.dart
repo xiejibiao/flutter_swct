@@ -22,7 +22,7 @@ class _LoginPageState extends State<LoginPage> {
       ),
       body: Form(
         key: _formKey,
-        child: Column(
+        child: ListView(
           children: <Widget>[
             LoginPhoneFormField(_bloc),
             LoginPasswordFormField(_bloc),

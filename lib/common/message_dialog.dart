@@ -43,7 +43,7 @@ class MessageDialog extends Dialog {
                     decoration: BoxDecoration(
                       border: Border(
                         bottom: BorderSide(
-                          width: 1,
+                          width: 0.4,
                           color: Colors.black12
                         )
                       )
@@ -70,9 +70,9 @@ class MessageDialog extends Dialog {
     if (negativeText != null && negativeText.isNotEmpty) widgets.add(_buildBottomCancelButton());
     if (positiveText != null && positiveText.isNotEmpty) widgets.add(_buildBottomPositiveButton());
     return Container(
-      height: ScreenUtil().setHeight(85),
+      height: ScreenUtil().setHeight(70),
       decoration: BoxDecoration(
-        color: Colors.red,
+        // color: Colors.red,
         borderRadius: BorderRadius.vertical(bottom: Radius.circular(10))
       ),
       child: Row(
@@ -109,15 +109,21 @@ class MessageDialog extends Dialog {
   Widget _buildBottomPositiveButton() {
     return Flexible(
       fit: FlexFit.tight,
-      child: FlatButton(
-        onPressed: onPositivePressEvent,
-        splashColor: Colors.red,
-        highlightColor: Colors.red,
-        child: Text(
-          positiveText,
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 16.0,
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.red,
+          borderRadius: BorderRadius.only(bottomRight: Radius.circular(10))
+        ),
+        child: FlatButton(
+          onPressed: onPositivePressEvent,
+          splashColor: Colors.red,
+          highlightColor: Colors.red,
+          child: Text(
+            positiveText,
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 16.0,
+            ),
           ),
         ),
       ),
