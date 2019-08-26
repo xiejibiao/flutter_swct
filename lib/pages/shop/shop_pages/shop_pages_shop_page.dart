@@ -44,7 +44,6 @@ class ShopPagesShopPage extends StatelessWidget {
     final ShopPagesBloc _bloc = BlocProvider.of<ShopPagesBloc>(context);
     _bloc.setCommodityKey(id);
     _bloc.getShopTypeAndEssentialMessage(context, id);
-    _bloc.getCommodityList();
     return DefaultTabController(
       length: 2,
       child: StreamBuilder(
@@ -82,9 +81,8 @@ class ShopPagesShopPage extends StatelessWidget {
                       AMapNavi().startNavi(lat: lat, lon: lng, naviType: AMapNavi.drive);
                       break;
                     default:
-                      // _bloc.removeCommodity();
                       Navigator.push(context, CupertinoPageRoute(builder: (context) => BlocProvider(child: ShopPagesShopPageShopingcar(id), bloc: ShopPagesBloc()))).then((val) {
-                        _bloc.getCommodityList();
+                        _bloc.getCommodityInfoVos();
                       });
                   }
                 },

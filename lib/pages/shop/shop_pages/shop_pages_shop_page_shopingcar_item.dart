@@ -42,8 +42,7 @@ class ShopPagesShopPageShopingcarItem extends StatelessWidget {
         value: commodityInfoVo.isCheck,
         activeColor: Colors.blue,
         onChanged: (val) {
-          commodityInfoVo.isCheck = val;
-          bloc.changeCheckState(commodityInfoVo);
+          bloc.changeCartState(id: commodityInfoVo.id, checked: val);
         },
       ),
     );
@@ -98,7 +97,7 @@ class ShopPagesShopPageShopingcarItem extends StatelessWidget {
                       },
                       onPositivePressEvent: () {
                         Navigator.pop(context);
-                        bloc.deleteOneCommodity(commodityInfoVo.id);
+                        bloc.removeCarts(id: commodityInfoVo.id);
                       },
                       negativeText: '取消',
                       positiveText: '确认',

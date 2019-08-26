@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_swcy/bloc/bloc_provider.dart';
+import 'package:flutter_swcy/common/preference_utils.dart';
 import 'package:flutter_swcy/common/shared_preferences.dart';
 import 'package:flutter_swcy/service/service_method.dart';
 import 'package:flutter_swcy/vo/commen_vo.dart';
@@ -45,26 +46,6 @@ class ShopPagesBloc extends BlocBase {
   BehaviorSubject<bool> _isFollowController = BehaviorSubject<bool>();
   Sink<bool> get _isFollowSink => _isFollowController.sink;
   Stream<bool> get isFollowStream => _isFollowController.stream;
-
-  // 持久化保存购物车商品
-  String commodityString = '[]';
-  // 进入商家时，必须初始化此值
-  String commodityKey = 'COMMODITY_INFO';
-  BehaviorSubject<List<CommodityInfoVo>> _commodityInfoVoListController = BehaviorSubject<List<CommodityInfoVo>>();
-  Sink<List<CommodityInfoVo>> get _commodityInfoVoListSink => _commodityInfoVoListController.sink;
-  Stream<List<CommodityInfoVo>> get commodityInfoVoListStream => _commodityInfoVoListController.stream;
-  // 持久化购物车商品价格
-  BehaviorSubject<double> _allPriceController = BehaviorSubject<double>();
-  Sink<double> get _allPriceSink => _allPriceController.sink;
-  Stream<double> get allPriceStream => _allPriceController.stream;
-  // 持久化购物车数量
-  BehaviorSubject<int> _allCommodityCountController = BehaviorSubject<int>();
-  Sink<int> get _allCommodityCountSink => _allCommodityCountController.sink;
-  Stream<int> get allCommodityCountStream => _allCommodityCountController.stream;
-  // 是否全选
-  BehaviorSubject<bool> _isAllCheckController = BehaviorSubject<bool>();
-  Sink<bool> get _isAllCheckSink => _isAllCheckController.sink;
-  Stream<bool> get isAllCheckStream => _isAllCheckController.stream;
 
   // 左侧分类是否被选中
   thisIndexIsSelected(int index) {
@@ -160,171 +141,164 @@ class ShopPagesBloc extends BlocBase {
     });
   }
 
+  // ----------------------------------------------------------------------------------------------------------------------------
+  
+  // 进入商家时，必须初始化此值
+  String commodityKey = 'COMMODITY_INFO';
   // 进入商家时，必须初始化此值
   setCommodityKey(int shopId) {
     commodityKey = '${commodityKey}_$shopId';
+    getCommodityInfoVos();
   }
 
-  // 保存商品, 主键，商品名称，数量，价格，图片
-  saveCommodity(id, name, count, price, cover) async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    commodityString = sharedPreferences.getString(commodityKey);
-    var temp = commodityString == null ? [] : json.decode(commodityString);
-    List<Map> tempList = (temp as List).cast();
-    bool isHave = false;
-    int ival = 0;
-    _allPriceSink.add(0);
-    _allCommodityCountSink.add(0);
-    tempList.forEach((item) {
-      if (item['id'] == id) {
-        tempList[ival]['count']++;
-        isHave = true;
-      }
-      if(item['isCheck']) {
-        _allPriceSink.add(tempList[ival]['price'] * tempList[ival]['count']);
-        _allCommodityCountSink.add(tempList[ival]['count']);
-      }
-      ival++;
+  // 购物车商品列表
+  BehaviorSubject<List<CommodityInfoVo>> _commodityInfoVoListController = BehaviorSubject<List<CommodityInfoVo>>();
+  Sink<List<CommodityInfoVo>> get _commodityInfoVoListSink => _commodityInfoVoListController.sink;
+  Stream<List<CommodityInfoVo>> get commodityInfoVoListStream => _commodityInfoVoListController.stream;
+  // 持久化购物车商品价格
+  BehaviorSubject<double> _allPriceController = BehaviorSubject<double>();
+  Sink<double> get _allPriceSink => _allPriceController.sink;
+  Stream<double> get allPriceStream => _allPriceController.stream;
+  // 持久化购物车数量
+  BehaviorSubject<int> _allCommodityCountController = BehaviorSubject<int>();
+  Sink<int> get _allCommodityCountSink => _allCommodityCountController.sink;
+  Stream<int> get allCommodityCountStream => _allCommodityCountController.stream;
+  // 是否全选
+  BehaviorSubject<bool> _isAllCheckController = BehaviorSubject<bool>();
+  Sink<bool> get _isAllCheckSink => _isAllCheckController.sink;
+  Stream<bool> get isAllCheckStream => _isAllCheckController.stream;
+  bool _isAllChecked = false;                   // 是否全选
+  int _allSelectedCount = 0;                    // 选中的物品数量
+  double _allSelectedPrice = 0.0;               // 选中物品的全部价格
+  String _shoppingCarStringList = '[]';         // 用于持久化
+  List<CommodityInfoVo> _commodityInfoVos = []; // 购物车物品列表
+  getCommodityInfoVos() {
+    PreferenceUtils.instance.getString(key: commodityKey, defaultValue: '[]').then((value) {
+      _shoppingCarStringList = value;
+      _commodityInfoVos.clear();
+      _commodityInfoVos.addAll(_shoppingCarStringList == '[]' ? [] : CommodityInfoVo.fromJsonList(json.decode(_shoppingCarStringList)));
+      _commodityInfoVoListSink.add(_commodityInfoVos);
+      _allInfoStateCheck();
     });
+  }
 
-    if (!isHave) {
-      Map<String, dynamic> newCommodity = {
+  /// 数量，全选状态修改封装
+  void _allInfoStateCheck() {
+    // _allShoppingCartCount = 0;
+    _allSelectedCount = 0;
+    _allSelectedPrice = 0.0;
+    _isAllChecked = true;
+
+    _commodityInfoVos.forEach((e) {
+      // _allShoppingCartCount += e.count; // 全部数量
+      if (!e.isCheck) {
+        _isAllChecked = false; // 如果一个未选中，则全选为 false
+      } else {
+        _allSelectedCount += e.count;
+        _allSelectedPrice += e.count * e.price;
+      }
+    });
+    _allPriceSink.add(_allSelectedPrice);
+    _allCommodityCountSink.add(_allSelectedCount);
+    _isAllCheckSink.add(_isAllChecked);
+  }
+
+  /// 保存物品到购物车
+  saveCommodityToShoppingCar({@required id, @required name, @required count, @required price, @required cover}) {
+    List<dynamic> carts = _shoppingCarStringList == '[]' ? [] : json.decode(_shoppingCarStringList);
+    var included = false;
+    if (carts.isNotEmpty) {
+      carts.forEach((cart) {
+        // 不是空列表的情况下，判断是否已经存在该物品，存在则添加，并设置状态位
+        if (cart['id'] == id) {
+          cart['count'] += count;
+          included = true;
+        }
+      });
+    }
+
+    // 不存在该商品的时候则全部加入到列表
+    if (!included) {
+      carts.add({
         'id': id,
         'name': name,
         'count': count,
         'price': price,
         'cover': cover,
-        'isCheck': true        
-      };
-      tempList.add(newCommodity);
-      // _allPriceSink.add(count * price);
-      // _allCommodityCountSink.add(count);
-    }
-    commodityString = json.encode(tempList).toString();
-    sharedPreferences.setString(commodityKey, commodityString);
-    showToast('加入购物车成功');
-    await getCommodityList();
-  }
-
-  // 购物车全部清空
-  removeCommodity() async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    sharedPreferences.remove(commodityKey);
-    print('清空完成');
-  }
-
-  // 获取购物车商品列表
-  getCommodityList() async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    commodityString = sharedPreferences.getString(commodityKey);
-    List<CommodityInfoVo> commodityInfoVoList = [];
-    double tempAllPrice = 0;
-      int tempAllCommodityCount = 0;
-    if (commodityString != null) {
-      List<Map> tempList = (json.decode(commodityString.toString()) as List).cast();
-      _isAllCheckSink.add(true);
-      tempList.forEach((item) {
-        if (item['isCheck']) {
-          tempAllPrice += (item['count'] * item['price']);
-          tempAllCommodityCount += item['count'];
-        } else {
-          _isAllCheckSink.add(false);
-        }
-        commodityInfoVoList.add(CommodityInfoVo.fromJson(item));
+        'isCheck': true,
+        'delFlag': 0
       });
     }
-    _allPriceSink.add(tempAllPrice);
-    _allCommodityCountSink.add(tempAllCommodityCount);
-    _commodityInfoVoListSink.add(commodityInfoVoList);
+    showToast('加入购物车成功');
+    _notifyChanges(carts);
   }
 
-  // 删除单个购物车商品
-  deleteOneCommodity(int id) async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    commodityString = sharedPreferences.getString(commodityKey);
-    List<Map> tempList = (json.decode(commodityString.toString()) as List).cast();
-    int tempIndex = 0;
-    int delIndex = 0;
+  /// 更新购物车状态封装方法
+  _notifyChanges(List carts) {
+    PreferenceUtils.instance.saveString(key: commodityKey, value: json.encode(carts));
+    _shoppingCarStringList = json.encode(carts);
+    _commodityInfoVos.clear();
+    _commodityInfoVos.addAll(carts.isEmpty ? [] : CommodityInfoVo.fromJsonList(carts));
+    _commodityInfoVoListSink.add(_commodityInfoVos);
+    _allInfoStateCheck();
+  }
 
-    tempList.forEach((item) {
-      if (item['id'] == id) {
-        delIndex = tempIndex;
+  /// 增加/减少商品数量
+  increaseOrReduceOperation({@required int id, @required bool isIncrease}) {
+    List<dynamic> carts = json.decode(_shoppingCarStringList);
+    // 已经存在的情况下才增加减少，修改数量值
+    carts.forEach((cart) {
+      if (cart['id'] == id) {
+        if (isIncrease) {
+          cart['count'] += 1;
+        } else {
+          cart['count'] -= 1;
+        }
       }
-      tempIndex++;
     });
-    tempList.removeAt(delIndex);
-    commodityString = json.encode(tempList).toString();
-    sharedPreferences.setString(commodityKey, commodityString);
-    await getCommodityList();
+    _notifyChanges(carts);
   }
 
-  // 修改单个商品的选中状态
-  changeCheckState(CommodityInfoVo commodityInfoVo) async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    commodityString = sharedPreferences.getString(commodityKey);
-    List<Map> tempList = (json.decode(commodityString.toString()) as List).cast();
-    int tempIndex = 0;
-    int changeIndex = 0;
-    tempList.forEach((item) {
-      if (item['id'] == commodityInfoVo.id) {
-        changeIndex = tempIndex;
-      }
-      tempIndex++;
-    });
-    tempList[changeIndex] = commodityInfoVo.toJson();
-    commodityString = json.encode(tempList).toString();
-    sharedPreferences.setString(commodityKey, commodityString);
-    await getCommodityList();
-  }
-
-  // 点击全选按钮操作
-  changeAllCheckBtnState(bool isCheck) async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    commodityString = sharedPreferences.getString(commodityKey);
-    List<Map> tempList = (json.decode(commodityString.toString()) as List).cast();
-    List<Map> newList = [];
-    tempList.forEach((item) {
-      var newItem = item;
-      newItem['isCheck'] = isCheck;
-      newList.add(newItem);
-    });
-    commodityString = json.encode(newList).toString();
-    sharedPreferences.setString(commodityKey, commodityString);
-    await getCommodityList();
-  }
-
-  // 添加或减少数量
-  addOrReduceAction(CommodityInfoVo commodityInfoVo, String todo) async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    commodityString = sharedPreferences.getString(commodityKey);
-    List<Map> tempList = (json.decode(commodityString.toString()) as List).cast();
-    int temeIndex = 0;
-    int changeIndex = 0;
-    tempList.forEach((item) {
-      if(item['id'] == commodityInfoVo.id) {
-        changeIndex = temeIndex;
-      }
-      temeIndex++;
-    });
-    if (todo == 'add') {
-      commodityInfoVo.count++;
-    } else if (commodityInfoVo.count > 1) {
-      commodityInfoVo.count--;
+  /// 移除购物车内的某个商品
+  removeCarts({@required int id}) {
+    List<dynamic> carts = _shoppingCarStringList == '[]' ? [] : json.decode(_shoppingCarStringList);
+    if (carts.isNotEmpty) {
+      carts.removeWhere((e) => e['id'] == id);
     }
-    tempList[changeIndex] = commodityInfoVo.toJson();
-    commodityString = json.encode(tempList).toString();
-    sharedPreferences.setString(commodityKey, commodityString);
-    await getCommodityList();
+    _notifyChanges(carts);
+  }
+
+  /// 修改特定商品在购物车的选中状态
+  changeCartState({@required int id, @required bool checked}) {
+    List<dynamic> carts = _shoppingCarStringList == '[]' ? [] : json.decode(_shoppingCarStringList);
+    if (carts.isNotEmpty) {
+      carts.forEach((cart) {
+        if (cart['id'] == id) {
+          cart['isCheck'] = checked;
+        }
+      });
+    }
+    _notifyChanges(carts);
+  }
+
+  /// 全选状态修改
+  allCheckStateChange(bool checkState) {
+    List<dynamic> carts = _shoppingCarStringList == '[]' ? [] : json.decode(_shoppingCarStringList);
+    if (carts.isNotEmpty) {
+      carts.forEach((cart) {
+        cart['isCheck'] = checkState; // 所有状态跟随全选修改
+      });
+    }
+    _notifyChanges(carts);
   }
 
   // 获取购物车商品列表最新价格
   getCommodityNewestPrice() async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    commodityString = sharedPreferences.getString(commodityKey);
-    if (commodityString != null) {
-      List<Map> tempList = (json.decode(commodityString.toString()) as List).cast();
+    await getCommodityInfoVos();
+    List<dynamic> carts = _shoppingCarStringList == '[]' ? [] : json.decode(_shoppingCarStringList);
+    if (carts.length > 0) {
       List<int> listId = [];
-      tempList.forEach((item) {
+      carts.forEach((item) {
         listId.add(item['id']);
       });
       var formData = {
@@ -333,18 +307,16 @@ class ShopPagesBloc extends BlocBase {
       await requestPost('getCommodityNewestPrice', formData: formData).then((val) {
         CommodityShopingCarVo commodityShopingCarVo = CommodityShopingCarVo.fromJson(val);
         commodityShopingCarVo.data.forEach((item) {
-          for(int j = 0; j < tempList.length; j++) {
-            if (tempList[j]['id'] == item.id) {
-              tempList[j]['price'] = item.price;
+          for(int j = 0; j < carts.length; j++) {
+            if (carts[j]['id'] == item.id) {
+              carts[j]['price'] = item.price;
               break;
             }
           }
         });
       });
-      commodityString = json.encode(tempList).toString();
-      sharedPreferences.setString(commodityKey, commodityString);
-      await getCommodityList();
     }
+    await _notifyChanges(carts);
   }
 
 

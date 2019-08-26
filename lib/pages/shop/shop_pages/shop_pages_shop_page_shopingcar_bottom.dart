@@ -3,6 +3,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_swcy/bloc/bloc_provider.dart';
 import 'package:flutter_swcy/bloc/shop/shop_pages_bloc.dart';
+import 'package:city_pickers/city_pickers.dart';
 
 class ShopPagesShopPageShopingcarBottom extends StatelessWidget {
   @override
@@ -34,7 +35,7 @@ class ShopPagesShopPageShopingcarBottom extends StatelessWidget {
                 value: sanpshop.data,
                 activeColor: Colors.blue,
                 onChanged: (val) {
-                  bloc.changeAllCheckBtnState(val);
+                  bloc.allCheckStateChange(val);
                 },
               ),
               Text('全选')
@@ -94,8 +95,12 @@ class ShopPagesShopPageShopingcarBottom extends StatelessWidget {
           width: ScreenUtil().setWidth(180),
           padding: EdgeInsets.only(left: 10.0),
           child: InkWell(
-            onTap: () {
+            onTap: () async {
               print('点击结算');
+              Result result = await CityPickers.showCityPicker(
+                context: context
+              );
+              print(result);
             },
             child: Container(
               padding: EdgeInsets.all(10.0),

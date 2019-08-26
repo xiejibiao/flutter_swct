@@ -142,7 +142,7 @@ class ShopPagesShopPageEvaluateRightList extends StatelessWidget {
   Widget _addShopingcar(CommodityList commodityList, ShopPagesBloc bloc) {
     return InkWell(
       onTap: () async {
-        await bloc.saveCommodity(commodityList.id, commodityList.name, 1, commodityList.price, commodityList.cover);
+        await bloc.saveCommodityToShoppingCar(id: commodityList.id, name: commodityList.name, count: 1, price: commodityList.price, cover: commodityList.cover);
       },
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),

@@ -5,6 +5,7 @@ class CommodityInfoVo {
   double price;
   String cover;
   bool isCheck;
+  int delFlag;
 
   CommodityInfoVo({this.id, this.name, this.count, this.price, this.cover, this.isCheck});
 
@@ -15,6 +16,7 @@ class CommodityInfoVo {
     price = json['price'];
     cover = json['cover'];
     isCheck = json['isCheck'];
+    delFlag = json['delFlag'];
   }
 
   Map<String, dynamic> toJson() {
@@ -25,6 +27,15 @@ class CommodityInfoVo {
     data['price'] = this.price;
     data['cover'] = this.cover;
     data['isCheck'] = this.isCheck;
+    data['delFlag'] = this.delFlag;
     return data;
+  }
+
+  static List<CommodityInfoVo> fromJsonList(dynamic maps) {
+    List<CommodityInfoVo> list = List(maps.length);
+    for (int i = 0; i < maps.length; i++) {
+      list[i] = CommodityInfoVo.fromJson(maps[i]);
+    }
+    return list;
   }
 }

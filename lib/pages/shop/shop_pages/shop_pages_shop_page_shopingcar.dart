@@ -16,7 +16,6 @@ class ShopPagesShopPageShopingcar extends StatelessWidget {
   Widget build(BuildContext context) {
     final ShopPagesBloc _bloc = BlocProvider.of<ShopPagesBloc>(context);
     _bloc.setCommodityKey(id);
-    _bloc.getCommodityList();
     _bloc.getCommodityNewestPrice();
     return Scaffold(
       appBar: AppBar(

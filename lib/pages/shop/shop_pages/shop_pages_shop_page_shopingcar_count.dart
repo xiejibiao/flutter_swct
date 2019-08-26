@@ -31,7 +31,7 @@ class ShopPagesShopPageShopingcarCount extends StatelessWidget {
   Widget _reduceBtn(ShopPagesBloc bloc) {
     return InkWell(
       onTap: () {
-        bloc.addOrReduceAction(commodityInfoVo, 'reduce');
+        bloc.increaseOrReduceOperation(id: commodityInfoVo.id, isIncrease: false);
       },
       child: Container(
         width: ScreenUtil().setWidth(45),
@@ -51,7 +51,7 @@ class ShopPagesShopPageShopingcarCount extends StatelessWidget {
   Widget _addBtn(ShopPagesBloc bloc) {
     return InkWell(
       onTap: () {
-        bloc.addOrReduceAction(commodityInfoVo, 'add');
+        bloc.increaseOrReduceOperation(id: commodityInfoVo.id, isIncrease: true);
       },
       child: Container(
         width: ScreenUtil().setWidth(45),
