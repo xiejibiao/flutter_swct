@@ -12,7 +12,6 @@ import 'package:flutter_swcy/vo/shop/commodity_shopingcar_vo.dart';
 import 'package:flutter_swcy/vo/shop/shop_type_and_essential_message_vo.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:rxdart/subjects.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class ShopPagesBloc extends BlocBase {
 

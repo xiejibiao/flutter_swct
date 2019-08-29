@@ -1,9 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_swcy/bloc/bloc_provider.dart';
+import 'package:flutter_swcy/bloc/person/person_info_receiving_address_bloc.dart';
 import 'package:flutter_swcy/pages/person/person_info_authentication_page.dart';
 import 'package:flutter_swcy/pages/person/person_info_edit_mailbox_page.dart';
 import 'package:flutter_swcy/pages/person/person_info_edit_password_page.dart';
+import 'package:flutter_swcy/pages/person/person_info_receiving_address_page.dart';
 import 'package:flutter_swcy/pages/person/person_share_page.dart';
 import 'package:flutter_swcy/vo/person/person_info_vo.dart';
 
@@ -21,6 +24,7 @@ class PersonInfoPageItem extends StatelessWidget {
         _buildItem('assets/image_icon/icon_mailbox.png', '邮箱', PersonInfoEditMailboxPage(), context, value: personInfoVo.data.email),
         _buildItem('assets/image_icon/icon_qr_code.png', '我的分享码', PersonSharePage(), context),
         _buildItem('assets/image_icon/icon_edit_password.png', '修改密码', PersonInfoEditPasswordPage(), context),
+        _buildItem('assets/image_icon/icon_receiving_address.png', '收货地址', BlocProvider(bloc: PersonInfoReceivingAddressBloc(), child: PersonInfoReceivingAddressPage()), context),
       ],
     );
   }

@@ -26,6 +26,10 @@ const servicePath = {
   'getMessage': serviceBaseUrl + '/person/getMessage',                                                // 获取个人消息，通告消息
   'getMyTeamAchievement': serviceBaseUrl + '/person/getMyTeamAchievement',                            // 获取我的团队总业绩
   'getMyTeam': serviceBaseUrl + '/person/getMyTeam',                                                  // 获取我的团队
+  'saveReceivingAddress': serviceBaseUrl + '/person/saveReceivingAddress',                            // 添加收货地址
+  'getReceivingAddressListByUId': serviceBaseUrl + '/person/getReceivingAddressListByUId',            // 获取收货地址
+  'deleteReceivingAddressById': serviceBaseUrl + '/person/deleteReceivingAddressById',                // 删除收货地址
+  'updateReceivingAddress': serviceBaseUrl + '/person/updateReceivingAddress',                        // 修改收货地址
   'getOrderPage': serviceBaseUrl + '/order/getOrderPage',                                             // 获取订单列表
   'getOrderDetailById': serviceBaseUrl + '/order/getOrderDetailById',                                 // 获取订单详情
 };
