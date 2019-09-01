@@ -3,7 +3,6 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_swcy/bloc/bloc_provider.dart';
 import 'package:flutter_swcy/bloc/shop/shop_pages_bloc.dart';
-import 'package:city_pickers/city_pickers.dart';
 
 class ShopPagesShopPageShopingcarBottom extends StatelessWidget {
   @override
@@ -96,11 +95,7 @@ class ShopPagesShopPageShopingcarBottom extends StatelessWidget {
           padding: EdgeInsets.only(left: 10.0),
           child: InkWell(
             onTap: () async {
-              print('点击结算');
-              Result result = await CityPickers.showCityPicker(
-                context: context
-              );
-              print(result);
+              
             },
             child: Container(
               padding: EdgeInsets.all(10.0),
