@@ -1,10 +1,21 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_swcy/bloc/bloc_provider.dart';
+import 'package:flutter_swcy/bloc/person/person_info_receiving_address_bloc.dart';
 import 'package:flutter_swcy/bloc/shop/shop_pages_bloc.dart';
+import 'package:flutter_swcy/pages/shop/shop_pages/shop_pages_shop_page_shopingcar_settlement.dart';
 
 class ShopPagesShopPageShopingcarBottom extends StatelessWidget {
+  final int id;
+  final String shopName;
+  ShopPagesShopPageShopingcarBottom(
+    {
+      @required this.id,
+      @required this.shopName,
+    }
+  );
   @override
   Widget build(BuildContext context) {
     final ShopPagesBloc _bloc = BlocProvider.of<ShopPagesBloc>(context);
@@ -95,7 +106,16 @@ class ShopPagesShopPageShopingcarBottom extends StatelessWidget {
           padding: EdgeInsets.only(left: 10.0),
           child: InkWell(
             onTap: () async {
-              
+              Navigator.push(
+                context, 
+                CupertinoPageRoute(
+                  builder: (context) => 
+                    BlocProvider(
+                      child: BlocProvider(child: ShopPagesShopPageShopingcarSettlement(id: id, shopName: shopName,), bloc: PersonInfoReceivingAddressBloc()),
+                      bloc: ShopPagesBloc(),
+                    )
+                  )
+                );
             },
             child: Container(
               padding: EdgeInsets.all(10.0),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_swcy/bloc/bloc_provider.dart';
 import 'package:flutter_swcy/bloc/person_page_bloc.dart';
@@ -11,11 +12,51 @@ class PersonAboutPage extends StatelessWidget {
       appBar: AppBar(
         title: Text('关于'),
       ),
-      body: ListView(
+      body: Column(
         children: <Widget>[
-          _abotListTile(context),
-          SizedBox(height: 50.0),
-          _logoutButton(context, _bloc)
+          Expanded(
+            child: Column(
+              children: <Widget>[
+                _abotListTile(context),
+                SizedBox(height: 50.0),
+                _logoutButton(context, _bloc)
+              ],
+            ),
+          ),
+          Expanded(
+            child: Column(
+              children: <Widget>[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text(
+                      'Copyright',
+                      style: TextStyle(
+                        color: Colors.grey
+                      ),
+                    ),
+                    Image.asset(
+                      'assets/image_icon/icon_copyright.png',
+                      width: 15,
+                      color: Colors.grey
+                    ),
+                    Text(
+                      '2019',
+                      style: TextStyle(
+                        color: Colors.grey
+                      ),
+                    )
+                  ],
+                ),
+                Text(
+                  '两个码农 版权所有',
+                  style: TextStyle(
+                    color: Colors.grey
+                  ),
+                ),
+              ],
+            ),
+          )
         ],
       ),
     );
@@ -66,6 +107,7 @@ class PersonAboutPage extends StatelessWidget {
       stream: bloc.isLogoutLoadingStream,
       builder: (context, sanpshop) {
         return Container(
+          width: ScreenUtil().setWidth(740),
           padding: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
           child: FlatButton(
             splashColor: Colors.white54,

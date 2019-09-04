@@ -166,6 +166,10 @@ class ShopPagesBloc extends BlocBase {
   BehaviorSubject<bool> _isAllCheckController = BehaviorSubject<bool>();
   Sink<bool> get _isAllCheckSink => _isAllCheckController.sink;
   Stream<bool> get isAllCheckStream => _isAllCheckController.stream;
+  // 结算时，获取选中的商品列表
+  BehaviorSubject<Map<String, dynamic>> _settlementCommodityInfoVoListController = BehaviorSubject<Map<String, dynamic>>();
+  Sink<Map<String, dynamic>> get _settlementCommodityInfoVoListSink => _settlementCommodityInfoVoListController.sink;
+  Stream<Map<String, dynamic>> get settlementCommodityInfoVoListStream => _settlementCommodityInfoVoListController.stream;
   bool _isAllChecked = false;                   // 是否全选
   int _allSelectedCount = 0;                    // 选中的物品数量
   double _allSelectedPrice = 0.0;               // 选中物品的全部价格
@@ -318,6 +322,31 @@ class ShopPagesBloc extends BlocBase {
     await _notifyChanges(carts);
   }
 
+  // 获取选中的购物车商品
+  getShopingCarCommoditysByIsCheckFormTrue(int shopId) {
+    PreferenceUtils.instance.getString(key: '${commodityKey}_$shopId', defaultValue: '[]').then((value) {
+      List<CommodityInfoVo> commodityInfoVos = CommodityInfoVo.fromJsonList(json.decode(value));
+      List<CommodityInfoVo> newCommodityInfoVos = [];
+      int count = 0;
+      double pricr = 0.0;
+      Map<String, dynamic> map = Map<String, dynamic>();
+      commodityInfoVos.forEach((item) {
+        if (item.isCheck) {
+          newCommodityInfoVos.add(item);
+          count += item.count;
+          pricr += item.count * item.price;
+        }
+      });
+      map.addAll(
+        {
+          'list': newCommodityInfoVos,
+          'count': count,
+          'price': pricr
+        }
+      );
+      _settlementCommodityInfoVoListSink.add(map);
+    });    
+  }
 
   @override
   void dispose() {
@@ -330,5 +359,6 @@ class ShopPagesBloc extends BlocBase {
     _allCommodityCountController.close();
     _allPriceController.close();
     _isAllCheckController.close();
+    _settlementCommodityInfoVoListController.close();
   }
 }

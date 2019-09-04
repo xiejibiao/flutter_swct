@@ -9,8 +9,12 @@ import 'package:flutter_swcy/vo/shop/commodity_info_vo.dart';
 
 class ShopPagesShopPageShopingcar extends StatelessWidget {
   final int id;
+  final String shopName;
   ShopPagesShopPageShopingcar(
-    this.id
+    {
+      @required this.id,
+      @required this.shopName
+    }
   );
   @override
   Widget build(BuildContext context) {
@@ -41,7 +45,7 @@ class ShopPagesShopPageShopingcar extends StatelessWidget {
                   Positioned(
                     bottom: 0,
                     left: 0,
-                    child: ShopPagesShopPageShopingcarBottom(),
+                    child: ShopPagesShopPageShopingcarBottom(id: id, shopName: shopName,),
                   )
                 ],
               ),

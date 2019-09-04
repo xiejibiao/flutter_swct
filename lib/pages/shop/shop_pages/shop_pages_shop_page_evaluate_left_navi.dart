@@ -40,10 +40,11 @@ class ShopPagesShopPageEvaluateLeftNavi extends StatelessWidget {
         bloc.setLeftIndex(index);
       },
       child: Container(
+        alignment: Alignment.centerLeft,
         height: ScreenUtil().setHeight(100),
-        padding: EdgeInsets.only(left: 10, top: 14),
+        padding: EdgeInsets.only(left: 10),
         decoration: BoxDecoration(
-          color: isSelected ? Colors.blueAccent : Colors.white,
+          color: isSelected ? Colors.blue : Colors.white,
           border: Border(
             bottom: BorderSide(width: 1, color: Colors.black12)
           )
