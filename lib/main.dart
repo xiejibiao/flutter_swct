@@ -8,8 +8,10 @@ import 'package:flutter_swcy/bloc/person_page_bloc.dart';
 import 'package:flutter_swcy/bloc/shop_page_bloc.dart';
 import 'package:flutter_swcy/pages/init_page.dart';
 import 'package:oktoast/oktoast.dart';
+import 'package:fluwx/fluwx.dart' as fluwx;
 
-void main() {
+void main() async {
+  await fluwx.register(appId:"wx6135b0ad2c35654c");
   runApp(
     BlocProvider(
       bloc: PersonInfoPageBloc(),

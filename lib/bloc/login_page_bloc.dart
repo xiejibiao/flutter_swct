@@ -6,6 +6,7 @@ import 'package:flutter_swcy/service/service_method.dart';
 import 'package:flutter_swcy/vo/login_vo.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:fluwx/fluwx.dart' as fluwx;
 
 class LoginPageBloc extends BlocBase{
 
@@ -73,6 +74,45 @@ class LoginPageBloc extends BlocBase{
     }
   }
 
+
+  // 改版后的方式
+  // 初始化微信登录授权成功监听
+  initFluwxAuthListen(BuildContext context) {
+    fluwx.responseFromAuth.listen((data) {
+      print('\n\n\n');
+      print('data: $data');
+      print('code: ${data.code}');
+      print('errCode: ${data.errCode}');
+      print('\n\n\n');
+      login(context);
+    });
+  }
+
+  fluwxAuth() async {
+    bool isInstalledWeChat = await fluwx.isWeChatInstalled();
+    if (isInstalledWeChat) {
+      await fluwx.sendAuth(scope: "snsapi_userinfo", state: "wechat_sdk_demo_test");
+    } else {
+      showToast('请先安装微信');
+    }
+  }
+
+  login (BuildContext context) async {
+    final PersonInfoPageBloc pageBloc = BlocProvider.of<PersonInfoPageBloc>(context);
+    var formData = {
+      'phone': '13724603643',
+      'password': '11111111q',
+    };
+    await requestPost('login', formData: formData).then((val) {
+      LoginVo loginVo = LoginVo.fromJson(val);
+      if (loginVo.code == '200') {
+        saveToken(loginVo.data.accessToken);
+        pageBloc.getPersonInfo(context);
+      } else {
+        showToast(loginVo.message);
+      }
+    });
+  }
 
   @override
   void dispose() {
