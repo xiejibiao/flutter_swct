@@ -37,6 +37,8 @@ class PersonComplaintsPage extends StatelessWidget {
             validator: (value) {
               if (value == '') {
                 return '请填写反馈信息';
+              } else {
+                return '';
               }
             },
             onSaved: (value) {

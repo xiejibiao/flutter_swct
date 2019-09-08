@@ -13,6 +13,19 @@ const servicePath = {
   'followAndCleanFollow': serviceBaseUrl + '/store/followAndCleanFollow',                             // 关注与取消关注
   'getCommodityPageByCommodityTypeId': serviceBaseUrl + '/store/getCommodityPageByCommodityTypeId',   // 获取门店商品列表
   'getCommodityNewestPrice': serviceBaseUrl + '/store/getCommodityNewestPrice',                       // 获取商品最新价格
+  'addStoreForUnlicensed': serviceBaseUrl + '/store/addStoreForUnlicensed',                           // 添加无证共享店
+  'addStore': serviceBaseUrl + '/store/addStore',                                                     // 添加有证共享店
+  'authenticationStore': serviceBaseUrl + '/store/authenticationStore',                               // 认证共享店
+  'addCommodityType': serviceBaseUrl + '/store/addCommodityType',                                     // 添加商品类型
+  'editCommodityType': serviceBaseUrl + '/store/editCommodityType',                                   // 修改商品类型
+  'deleteCommodityType': serviceBaseUrl + '/store/deleteCommodityType',                               // 删除商品类型
+  'addCommodity': serviceBaseUrl + '/store/addCommodity',                                             // 添加商品
+  'editCommodity': serviceBaseUrl + '/store/editCommodity',                                           // 修改商品
+  'deleteCommodity': serviceBaseUrl + '/store/deleteCommodity',                                       // 删除商品
+  'upperShelfAndLowerShelf': serviceBaseUrl + '/store/upperShelfAndLowerShelf',                       // 上架或下架：0下架，1 上架
+  'getQiNiuToken': serviceBaseUrl + '/store/getQiNiuToken',                                           // 获取七牛云上传文件Token
+  'getMyStorePage': serviceBaseUrl + '/store/getMyStorePage',                                         // 获取我的共享店
+  'getStoreById': serviceBaseUrl + '/store/getStoreById',                                             // 获取门店
   'getPersonAndAdList': serviceBaseUrl + '/person/getPersonAndAdList',                                // 获取基本信息与广告
   'upDateAvatar': serviceBaseUrl + '/person/upDateAvatar',                                            // 修改头像
   'getPersonInfo': serviceBaseUrl + '/person/getPersonInfo',                                          // 获取用户基本信息
