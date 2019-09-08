@@ -51,6 +51,8 @@ class PersonInfoEditPasswordPage extends StatelessWidget {
       validator: (String value) {
         if (!_passwordRegExp.hasMatch(value)) {
           return '密码长度或格式错误';
+        } else {
+          return '';
         }
       },
     );
@@ -73,7 +75,7 @@ class PersonInfoEditPasswordPage extends StatelessWidget {
         if (!_passwordRegExp.hasMatch(value)) {
           return '密码长度或格式错误';
         } else {
-          bloc.setNewPassword(value);
+          return bloc.setNewPassword(value);
         }
       },
     );
@@ -98,6 +100,8 @@ class PersonInfoEditPasswordPage extends StatelessWidget {
           validator: (String value) {
             if (value != sanpshop.data) {
               return '两次密码不相同';
+            } else {
+              return '';
             }
           },
         );

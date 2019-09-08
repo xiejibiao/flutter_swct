@@ -13,7 +13,7 @@ class PersonSmsPageNoticeSms extends StatefulWidget {
   _PersonSmsPageNoticeSmsState createState() => _PersonSmsPageNoticeSmsState();
 }
 
-class _PersonSmsPageNoticeSmsState extends State<PersonSmsPageNoticeSms> with AutomaticKeepAliveClientMixin {
+class _PersonSmsPageNoticeSmsState extends State<PersonSmsPageNoticeSms> {
   final GlobalKey<RefreshFooterState> _footerKey = GlobalKey<RefreshFooterState>();
   @override
   Widget build(BuildContext context) {
@@ -55,7 +55,7 @@ class _PersonSmsPageNoticeSmsState extends State<PersonSmsPageNoticeSms> with Au
                 ],
               ),
               loadMore: () {
-                _bloc.getnoticeMessageLoadMore(context);
+                return _bloc.getnoticeMessageLoadMore(context);
               },
             );
           }
@@ -103,7 +103,4 @@ class _PersonSmsPageNoticeSmsState extends State<PersonSmsPageNoticeSms> with Au
       ),
     );
   }
-
-  @override
-  bool get wantKeepAlive => true;
 }

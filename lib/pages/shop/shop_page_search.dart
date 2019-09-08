@@ -15,7 +15,7 @@ class ShopPageSearch extends StatefulWidget {
   _ShopPageSearchState createState() => _ShopPageSearchState();
 }
 
-class _ShopPageSearchState extends State<ShopPageSearch> with AutomaticKeepAliveClientMixin {
+class _ShopPageSearchState extends State<ShopPageSearch> {
   int pageNumber = 0;
   int pageSize = 10;
   ShopListVo shopListVo;
@@ -35,9 +35,6 @@ class _ShopPageSearchState extends State<ShopPageSearch> with AutomaticKeepAlive
             ) : shopListVo.data.list.length == 0 ? ShopPageSearchDefaultPage() : _buildEasyRefresh()
     );
   }
-
-  @override
-  bool get wantKeepAlive => true;
 
   Widget _buildTextField() {
     return TextField(
@@ -117,6 +114,7 @@ class _ShopPageSearchState extends State<ShopPageSearch> with AutomaticKeepAlive
         if ((shopListVo.data.pageNumber + 1) < shopListVo.data.totalPage) {
           loadMoreShopPage(widget.latitude, widget.longitude, textEditingController.text);
         }
+        return;
       },
     );
   }

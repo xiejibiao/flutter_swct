@@ -12,7 +12,7 @@ class PersonSmsPageMySms extends StatefulWidget {
   _PersonSmsPageMySmsState createState() => _PersonSmsPageMySmsState();
 }
 
-class _PersonSmsPageMySmsState extends State<PersonSmsPageMySms> with AutomaticKeepAliveClientMixin {
+class _PersonSmsPageMySmsState extends State<PersonSmsPageMySms> {
   final GlobalKey<RefreshFooterState> _footerKey = GlobalKey<RefreshFooterState>();
 
   @override
@@ -55,7 +55,7 @@ class _PersonSmsPageMySmsState extends State<PersonSmsPageMySms> with AutomaticK
                 ],
               ),
               loadMore: () {
-                _bloc.getMyMessageLoadMore(context);
+                return _bloc.getMyMessageLoadMore(context);
               },
             );
           }
@@ -103,7 +103,4 @@ class _PersonSmsPageMySmsState extends State<PersonSmsPageMySms> with AutomaticK
       ),
     );
   }
-
-  @override
-  bool get wantKeepAlive => true;
 }

@@ -53,6 +53,8 @@ class _RegisterPageSmsCodeState extends State<RegisterPageSmsCode> {
             var smsCodeRegExp = RegExp('^\\d{6}\$');
             if (!smsCodeRegExp.hasMatch(value)) {
               return '请输入正确的验证码';
+            } else {
+              return '';
             }
           },
           onSaved: (value) {

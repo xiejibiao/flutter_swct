@@ -13,7 +13,7 @@ class ShopPagesShopPageEvaluate extends StatefulWidget {
   _ShopPagesShopPageEvaluateState createState() => _ShopPagesShopPageEvaluateState();
 }
 
-class _ShopPagesShopPageEvaluateState extends State<ShopPagesShopPageEvaluate> with AutomaticKeepAliveClientMixin {
+class _ShopPagesShopPageEvaluateState extends State<ShopPagesShopPageEvaluate> {
   @override
   Widget build(BuildContext context) {
     return widget.commodityTypeList.length == 0 ? 
@@ -26,7 +26,4 @@ class _ShopPagesShopPageEvaluateState extends State<ShopPagesShopPageEvaluate> w
                 ],
               );
   }
-
-  @override
-  bool get wantKeepAlive => true;
 }

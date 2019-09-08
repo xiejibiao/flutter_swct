@@ -10,7 +10,7 @@ class ShopPagesShopPageDetails extends StatefulWidget {
   _ShopPagesShopPageDetailsState createState() => _ShopPagesShopPageDetailsState();
 }
 
-class _ShopPagesShopPageDetailsState extends State<ShopPagesShopPageDetails> with AutomaticKeepAliveClientMixin{
+class _ShopPagesShopPageDetailsState extends State<ShopPagesShopPageDetails> {
   @override
   Widget build(BuildContext context) {
     final ShopPagesBloc _bloc = BlocProvider.of<ShopPagesBloc>(context);
@@ -36,7 +36,4 @@ class _ShopPagesShopPageDetailsState extends State<ShopPagesShopPageDetails> wit
       ),
     );
   }
-
-  @override
-  bool get wantKeepAlive => true;
 }

@@ -77,6 +77,8 @@ class _PersonInfoReceivingAddressTextFormFieldColumnState extends State<PersonIn
             if(ObjectUtil.isEmptyString(val)) {
               showToast('请输入收货人');
               return '';
+            } else {
+              return '';
             }
           },
           onSaved: (val) {
@@ -115,6 +117,8 @@ class _PersonInfoReceivingAddressTextFormFieldColumnState extends State<PersonIn
             validator: (val) {
               if(ObjectUtil.isEmptyString(val)) {
                 showToast('请选择所在地区');
+                return '';
+              } else {
                 return '';
               }
             },
@@ -161,6 +165,8 @@ class _PersonInfoReceivingAddressTextFormFieldColumnState extends State<PersonIn
             if (!phoneRegExp.hasMatch(val)) {
               showToast('您的手机号码未输入或输入有误');
               return '';
+            } else {
+              return '';
             }
           },
           onSaved: (val) {
@@ -206,6 +212,8 @@ class _PersonInfoReceivingAddressTextFormFieldColumnState extends State<PersonIn
           validator: (val) {
             if(ObjectUtil.isEmptyString(val)) {
               showToast('请输入详细地址');
+              return '';
+            } else {
               return '';
             }
           },

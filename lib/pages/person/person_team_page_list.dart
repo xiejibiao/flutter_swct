@@ -42,25 +42,10 @@ class PersonTeamPageList extends StatelessWidget {
                     },
                   ),
                   _bloc.myTeamIsEnd ? TheEndBaseline() : Text('')
-                  // StreamBuilder(
-                  //   stream: _bloc.myTeamIsEndStream,
-                  //   initialData: false,
-                  //   builder: (context, sanpshop) {
-                  //     if (sanpshop.hasData) {
-                  //       if (sanpshop.data) {
-                  //         return TheEndBaseline();
-                  //       } else {
-                  //         return Text('');
-                  //       }
-                  //     } else {
-                  //       return Text('');
-                  //     }
-                  //   },
-                  // )
                 ],
               ),
               loadMore: () {
-                _bloc.getMyTeamLoadMore(context);
+                return _bloc.getMyTeamLoadMore(context);
               },
             );
           } else {

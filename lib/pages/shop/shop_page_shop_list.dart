@@ -82,6 +82,7 @@ class _ShopPageShopListState extends State<ShopPageShopList> {
             }
           });
         }
+        return;
       },
     );
   }

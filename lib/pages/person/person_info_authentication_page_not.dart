@@ -40,6 +40,8 @@ class PersonInfoAuthenticationPageNot extends StatelessWidget {
       validator: (String value) {
         if (!RegexUtil.isZh(value) || value.length < 2 || value.length > 4) {
           return '姓名错误';
+        } else {
+          return '';
         }
       },
       decoration: InputDecoration(
@@ -59,6 +61,8 @@ class PersonInfoAuthenticationPageNot extends StatelessWidget {
       validator: (String value) {
         if (!RegexUtil.isIDCard18(value)) {
           return '身份证号码错误';
+        } else {
+          return '';
         }
       },
       decoration: InputDecoration(

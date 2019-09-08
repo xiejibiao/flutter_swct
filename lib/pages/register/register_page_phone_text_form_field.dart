@@ -27,6 +27,8 @@ class RegisterPagePhoneTextFormField extends StatelessWidget {
             var phoneRegExp = RegExp('^((13[0-9])|(15[^4])|(166)|(17[0-8])|(18[0-9])|(19[8-9])|(147,145))\\d{8}\$');
             if (!phoneRegExp.hasMatch(value)) {
               return '请输入正确的手机账号';
+            } else {
+              return '';
             }
           },
           onSaved: (value) {

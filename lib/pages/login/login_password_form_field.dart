@@ -41,6 +41,8 @@ class LoginPasswordFormField extends StatelessWidget {
                 var passwordRegExp = RegExp('^(?![0-9]+\$)(?![a-z]+\$)(?![A-Z]+\$)(?!([^(0-9a-zA-Z)])+\$).{8,32}\$');
                 if (!passwordRegExp.hasMatch(value)) {
                   return '密码长度或格式错误';
+                } else {
+                  return '';
                 }
               },
             );

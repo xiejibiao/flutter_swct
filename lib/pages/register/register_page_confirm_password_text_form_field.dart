@@ -40,6 +40,8 @@ class RegisterPageConfirmPasswordTextFormField extends StatelessWidget {
               validator: (String value) {
                 if (value != bloc.password) {
                   return '两次密码不相同';
+                } else {
+                  return '';
                 }
               },
             );

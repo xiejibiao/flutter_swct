@@ -70,7 +70,7 @@ class ShopPagesShopPageEvaluateRightList extends StatelessWidget {
                   ],
                 ),
                 loadMore: () {
-                  _bloc.loadMoreCommodityPageByCommodityTypeId();
+                  return _bloc.loadMoreCommodityPageByCommodityTypeId();
                 },
               );
             }

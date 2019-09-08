@@ -48,7 +48,7 @@ class OrderPage extends StatelessWidget {
                   ],
                 ),
                 loadMore: () {
-                  _bloc.loadMoreOrderPage(context);
+                  return _bloc.loadMoreOrderPage(context);
                 },
               );
             }
