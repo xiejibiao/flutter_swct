@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_swcy/bloc/shop_page_bloc.dart';
 import 'package:flutter_swcy/common/the_end_baseline.dart';
-import 'package:flutter_swcy/pages/shop/shop_page_shop_list_item.dart';
+import 'package:flutter_swcy/pages/shop/shop_page_grid_view_item.dart';
 import 'package:flutter_swcy/vo/shop/shop_list_vo.dart';
 
 class ShopPageShopList extends StatefulWidget {
@@ -50,20 +50,7 @@ class _ShopPageShopListState extends State<ShopPageShopList> {
       ),
       child: ListView(
         children: <Widget>[
-          GridView.builder(
-            shrinkWrap: true,
-            physics: new NeverScrollableScrollPhysics(),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              mainAxisSpacing: 10.0,
-              crossAxisSpacing: 10.0,
-              childAspectRatio: 0.9
-            ),
-            itemCount: widget.shopListVo.data.list.length,
-            itemBuilder: (context, index) {
-              return ShopPageShopListItem(widget.shopListVo.data.list[index]);
-            },
-          ),
+          ShopPageGridViewItem(widget.shopListVo.data.list),
           theEnd ? TheEndBaseline() : Text('')
         ],
       ),

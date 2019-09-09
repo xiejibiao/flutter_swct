@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_swcy/common/the_end_baseline.dart';
+import 'package:flutter_swcy/pages/shop/shop_page_grid_view_item.dart';
 import 'package:flutter_swcy/pages/shop/shop_page_search_default_page.dart';
-import 'package:flutter_swcy/pages/shop/shop_page_shop_list_item.dart';
 import 'package:flutter_swcy/service/service_method.dart';
 import 'package:flutter_swcy/vo/shop/shop_list_vo.dart';
 
@@ -93,20 +93,7 @@ class _ShopPageSearchState extends State<ShopPageSearch> {
       ),
       child: ListView(
         children: <Widget>[
-          GridView.builder(
-            shrinkWrap: true,
-            physics: new NeverScrollableScrollPhysics(),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              mainAxisSpacing: 10.0,
-              crossAxisSpacing: 10.0,
-              childAspectRatio: 1.0
-            ),
-            itemCount: shopListVo.data.list.length,
-            itemBuilder: (context, index) {
-              return ShopPageShopListItem(shopListVo.data.list[index]);
-            },
-          ),
+          ShopPageGridViewItem(shopListVo.data.list),
           isTheEnd ? TheEndBaseline() : Text('')
         ],
       ),
