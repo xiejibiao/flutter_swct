@@ -11,6 +11,8 @@ import 'package:flutter_swcy/pages/person/person_complaints_page.dart';
 import 'package:flutter_swcy/pages/person/person_sms_page.dart';
 import 'package:flutter_swcy/pages/person/person_team_page.dart';
 import 'package:flutter_swcy/pages/person/shareshop/share_shop_page.dart';
+import 'package:flutter_swcy/show_map_screen.dart';
+import 'package:flutter_swcy/test_my_map.dart';
 import 'package:oktoast/oktoast.dart';
 
 class PersonPageItemButtom extends StatelessWidget {
@@ -25,7 +27,9 @@ class PersonPageItemButtom extends StatelessWidget {
           _item(context, Icons.group, '我的团队', PersonTeamPage()),
           _item(context, Icons.store, '我的盟店', MyWidget()),
           // _item(context, Icons.store, '我的盟店', null),
-          _item(context, Icons.star, '收藏', null),
+          // _item(context, Icons.star, '收藏', null),
+          _item(context, Icons.star, '地图测试', TestMyMap()),
+          _item(context, Icons.star, '地图测试1', ShowMapScreen()),
           _item(context, Icons.textsms, '消息', PersonSmsPage()),
           _item(context, Icons.insert_chart, '我的业绩', PersonAchievementPage()),
           _item(context, Icons.sms_failed, '意见与建议', PersonComplaintsPage()),

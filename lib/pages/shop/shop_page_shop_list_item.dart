@@ -26,7 +26,7 @@ class ShopPageShopListItem extends StatelessWidget {
               shopData.photo,
               width: MediaQuery.of(context).size.width,
               height: ScreenUtil().setHeight(280),
-              fit: BoxFit.cover,
+              fit: BoxFit.fill,
             ),
             Text(shopData.name),
             Row(

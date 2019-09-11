@@ -7,10 +7,7 @@ import 'package:flutter_swcy/pages/home/home_head_top.dart';
 import 'package:flutter_swcy/pages/swiper_page.dart';
 import 'package:flutter_swcy/vo/home/home_vo.dart';
 
-final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-
 class HomePage extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     final HomePageBloc _bloc = BlocProvider.of<HomePageBloc>(context);

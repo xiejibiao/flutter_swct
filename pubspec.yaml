@@ -31,7 +31,6 @@ dependencies:
   image_picker: ^0.6.1
   image_cropper: ^1.0.2
   oktoast: ^2.2.0
-  # amap_base: ^0.3.5
   amap_base:
     git:
       url: https://github.com/yohom/amap_base_flutter.git
@@ -40,8 +39,11 @@ dependencies:
   rxdart: ^0.22.1
   flutter_html: ^0.10.4
   city_pickers: ^0.1.23
-  fluwx: 0.6.0
+  fluwx: ^0.6.0
   zefyr: ^0.6.1
+  flutter_sujian_select: ^1.0.1
+  flutter_qiniu: ^0.1.2
+  multi_image_picker: ^4.5.3
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -50,7 +52,6 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
 
 # For information on the generic Dart part of this file, see the
 # following page: https://www.dartlang.org/tools/pub/pubspec
