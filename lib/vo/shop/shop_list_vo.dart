@@ -61,7 +61,7 @@ class ShopData {
   int likeVolume;
   String address;
   String lng;
-  String name;
+  String storeName;
   double juli;
   String photo;
   int id;
@@ -71,7 +71,7 @@ class ShopData {
       {this.likeVolume,
       this.address,
       this.lng,
-      this.name,
+      this.storeName,
       this.juli,
       this.photo,
       this.id,
@@ -81,7 +81,7 @@ class ShopData {
     likeVolume = json['likeVolume'];
     address = json['address'];
     lng = json['lng'];
-    name = json['name'];
+    storeName = json['storeName'];
     juli = json['juli'];
     photo = json['photo'];
     id = json['id'];
@@ -93,7 +93,7 @@ class ShopData {
     data['likeVolume'] = this.likeVolume;
     data['address'] = this.address;
     data['lng'] = this.lng;
-    data['name'] = this.name;
+    data['storeName'] = this.storeName;
     data['juli'] = this.juli;
     data['photo'] = this.photo;
     data['id'] = this.id;

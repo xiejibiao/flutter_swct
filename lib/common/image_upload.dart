@@ -3,6 +3,7 @@ import 'package:flutter_qiniu/flutter_qiniu.dart';
 import 'package:flutter_swcy/service/service_method.dart';
 import 'package:flutter_swcy/vo/qiniu_token_vo.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
+import 'package:oktoast/oktoast.dart';
 
 class ImageUpload {
   static const String QI_NIU_URI = 'http://qncdn.gdsdec.com/';
@@ -77,7 +78,7 @@ class ImageUpload {
         ),
       );
     } on Exception catch (e) {
-      // showToast(e.toString());
+      showToast(e.toString());
     }
     return resultList;
   }

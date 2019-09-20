@@ -1,3 +1,4 @@
+import 'package:common_utils/common_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_swcy/bloc/bloc_provider.dart';
@@ -22,12 +23,12 @@ class _ShopPagesShopPageDetailsState extends State<ShopPagesShopPageDetails> {
             return showLoading();
           } else {
             ShopTypeAndEssentialMessageVo shopTypeAndEssentialMessageVo = sanpshop.data;
-            if (shopTypeAndEssentialMessageVo.data.swcyStoreEntity.desc == '') {
+            if (TextUtil.isEmpty(shopTypeAndEssentialMessageVo.data.swcyStoreEntity.description)) {
               return ShopPageSearchDefaultPage();
             } else {
               return SingleChildScrollView(
                 child: Html(
-                  data: shopTypeAndEssentialMessageVo.data.swcyStoreEntity.desc,
+                  data: shopTypeAndEssentialMessageVo.data.swcyStoreEntity.description,
                 ),
               );
             }

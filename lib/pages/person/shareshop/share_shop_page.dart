@@ -1,3 +1,4 @@
+import 'package:common_utils/common_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
@@ -7,6 +8,7 @@ import 'package:flutter_swcy/bloc/person/share_shop_page_bloc.dart';
 import 'package:flutter_swcy/common/loading.dart';
 import 'package:flutter_swcy/common/the_end_baseline.dart';
 import 'package:flutter_swcy/pages/person/shareshop/share_shop_page_add.dart';
+import 'package:flutter_swcy/pages/person/shareshop/share_shop_page_authentication.dart';
 import 'package:flutter_swcy/vo/shop/my_store_page_vo.dart';
 
 class ShareShopPage extends StatelessWidget {
@@ -22,7 +24,7 @@ class ShareShopPage extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.add, size: 32),
             onPressed: () {
-              Navigator.push(context, CupertinoPageRoute(builder: (context) => BlocProvider(child: ShareShopPageAdd(), bloc: ShareShopPageBloc(),)));
+              Navigator.push(context, CupertinoPageRoute(builder: (context) => BlocProvider(child: ShareShopPageAdd(_bloc), bloc: ShareShopPageBloc())));
             },
           )
         ],
@@ -53,7 +55,7 @@ class ShareShopPage extends StatelessWidget {
                 ),
                 child: ListView(
                   children: <Widget>[
-                    _buildStoreItem(myStorePageVo),
+                    _buildStoreItem(myStorePageVo, _bloc),
                     _bloc.isEnd ? TheEndBaseline() : Text('')
                   ],
                 ),
@@ -68,7 +70,7 @@ class ShareShopPage extends StatelessWidget {
     );
   }
 
-  Widget _buildStoreItem(MyStorePageVo myStorePageVo) {
+  Widget _buildStoreItem(MyStorePageVo myStorePageVo, ShareShopPageBloc bloc) {
     return ListView.builder(
       shrinkWrap: true,
       physics: NeverScrollableScrollPhysics(),
@@ -100,12 +102,12 @@ class ShareShopPage extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
-                            Text(myStorePageVo.data.list[index].name),
+                            Text(myStorePageVo.data.list[index].storeName),
                             Text(myStorePageVo.data.list[index].isChecked == 1 ? '持证上线' : '无证照上线'),
                           ],
                         ),
                       ),
-                      _buildButtom(myStorePageVo.data.list[index].isChecked, myStorePageVo.data.list[index].licenseCode == '' ? false : true)
+                      _buildButtom(myStorePageVo.data.list[index].isChecked, TextUtil.isEmpty(myStorePageVo.data.list[index].licenseCode) ? false : true, context, myStorePageVo.data.list[index].id, bloc)
                     ],
                   )
                 ],
@@ -118,7 +120,7 @@ class ShareShopPage extends StatelessWidget {
   }
 
   // 审核状态、是否申请认证
-  Widget _buildButtom(int status, bool isAuthentication) {
+  Widget _buildButtom(int status, bool isAuthentication, BuildContext context, int id, ShareShopPageBloc bloc) {
     if (isAuthentication) {
       switch (status) {
         // 审核中
@@ -134,7 +136,7 @@ class ShareShopPage extends StatelessWidget {
          return _buildAuditFailureButtom();
       }
     } else {
-      return _buildAuthenticationButtom();
+      return _buildAuthenticationButtom(context, id, bloc);
     }
   }
 
@@ -202,7 +204,7 @@ class ShareShopPage extends StatelessWidget {
   }
 
   // 认证
-  Widget _buildAuthenticationButtom() {
+  Widget _buildAuthenticationButtom(BuildContext context, int id, ShareShopPageBloc bloc) {
     return Container(
       height: ScreenUtil().setHeight(70),
       width: ScreenUtil().setWidth(445),
@@ -220,7 +222,7 @@ class ShareShopPage extends StatelessWidget {
           child: Text('认证'),
         ),
         onTap: () {
-          print('认证');
+          Navigator.push(context, CupertinoPageRoute(builder:( context) => BlocProvider(bloc: ShareShopPageBloc(), child: ShareShopPageAuthentication(id: id, bloc: bloc))));
         },
       ),
     );

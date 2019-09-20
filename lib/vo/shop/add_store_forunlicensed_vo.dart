@@ -1,14 +1,14 @@
-class MyStorePageVo {
+class AddStoreForunlicensedVo {
   String code;
   String message;
-  MyStorePageData data;
+  Data data;
 
-  MyStorePageVo({this.code, this.message, this.data});
+  AddStoreForunlicensedVo({this.code, this.message, this.data});
 
-  MyStorePageVo.fromJson(Map<String, dynamic> json) {
+  AddStoreForunlicensedVo.fromJson(Map<String, dynamic> json) {
     code = json['code'];
     message = json['message'];
-    data = json['data'] != null ? new MyStorePageData.fromJson(json['data']) : null;
+    data = json['data'] != null ? new Data.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -22,68 +22,34 @@ class MyStorePageVo {
   }
 }
 
-class MyStorePageData {
-  List<MyStorePageItem> list;
-  int totalPage;
-  int pageSize;
-  int pageNumber;
-  int count;
-
-  MyStorePageData({this.list, this.totalPage, this.pageSize, this.pageNumber, this.count});
-
-  MyStorePageData.fromJson(Map<String, dynamic> json) {
-    if (json['list'] != null) {
-      list = new List<MyStorePageItem>();
-      json['list'].forEach((v) {
-        list.add(new MyStorePageItem.fromJson(v));
-      });
-    }
-    totalPage = json['totalPage'];
-    pageSize = json['pageSize'];
-    pageNumber = json['pageNumber'];
-    count = json['count'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.list != null) {
-      data['list'] = this.list.map((v) => v.toJson()).toList();
-    }
-    data['totalPage'] = this.totalPage;
-    data['pageSize'] = this.pageSize;
-    data['pageNumber'] = this.pageNumber;
-    data['count'] = this.count;
-    return data;
-  }
-}
-
-class MyStorePageItem {
+class Data {
   int id;
   String uid;
-  int brandId;
+  Null brandId;
   String storeName;
   String address;
   String lat;
   String lng;
   int industryId;
-  int provinceId;
-  int cityId;
-  int areaId;
-  int likeVolume;
+  Null provinceId;
+  Null cityId;
+  Null areaId;
+  Null likeVolume;
   int createTime;
   String photo;
-  String description;
+  Null description;
   String industryName;
   String provinceName;
   String cityName;
   String areaName;
-  String licenseCode;
-  String licensePhoto;
+  Null licenseCode;
+  Null licensePhoto;
   String legalPerson;
-  int isChecked;
-  String reason;
+  Null isChecked;
+  Null reason;
+  int area;
 
-  MyStorePageItem(
+  Data(
       {this.id,
       this.uid,
       this.brandId,
@@ -107,9 +73,10 @@ class MyStorePageItem {
       this.licensePhoto,
       this.legalPerson,
       this.isChecked,
-      this.reason});
+      this.reason,
+      this.area});
 
-  MyStorePageItem.fromJson(Map<String, dynamic> json) {
+  Data.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     uid = json['uid'];
     brandId = json['brandId'];
@@ -134,6 +101,7 @@ class MyStorePageItem {
     legalPerson = json['legalPerson'];
     isChecked = json['isChecked'];
     reason = json['reason'];
+    area = json['area'];
   }
 
   Map<String, dynamic> toJson() {
@@ -162,6 +130,7 @@ class MyStorePageItem {
     data['legalPerson'] = this.legalPerson;
     data['isChecked'] = this.isChecked;
     data['reason'] = this.reason;
+    data['area'] = this.area;
     return data;
   }
 }

@@ -60,7 +60,7 @@ class SwcyStoreEntity {
   int id;
   String uid;
   int brandId;
-  String name;
+  String storeName;
   String address;
   String lat;
   String lng;
@@ -71,13 +71,13 @@ class SwcyStoreEntity {
   int likeVolume;
   int createTime;
   String photo;
-  String desc;
+  String description;
 
   SwcyStoreEntity(
       {this.id,
       this.uid,
       this.brandId,
-      this.name,
+      this.storeName,
       this.address,
       this.lat,
       this.lng,
@@ -88,13 +88,13 @@ class SwcyStoreEntity {
       this.likeVolume,
       this.createTime,
       this.photo,
-      this.desc});
+      this.description});
 
   SwcyStoreEntity.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     uid = json['uid'];
     brandId = json['brandId'];
-    name = json['name'];
+    storeName = json['storeName'];
     address = json['address'];
     lat = json['lat'];
     lng = json['lng'];
@@ -105,7 +105,7 @@ class SwcyStoreEntity {
     likeVolume = json['likeVolume'];
     createTime = json['createTime'];
     photo = json['photo'];
-    desc = json['desc'];
+    description = json['description'];
   }
 
   Map<String, dynamic> toJson() {
@@ -113,7 +113,7 @@ class SwcyStoreEntity {
     data['id'] = this.id;
     data['uid'] = this.uid;
     data['brandId'] = this.brandId;
-    data['name'] = this.name;
+    data['storeName'] = this.storeName;
     data['address'] = this.address;
     data['lat'] = this.lat;
     data['lng'] = this.lng;
@@ -124,7 +124,7 @@ class SwcyStoreEntity {
     data['likeVolume'] = this.likeVolume;
     data['createTime'] = this.createTime;
     data['photo'] = this.photo;
-    data['desc'] = this.desc;
+    data['description'] = this.description;
     return data;
   }
 }

@@ -15,7 +15,7 @@ class ShopPageShopListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Navigator.push(context, CupertinoPageRoute(builder: (context) => BlocProvider(bloc: ShopPagesBloc(), child: ShopPagesShopPage(shopData.name, shopData.id))));
+        Navigator.push(context, CupertinoPageRoute(builder: (context) => BlocProvider(bloc: ShopPagesBloc(), child: ShopPagesShopPage(shopData.storeName, shopData.id))));
       },
       child: Card(
         elevation: 3.0,
@@ -28,7 +28,7 @@ class ShopPageShopListItem extends StatelessWidget {
               height: ScreenUtil().setHeight(280),
               fit: BoxFit.fill,
             ),
-            Text(shopData.name),
+            Text(shopData.storeName),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
