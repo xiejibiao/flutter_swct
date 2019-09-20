@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_swcy/bloc/bloc_provider.dart';
 import 'package:flutter_swcy/bloc/person/share_shop_page_bloc.dart';
 import 'package:flutter_swcy/common/loading.dart';
+import 'package:flutter_swcy/common/message_dialog.dart';
 import 'package:flutter_swcy/common/the_end_baseline.dart';
 import 'package:flutter_swcy/pages/person/shareshop/share_shop_page_add.dart';
 import 'package:flutter_swcy/pages/person/shareshop/share_shop_page_authentication.dart';
@@ -107,7 +108,7 @@ class ShareShopPage extends StatelessWidget {
                           ],
                         ),
                       ),
-                      _buildButtom(myStorePageVo.data.list[index].isChecked, TextUtil.isEmpty(myStorePageVo.data.list[index].licenseCode) ? false : true, context, myStorePageVo.data.list[index].id, bloc)
+                      _buildButtom(myStorePageVo.data.list[index].isChecked, TextUtil.isEmpty(myStorePageVo.data.list[index].licenseCode) ? false : true, context, myStorePageVo.data.list[index], bloc)
                     ],
                   )
                 ],
@@ -120,7 +121,7 @@ class ShareShopPage extends StatelessWidget {
   }
 
   // 审核状态、是否申请认证
-  Widget _buildButtom(int status, bool isAuthentication, BuildContext context, int id, ShareShopPageBloc bloc) {
+  Widget _buildButtom(int status, bool isAuthentication, BuildContext context, MyStorePageItem myStorePageItem, ShareShopPageBloc bloc) {
     if (isAuthentication) {
       switch (status) {
         // 审核中
@@ -133,10 +134,10 @@ class ShareShopPage extends StatelessWidget {
           break;
         // 审核失败
         default:
-         return _buildAuditFailureButtom();
+         return _buildAuditFailureButtom(myStorePageItem, context, bloc);
       }
     } else {
-      return _buildAuthenticationButtom(context, id, bloc);
+      return _buildAuthenticationButtom(context, myStorePageItem.id, bloc);
     }
   }
 
@@ -179,7 +180,7 @@ class ShareShopPage extends StatelessWidget {
   }
 
   // 审核失败
-  Widget _buildAuditFailureButtom() {
+  Widget _buildAuditFailureButtom(MyStorePageItem myStorePageItem, BuildContext context, ShareShopPageBloc bloc) {
     return Container(
       height: ScreenUtil().setHeight(70),
       width: ScreenUtil().setWidth(445),
@@ -197,7 +198,24 @@ class ShareShopPage extends StatelessWidget {
           child: Text('审核失败'),
         ),
         onTap: () {
-          print('审核失败');
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (BuildContext context) {
+              return MessageDialog(
+                message: myStorePageItem.reason,
+                onCloseEvent: () {
+                  Navigator.pop(context);
+                },
+                onPositivePressEvent: () {
+                  Navigator.pop(context);
+                  Navigator.push(context, CupertinoPageRoute(builder:( context) => BlocProvider(bloc: ShareShopPageBloc(), child: ShareShopPageAuthentication(id: myStorePageItem.id, bloc: bloc))));
+                },
+                negativeText: '取消',
+                positiveText: '重新认证',
+              );
+            }
+          );
         },
       ),
     );
