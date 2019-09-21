@@ -156,6 +156,38 @@ class ShopPagesBloc extends BlocBase {
     });
   }
 
+  // 删除类型
+  deleteCommodityType(int typeId, BuildContext context, int storeId) {
+    var formData = {
+      'id': typeId
+    };
+    requestPost('deleteCommodityType', formData: formData).then((val) {
+      CommenVo commenVo = CommenVo.fromJson(val);
+      if (commenVo.code == '200') {
+        showToast('删除商品类型成功');
+        getShopTypeAndEssentialMessage(context, storeId);
+      } else {
+        showToast(commenVo.message);
+      }
+    });
+  }
+
+  editCommodityType(int typeId, String name, BuildContext context, int storeId) {
+    var formData = {
+      'id': typeId,
+      'name': name
+    };
+    requestPost('editCommodityType', formData: formData).then((val) {
+      CommenVo commenVo = CommenVo.fromJson(val);
+      if (commenVo.code == '200') {
+        showToast('修改商品类型成功');
+        getShopTypeAndEssentialMessage(context, storeId);
+      } else {
+        showToast(commenVo.message);
+      }
+    });
+  }
+
   // ----------------------------------------------------------------------------------------------------------------------------
   
   // 进入商家时，必须初始化此值

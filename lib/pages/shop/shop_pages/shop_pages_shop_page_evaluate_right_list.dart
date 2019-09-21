@@ -61,7 +61,32 @@ class ShopPagesShopPageEvaluateRightList extends StatelessWidget {
                       stream: _bloc.isTheEndStream,
                       builder: (context, sanpshop) {
                         if (sanpshop.data) {
-                          return TheEndBaseline();
+                          return Column(
+                            children: <Widget>[
+                              InkWell(
+                                onTap: () {
+                                  print('添加商品');
+                                },
+                                onLongPress: () {
+                                  print('长按');
+                                },
+                                child: Card(
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    height: ScreenUtil().setHeight(235),
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: <Widget>[
+                                        Text('+', style: TextStyle(fontSize: ScreenUtil().setSp(68))),
+                                        Text('添加商品', style: TextStyle(fontSize: ScreenUtil().setSp(38)))
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              TheEndBaseline()
+                            ],
+                          );
                         } else {
                           return Text('');
                         }
