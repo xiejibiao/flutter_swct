@@ -91,7 +91,7 @@ class ShopPagesShopPageShopingcarItem extends StatelessWidget {
                   barrierDismissible: false,
                   builder: (BuildContext context) {
                     return MessageDialog(
-                      message: '确定要删除这1种商品吗？',
+                      widget: Text('确定要删除这1种商品吗？', style: TextStyle(fontSize: ScreenUtil().setSp(32))),
                       onCloseEvent: () {
                         Navigator.pop(context);
                       },

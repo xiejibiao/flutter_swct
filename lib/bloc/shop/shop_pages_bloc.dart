@@ -15,7 +15,7 @@ import 'package:rxdart/subjects.dart';
 
 class ShopPagesBloc extends BlocBase {
 
-  int _leftIndex = 0;
+  int leftIndex = 0;
   BehaviorSubject<int> _leftIndexController = BehaviorSubject<int>();
   Sink<int> get _leftIndexSink => _leftIndexController.sink;
   Stream<int> get leftIndexStream => _leftIndexController.stream;
@@ -48,7 +48,7 @@ class ShopPagesBloc extends BlocBase {
 
   // 左侧分类是否被选中
   thisIndexIsSelected(int index) {
-    if (_leftIndex == index) {
+    if (leftIndex == index) {
       return true;
     } else {
       return false;
@@ -57,8 +57,8 @@ class ShopPagesBloc extends BlocBase {
 
   // 修改左侧分类的当前下标
   setLeftIndex(int index) {
-    if (_leftIndex != index) {
-      _leftIndex = index;
+    if (leftIndex != index) {
+      leftIndex = index;
       commodityTypeId = commodityTypeList[index].id;
       getCommodityPageByCommodityTypeId();
       _leftIndexSink.add(index);
@@ -137,6 +137,22 @@ class ShopPagesBloc extends BlocBase {
         _isFollow = !_isFollow;
         _isFollowSink.add(_isFollow);
       });
+    });
+  }
+
+  // 添加类型
+  addCommodityType(BuildContext context, String name, int storeId) {
+    var formData = {
+      'name': name,
+      'storeId': storeId
+    };
+    requestPost('addCommodityType', formData: formData).then((val) {
+      CommenVo commenVo = CommenVo.fromJson(val);
+      if (commenVo.code == '200') {
+        showToast('添加商品类型成功');
+      } else {
+        showToast(commenVo.message);
+      }
     });
   }
 

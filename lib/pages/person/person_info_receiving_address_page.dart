@@ -165,7 +165,8 @@ class PersonInfoReceivingAddressPage extends StatelessWidget {
                 barrierDismissible: false,
                 builder: (BuildContext context) {
                   return MessageDialog(
-                    message: '请问您确定要删除此地址吗？',
+                    // message: '请问您确定要删除此地址吗？',
+                    widget: Text('请问您确定要删除此地址吗？', style: TextStyle(fontSize: ScreenUtil().setSp(32))),
                     onCloseEvent: () {
                       Navigator.pop(context);
                     },

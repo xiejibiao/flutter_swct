@@ -1,8 +1,10 @@
+import 'package:common_utils/common_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class MessageDialog extends Dialog {
-  final String message;
+  final Widget widget;
+  final String title;
   final String negativeText;
   final String positiveText;
   final Function onCloseEvent;
@@ -10,10 +12,11 @@ class MessageDialog extends Dialog {
 
   MessageDialog({
     Key key,
-    @required this.message,
+    @required this.widget,
     this.negativeText,
     this.positiveText,
     this.onPositivePressEvent,
+    this.title,    
     @required this.onCloseEvent,
   }) : super(key: key);
 
@@ -37,6 +40,14 @@ class MessageDialog extends Dialog {
               ),
               child: Column(
                 children: <Widget>[
+                  TextUtil.isEmpty(title) ? 
+                    Text('') : 
+                    Text(
+                      title,
+                      style: TextStyle(
+                        fontSize: ScreenUtil().setSp(32)
+                      ),
+                    ),
                   Container(
                     constraints: BoxConstraints(minHeight: 110.0),
                     alignment: Alignment.center,
@@ -49,10 +60,11 @@ class MessageDialog extends Dialog {
                       )
                     ),
                     child: IntrinsicHeight(
-                      child: Text(
-                        message,
-                        style: TextStyle(fontSize: 16.0),
-                      ),
+                      // child: Text(
+                      //   message,
+                      //   style: TextStyle(fontSize: 16.0),
+                      // ),
+                      child: widget,
                     ),
                   ),
                   this._buildBottomButtonGroup(),

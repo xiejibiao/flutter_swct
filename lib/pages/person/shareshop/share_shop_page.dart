@@ -5,11 +5,14 @@ import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_swcy/bloc/bloc_provider.dart';
 import 'package:flutter_swcy/bloc/person/share_shop_page_bloc.dart';
+import 'package:flutter_swcy/bloc/person/share_shop_page_commodity_admin_bloc.dart';
+import 'package:flutter_swcy/bloc/shop/shop_pages_bloc.dart';
 import 'package:flutter_swcy/common/loading.dart';
 import 'package:flutter_swcy/common/message_dialog.dart';
 import 'package:flutter_swcy/common/the_end_baseline.dart';
 import 'package:flutter_swcy/pages/person/shareshop/share_shop_page_add.dart';
 import 'package:flutter_swcy/pages/person/shareshop/share_shop_page_authentication.dart';
+import 'package:flutter_swcy/pages/person/shareshop/share_shop_page_commodity_admin.dart';
 import 'package:flutter_swcy/vo/shop/my_store_page_vo.dart';
 
 class ShareShopPage extends StatelessWidget {
@@ -130,7 +133,7 @@ class ShareShopPage extends StatelessWidget {
           break;
         // 产品上架
         case 1:
-          return _buildProductsOnShelvesButtom();
+          return _buildProductsOnShelvesButtom(context, myStorePageItem.id);
           break;
         // 审核失败
         default:
@@ -155,7 +158,7 @@ class ShareShopPage extends StatelessWidget {
   }
 
   // 产品上架
-  Widget _buildProductsOnShelvesButtom() {
+  Widget _buildProductsOnShelvesButtom(BuildContext context, int id) {
     return Container(
       height: ScreenUtil().setHeight(70),
       width: ScreenUtil().setWidth(445),
@@ -173,7 +176,11 @@ class ShareShopPage extends StatelessWidget {
           child: Text('产品上架'),
         ),
         onTap: () {
-          print('产品上架');
+          Navigator.push(context, 
+            CupertinoPageRoute(builder: (context) => 
+              BlocProvider(bloc: ShopPagesBloc(), 
+                child: BlocProvider(bloc: ShareShopPageCommodityAdminBloc(), 
+                  child: ShareShopPageCommodityAdmin(id)))));
         },
       ),
     );
@@ -203,7 +210,8 @@ class ShareShopPage extends StatelessWidget {
             barrierDismissible: false,
             builder: (BuildContext context) {
               return MessageDialog(
-                message: myStorePageItem.reason,
+                // message: myStorePageItem.reason,
+                widget: Text(myStorePageItem.reason, style: TextStyle(fontSize: ScreenUtil().setSp(32))),
                 onCloseEvent: () {
                   Navigator.pop(context);
                 },

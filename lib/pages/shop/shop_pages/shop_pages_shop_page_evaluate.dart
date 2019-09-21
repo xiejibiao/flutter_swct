@@ -6,9 +6,11 @@ import 'package:flutter_swcy/pages/shop/shop_pages/shop_pages_shop_page_evaluate
 import 'package:flutter_swcy/vo/shop/shop_type_and_essential_message_vo.dart';
 
 class ShopPagesShopPageEvaluate extends StatefulWidget {
-   final List<CommodityTypeList> commodityTypeList;
+  final List<CommodityTypeList> commodityTypeList;
+  final int id;
   ShopPagesShopPageEvaluate(
-    this.commodityTypeList
+    this.commodityTypeList,
+    this.id
   );
   _ShopPagesShopPageEvaluateState createState() => _ShopPagesShopPageEvaluateState();
 }
@@ -21,7 +23,7 @@ class _ShopPagesShopPageEvaluateState extends State<ShopPagesShopPageEvaluate> {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  ShopPagesShopPageEvaluateLeftNavi(widget.commodityTypeList),
+                  ShopPagesShopPageEvaluateLeftNavi(widget.commodityTypeList, widget.id),
                   ShopPagesShopPageEvaluateRightList()
                 ],
               );
