@@ -336,18 +336,7 @@ class ShareShopPageBloc extends BlocBase {
         CommodityVo commodityVo = CommodityVo.fromJson(val);
         if(commodityVo.code == '200') {
           showToast('添加商品成功');
-          CommodityList commodityList = CommodityList(
-            id: commodityVo.data.id,
-            typeId: commodityVo.data.id,
-            name: commodityVo.data.name,
-            cover: commodityVo.data.cover,
-            detail: commodityVo.data.detail,
-            specs: commodityVo.data.specs,
-            price: commodityVo.data.price,
-            status: commodityVo.data.status,
-            createTime: commodityVo.data.createTime,
-            delFlag: commodityVo.data.delFlag
-          );
+          CommodityList commodityList = _getCommodityItem(commodityVo);
           bloc.addCommodityToList(commodityList);
           Navigator.pop(context);
         } else {
@@ -371,6 +360,48 @@ class ShareShopPageBloc extends BlocBase {
         showToast(commenVo.message);
       }
     });
+  }
+
+  /// 修改商品
+  editCommodity(BuildContext context, String cover, int id, String name, double price, String specs, int typeId, ShopPagesBloc bloc) {
+    if (_checkAddCommodityParameter(cover, name, price, specs)) {
+      var formData = {
+        'cover': cover,
+        'id': id,
+        'name': name,
+        'price': price,
+        'specs': specs,
+        'typeId': typeId
+      };
+      requestPost('editCommodity', formData: formData).then((val) {
+        CommodityVo commodityVo = CommodityVo.fromJson(val);
+        if(commodityVo.code == '200') {
+          showToast('修改商品成功');
+          CommodityList commodityList = _getCommodityItem(commodityVo);
+          bloc.editCommodityToList(commodityList);
+          Navigator.pop(context);
+        } else {
+          showToast(commodityVo.message);
+        }
+      });
+    }
+  }
+
+  /// 组装单个商品对象
+  CommodityList _getCommodityItem(CommodityVo commodityVo) {
+    CommodityList commodityList = CommodityList(
+      id: commodityVo.data.id,
+      typeId: commodityVo.data.id,
+      name: commodityVo.data.name,
+      cover: commodityVo.data.cover,
+      detail: commodityVo.data.detail,
+      specs: commodityVo.data.specs,
+      price: commodityVo.data.price,
+      status: commodityVo.data.status,
+      createTime: commodityVo.data.createTime,
+      delFlag: commodityVo.data.delFlag
+    );
+    return commodityList;
   }
 
   @override

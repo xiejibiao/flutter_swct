@@ -5,26 +5,32 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_swcy/bloc/bloc_provider.dart';
 import 'package:flutter_swcy/bloc/person/share_shop_page_bloc.dart';
 import 'package:flutter_swcy/bloc/shop/shop_pages_bloc.dart';
+import 'package:flutter_swcy/vo/shop/commodity_page_by_commodity_type_vo.dart';
 
-class ShareShopPageCommodityAdminAdd extends StatefulWidget {
+class ShareShopPageCommodityAdminAddEdit extends StatefulWidget {
   final int commodityTypeId;
   final String commodityTypeName;
   final ShopPagesBloc bloc;
-  ShareShopPageCommodityAdminAdd(
+  final CommodityList item;
+  final bool isAdd;
+  ShareShopPageCommodityAdminAddEdit(
     this.commodityTypeId,
     this.commodityTypeName,
-    this.bloc
+    this.bloc,
+    this.isAdd,
+    {this.item}
   );
-  _ShareShopPageCommodityAdminAddState createState() => _ShareShopPageCommodityAdminAddState();
+  _ShareShopPageCommodityAdminAddEditState createState() => _ShareShopPageCommodityAdminAddEditState();
 }
 
-class _ShareShopPageCommodityAdminAddState extends State<ShareShopPageCommodityAdminAdd> {
+class _ShareShopPageCommodityAdminAddEditState extends State<ShareShopPageCommodityAdminAddEdit> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   String _cover, _name, _specs;
   double _price;
   @override
   Widget build(BuildContext context) {
     final ShareShopPageBloc _shareShopPageBloc = BlocProvider.of<ShareShopPageBloc>(context);
+    _cover = widget.item == null ? '' : widget.item.cover;
     return Scaffold(
       appBar: AppBar(
         title: Text('添加商品'),
@@ -49,6 +55,7 @@ class _ShareShopPageCommodityAdminAddState extends State<ShareShopPageCommodityA
                       enabled: false,
                     ),
                     TextFormField(
+                      initialValue: widget.item == null ? '' : widget.item.name,
                       decoration: InputDecoration(
                         labelText: '商品名称',
                       ),
@@ -57,6 +64,7 @@ class _ShareShopPageCommodityAdminAddState extends State<ShareShopPageCommodityA
                       },
                     ),
                     TextFormField(
+                      initialValue: widget.item == null ? '' : widget.item.specs,
                       decoration: InputDecoration(
                         labelText: '规格',
                       ),
@@ -65,6 +73,7 @@ class _ShareShopPageCommodityAdminAddState extends State<ShareShopPageCommodityA
                       },
                     ),
                     TextFormField(
+                      initialValue: widget.item == null ? '' : '${widget.item.price}',
                       decoration: InputDecoration(
                         labelText: '单价',
                       ),
@@ -98,7 +107,13 @@ class _ShareShopPageCommodityAdminAddState extends State<ShareShopPageCommodityA
                       ),
                       onTap: () {
                         _formKey.currentState.save();
-                        _shareShopPageBloc.addCommodity(context, _cover, _name, _price, _specs, widget.commodityTypeId, widget.bloc);
+                        switch (widget.isAdd) {
+                          case true:
+                            _shareShopPageBloc.addCommodity(context, _cover, _name, _price, _specs, widget.commodityTypeId, widget.bloc);
+                            break;
+                          default:
+                            _shareShopPageBloc.editCommodity(context, _cover, widget.item.id, _name, _price, _specs, widget.commodityTypeId, widget.bloc);
+                        }
                       },
                     )
                   ],
@@ -120,24 +135,31 @@ class _ShareShopPageCommodityAdminAddState extends State<ShareShopPageCommodityA
           if (sanpshop.hasData) {
             _cover = sanpshop.data;
             return Image.network(
-              sanpshop.data, 
+              _cover, 
               fit: BoxFit.fill,
               width: ScreenUtil().setWidth(200),
               height: ScreenUtil().setWidth(200),
             );
           } else {
-            return Column(
-              children: <Widget>[
-                ImageIcon(
-                  AssetImage(
-                    'assets/image_icon/icon_camera.png',
+            return widget.item == null ?
+              Column(
+                children: <Widget>[
+                  ImageIcon(
+                    AssetImage(
+                      'assets/image_icon/icon_camera.png',
+                    ),
+                    color: Colors.blue,
+                    size: 113,
                   ),
-                  color: Colors.blue,
-                  size: 113,
-                ),
-                Text('请上传封面图')
-              ],
-            );
+                  Text('请上传封面图')
+                ],
+              ) :
+              Image.network(
+                _cover, 
+                fit: BoxFit.fill,
+                width: ScreenUtil().setWidth(200),
+                height: ScreenUtil().setWidth(200),
+              );
           }
         },
       ),
