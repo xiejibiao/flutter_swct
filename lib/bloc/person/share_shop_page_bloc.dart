@@ -404,6 +404,22 @@ class ShareShopPageBloc extends BlocBase {
     return commodityList;
   }
 
+  upperShelfAndLowerShelf(int id, ShopPagesBloc bloc) {
+    var formData = {
+      'id': id
+    };
+    requestPost('upperShelfAndLowerShelf', formData: formData).then((val) {
+      CommodityVo commodityVo = CommodityVo.fromJson(val);
+      if(commodityVo.code == '200') {
+          showToast(commodityVo.data.status == 0 ? '商品下架成功' : '商品上架成功');
+          CommodityList commodityList = _getCommodityItem(commodityVo);
+          bloc.editCommodityToList(commodityList);
+        } else {
+          showToast(commodityVo.message);
+        }
+    });
+  }
+
   @override
   void dispose() {
     _myStorePageVoController.close();

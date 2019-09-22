@@ -90,18 +90,21 @@ class ShareShopPage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Image.network(
-                    myStorePageVo.data.list[index].photo,
-                    fit: BoxFit.fill,
-                    width: ScreenUtil().setHeight(200),
-                    height: ScreenUtil().setHeight(200),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: Image.network(
+                      myStorePageVo.data.list[index].photo,
+                      fit: BoxFit.fill,
+                      width: ScreenUtil().setWidth(200),
+                      height: ScreenUtil().setWidth(200),
+                    ),
                   ),
                   SizedBox(width: ScreenUtil().setWidth(20)),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Container(
-                        height: ScreenUtil().setHeight(80),
+                        height: ScreenUtil().setHeight(70),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,

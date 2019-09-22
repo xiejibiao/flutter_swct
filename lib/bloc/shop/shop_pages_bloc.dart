@@ -56,17 +56,17 @@ class ShopPagesBloc extends BlocBase {
   }
 
   // 修改左侧分类的当前下标
-  setLeftIndex(int index) {
+  setLeftIndex(int index, bool isAdmin) {
     if (leftIndex != index) {
       leftIndex = index;
       commodityTypeId = commodityTypeList[index].id;
-      getCommodityPageByCommodityTypeId();
+      getCommodityPageByCommodityTypeId(isAdmin);
       _leftIndexSink.add(index);
     }
   }
 
   // 获取门店分类，详情，是否关注
-  getShopTypeAndEssentialMessage(BuildContext context, int id) {
+  getShopTypeAndEssentialMessage(BuildContext context, int id, bool isAdmin) {
     getToken().then((token) async {
       var formData = {
         'id': id
@@ -78,7 +78,7 @@ class ShopPagesBloc extends BlocBase {
           commodityTypeId = shopTypeAndEssentialMessageVo.data.commodityTypeList[leftIndex].id;
           _isFollow = shopTypeAndEssentialMessageVo.data.follow;
           _isFollowSink.add(_isFollow);
-          await getCommodityPageByCommodityTypeId();
+          await getCommodityPageByCommodityTypeId(isAdmin);
         }
         _shopTypeAndEssentialMessageVoSink.add(shopTypeAndEssentialMessageVo);
       });
@@ -86,13 +86,14 @@ class ShopPagesBloc extends BlocBase {
   }
 
   // 获取门店商品列表
-  getCommodityPageByCommodityTypeId() async {
+  getCommodityPageByCommodityTypeId(bool isAdmin) async {
     _isTheEndSink.add(false);
     pageNumber = 0;
     var formData = {
       'commodityTypeId': commodityTypeId,
       'pageNumber': pageNumber,
-      'pageSize': pageSize
+      'pageSize': pageSize,
+      'isAdmin': isAdmin
     };
     await requestPost('getCommodityPageByCommodityTypeId', formData: formData).then((data) {
       this.commodityPageByCommodityTypeVo = CommodityPageByCommodityTypeVo.fromJson(data);
@@ -150,6 +151,7 @@ class ShopPagesBloc extends BlocBase {
       CommenVo commenVo = CommenVo.fromJson(val);
       if (commenVo.code == '200') {
         showToast('添加商品类型成功');
+        getShopTypeAndEssentialMessage(context, storeId, true);
       } else {
         showToast(commenVo.message);
       }
@@ -165,7 +167,7 @@ class ShopPagesBloc extends BlocBase {
       CommenVo commenVo = CommenVo.fromJson(val);
       if (commenVo.code == '200') {
         showToast('删除商品类型成功');
-        getShopTypeAndEssentialMessage(context, storeId);
+        getShopTypeAndEssentialMessage(context, storeId, true);
       } else {
         showToast(commenVo.message);
       }
@@ -182,7 +184,7 @@ class ShopPagesBloc extends BlocBase {
       CommenVo commenVo = CommenVo.fromJson(val);
       if (commenVo.code == '200') {
         showToast('修改商品类型成功');
-        getShopTypeAndEssentialMessage(context, storeId);
+        getShopTypeAndEssentialMessage(context, storeId, true);
       } else {
         showToast(commenVo.message);
       }

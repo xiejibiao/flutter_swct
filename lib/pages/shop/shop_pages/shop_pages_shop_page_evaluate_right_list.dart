@@ -104,36 +104,40 @@ class ShopPagesShopPageEvaluateRightList extends StatelessWidget {
       },
       onLongPress: isAdmin ? () => _onLongPressShowDeleteAndEditDialog(context, shareShopPageBloc, commodityList, bloc) : null,
       child: Container(
-        height: ScreenUtil().setHeight(235),
+        height: ScreenUtil().setHeight(190),
         child: Card(
+          color: commodityList.status == 0 ? Colors.grey[200] : Colors.white,
           child: Padding(
             padding: EdgeInsets.all(5.0),
-            child: _buildGoodsItemRow(commodityList, bloc),
+            child: _buildGoodsItemRow(commodityList, bloc, shareShopPageBloc),
           ),
         ),
       ),
     );
   }
 
-  Widget _buildGoodsItemRow(CommodityList commodityList, ShopPagesBloc bloc) {
+  Widget _buildGoodsItemRow(CommodityList commodityList, ShopPagesBloc bloc, ShareShopPageBloc shareShopPageBloc) {
     return Row(
       children: <Widget>[
-        Image.network(
-          commodityList.cover,
-          width: ScreenUtil().setWidth(180),
-          height: ScreenUtil().setWidth(180),
-          fit: BoxFit.cover,
+        ClipRRect(
+          borderRadius: BorderRadius.circular(8),
+          child: Image.network(
+            commodityList.cover,
+            width: ScreenUtil().setWidth(180),
+            height: ScreenUtil().setWidth(180),
+            fit: BoxFit.cover,
+          ),
         ),
         SizedBox(width: ScreenUtil().setWidth(20.0)),
         Container(
           width: ScreenUtil().setWidth(327),
-          child: _buildGoodsItemGoodsMessage(commodityList, bloc),
+          child: _buildGoodsItemGoodsMessage(commodityList, bloc, shareShopPageBloc),
         )
       ],
     );
   }
 
-  Widget _buildGoodsItemGoodsMessage(CommodityList commodityList, ShopPagesBloc bloc) {
+  Widget _buildGoodsItemGoodsMessage(CommodityList commodityList, ShopPagesBloc bloc, ShareShopPageBloc shareShopPageBloc) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -150,30 +154,49 @@ class ShopPagesShopPageEvaluateRightList extends StatelessWidget {
                 fontSize: ScreenUtil().setSp(28)
               ),
             ),
-            _addShopingcar(commodityList, bloc)
+            _addShopingcar(commodityList, bloc, shareShopPageBloc)
           ],
         )
       ],
     );
   }
 
-  Widget _addShopingcar(CommodityList commodityList, ShopPagesBloc bloc) {
-    return InkWell(
-      onTap: () async {
-        await bloc.saveCommodityToShoppingCar(id: commodityList.id, name: commodityList.name, count: 1, price: commodityList.price, cover: commodityList.cover);
-      },
-      child: Container(
-        padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
-        decoration: BoxDecoration(
-          color: Color.fromRGBO(255,218,68, 1.0),
-          border: Border.all(
-            color: Color.fromRGBO(255,218,68, 1.0)
+  Widget _addShopingcar(CommodityList commodityList, ShopPagesBloc bloc, ShareShopPageBloc shareShopPageBloc) {
+    if (isAdmin) {
+      return InkWell(
+        onTap: () async {
+          shareShopPageBloc.upperShelfAndLowerShelf(commodityList.id, bloc);
+        },
+        child: Container(
+          padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
+          decoration: BoxDecoration(
+            color: commodityList.status == 0 ? Colors.green : Color.fromRGBO(255,218,68, 1.0),
+            border: Border.all(
+              color: commodityList.status == 0 ? Colors.green : Color.fromRGBO(255,218,68, 1.0),
+            ),
+            borderRadius: BorderRadius.circular(20.0)
           ),
-          borderRadius: BorderRadius.circular(20.0)
+          child: commodityList.status == 0 ? Text('点击上架', style: TextStyle(color: Colors.white)) : Text('点击下架'),
         ),
-        child: Text('加入购物车'),
-      ),
-    );
+      );
+    } else {
+      return InkWell(
+        onTap: () async {
+          await bloc.saveCommodityToShoppingCar(id: commodityList.id, name: commodityList.name, count: 1, price: commodityList.price, cover: commodityList.cover);
+        },
+        child: Container(
+          padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
+          decoration: BoxDecoration(
+            color: Color.fromRGBO(255,218,68, 1.0),
+            border: Border.all(
+              color: Color.fromRGBO(255,218,68, 1.0)
+            ),
+            borderRadius: BorderRadius.circular(20.0)
+          ),
+          child: Text('加入购物车'),
+        ),
+      );
+    }
   }
 
   // 添加商品框
@@ -193,7 +216,7 @@ class ShopPagesShopPageEvaluateRightList extends StatelessWidget {
       child: Card(
         child: Container(
           alignment: Alignment.center,
-          height: ScreenUtil().setHeight(235),
+          height: ScreenUtil().setHeight(180),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[

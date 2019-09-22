@@ -43,7 +43,7 @@ class ShopPagesShopPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final ShopPagesBloc _bloc = BlocProvider.of<ShopPagesBloc>(context);
     _bloc.setCommodityKey(id);
-    _bloc.getShopTypeAndEssentialMessage(context, id);
+    _bloc.getShopTypeAndEssentialMessage(context, id, false);
     return DefaultTabController(
       length: 2,
       child: StreamBuilder(

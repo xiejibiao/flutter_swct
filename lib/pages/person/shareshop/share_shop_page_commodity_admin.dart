@@ -19,7 +19,7 @@ class _ShareShopPageCommodityAdminState extends State<ShareShopPageCommodityAdmi
   @override
   void initState() { 
     super.initState();
-    widget.shopPagesBloc.getShopTypeAndEssentialMessage(context, widget.id);
+    widget.shopPagesBloc.getShopTypeAndEssentialMessage(context, widget.id, true);
   }
   @override
   Widget build(BuildContext context) {
