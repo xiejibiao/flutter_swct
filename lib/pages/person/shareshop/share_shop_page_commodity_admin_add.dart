@@ -4,13 +4,16 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_swcy/bloc/bloc_provider.dart';
 import 'package:flutter_swcy/bloc/person/share_shop_page_bloc.dart';
+import 'package:flutter_swcy/bloc/shop/shop_pages_bloc.dart';
 
 class ShareShopPageCommodityAdminAdd extends StatefulWidget {
   final int commodityTypeId;
   final String commodityTypeName;
+  final ShopPagesBloc bloc;
   ShareShopPageCommodityAdminAdd(
     this.commodityTypeId,
     this.commodityTypeName,
+    this.bloc
   );
   _ShareShopPageCommodityAdminAddState createState() => _ShareShopPageCommodityAdminAddState();
 }
@@ -95,7 +98,7 @@ class _ShareShopPageCommodityAdminAddState extends State<ShareShopPageCommodityA
                       ),
                       onTap: () {
                         _formKey.currentState.save();
-                        _shareShopPageBloc.addCommodity(context, _cover, _name, _price, _specs, widget.commodityTypeId);
+                        _shareShopPageBloc.addCommodity(context, _cover, _name, _price, _specs, widget.commodityTypeId, widget.bloc);
                       },
                     )
                   ],

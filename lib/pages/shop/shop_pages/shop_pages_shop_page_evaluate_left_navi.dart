@@ -1,7 +1,6 @@
 import 'package:common_utils/common_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_swcy/bloc/bloc_provider.dart';
 import 'package:flutter_swcy/bloc/shop/shop_pages_bloc.dart';
 import 'package:flutter_swcy/common/message_dialog.dart';
 import 'package:flutter_swcy/vo/shop/shop_type_and_essential_message_vo.dart';
@@ -19,7 +18,6 @@ class ShopPagesShopPageEvaluateLeftNavi extends StatelessWidget {
   );
   @override
   Widget build(BuildContext context) {
-    // final ShopPagesBloc _bloc = BlocProvider.of<ShopPagesBloc>(context);
     return StreamBuilder(
       stream: bloc.leftIndexStream,
       builder: (context, sanpshop) {

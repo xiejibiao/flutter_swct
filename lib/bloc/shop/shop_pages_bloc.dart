@@ -75,7 +75,7 @@ class ShopPagesBloc extends BlocBase {
         ShopTypeAndEssentialMessageVo shopTypeAndEssentialMessageVo = ShopTypeAndEssentialMessageVo.fromJson(data);
         commodityTypeList = shopTypeAndEssentialMessageVo.data.commodityTypeList;
         if (shopTypeAndEssentialMessageVo.data.commodityTypeList.length > 0) {
-          commodityTypeId = shopTypeAndEssentialMessageVo.data.commodityTypeList[0].id;
+          commodityTypeId = shopTypeAndEssentialMessageVo.data.commodityTypeList[leftIndex].id;
           _isFollow = shopTypeAndEssentialMessageVo.data.follow;
           _isFollowSink.add(_isFollow);
           await getCommodityPageByCommodityTypeId();
@@ -172,6 +172,7 @@ class ShopPagesBloc extends BlocBase {
     });
   }
 
+  // 修改商品类型
   editCommodityType(int typeId, String name, BuildContext context, int storeId) {
     var formData = {
       'id': typeId,
@@ -186,6 +187,12 @@ class ShopPagesBloc extends BlocBase {
         showToast(commenVo.message);
       }
     });
+  }
+
+  /// 添加商品成功后，添加对象到列表
+  addCommodityToList(CommodityList commodityList) {
+    commodityPageByCommodityTypeVo.data.list.add(commodityList);
+    _commodityPageByCommodityTypeVoSink.add(commodityPageByCommodityTypeVo);
   }
 
   // ----------------------------------------------------------------------------------------------------------------------------

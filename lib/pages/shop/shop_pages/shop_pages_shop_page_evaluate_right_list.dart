@@ -20,7 +20,6 @@ class ShopPagesShopPageEvaluateRightList extends StatelessWidget {
   final GlobalKey<RefreshFooterState> _footerKey = GlobalKey<RefreshFooterState>();
   @override
   Widget build(BuildContext context) {
-    // final ShopPagesBloc _bloc = BlocProvider.of<ShopPagesBloc>(context);
     return Container(
       width: ScreenUtil().setWidth(570),
       child: StreamBuilder(
@@ -179,7 +178,7 @@ class ShopPagesShopPageEvaluateRightList extends StatelessWidget {
         Navigator.push(context, 
           CupertinoPageRoute(builder: (context) => 
             BlocProvider(bloc: ShareShopPageBloc(), 
-              child: BlocProvider(bloc: ShareShopPageCommodityAdminBloc(), child: ShareShopPageCommodityAdminAdd(commodityTypeId, commodityTypeName))
+              child: BlocProvider(bloc: ShareShopPageCommodityAdminBloc(), child: ShareShopPageCommodityAdminAdd(commodityTypeId, commodityTypeName, bloc))
             )
           )
         );

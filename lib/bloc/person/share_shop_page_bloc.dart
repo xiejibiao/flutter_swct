@@ -2,11 +2,14 @@ import 'package:amap_base/amap_base.dart';
 import 'package:common_utils/common_utils.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_swcy/bloc/bloc_provider.dart';
+import 'package:flutter_swcy/bloc/shop/shop_pages_bloc.dart';
 import 'package:flutter_swcy/common/image_upload.dart';
 import 'package:flutter_swcy/common/shared_preferences.dart';
 import 'package:flutter_swcy/service/service_method.dart';
 import 'package:flutter_swcy/vo/commen_vo.dart';
 import 'package:flutter_swcy/vo/shop/add_store_forunlicensed_vo.dart';
+import 'package:flutter_swcy/vo/shop/commodity_page_by_commodity_type_vo.dart';
+import 'package:flutter_swcy/vo/shop/commodity_vo.dart';
 import 'package:flutter_swcy/vo/shop/my_store_page_vo.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:rxdart/rxdart.dart';
@@ -319,7 +322,7 @@ class ShareShopPageBloc extends BlocBase {
   }
 
   /// 添加商品
-  addCommodity(BuildContext context, String cover, String name, double price, String specs, int typeId) {
+  addCommodity(BuildContext context, String cover, String name, double price, String specs, int typeId, ShopPagesBloc bloc) {
     if (_checkAddCommodityParameter(cover, name, price, specs)) {
       var formData = {
         'cover': cover,
@@ -329,12 +332,25 @@ class ShareShopPageBloc extends BlocBase {
         'typeId': typeId
       };
       requestPost('addCommodity', formData: formData).then((val) {
-        CommenVo commenVo = CommenVo.fromJson(val);
-        if(commenVo.code == '200') {
+        CommodityVo commodityVo = CommodityVo.fromJson(val);
+        if(commodityVo.code == '200') {
           showToast('添加商品成功');
+          CommodityList commodityList = CommodityList(
+            id: commodityVo.data.id,
+            typeId: commodityVo.data.id,
+            name: commodityVo.data.name,
+            cover: commodityVo.data.cover,
+            detail: commodityVo.data.detail,
+            specs: commodityVo.data.specs,
+            price: commodityVo.data.price,
+            status: commodityVo.data.status,
+            createTime: commodityVo.data.createTime,
+            delFlag: commodityVo.data.delFlag
+          );
+          bloc.addCommodityToList(commodityList);
           Navigator.pop(context);
         } else {
-          showToast(commenVo.message);
+          showToast(commodityVo.message);
         }
       });
     }

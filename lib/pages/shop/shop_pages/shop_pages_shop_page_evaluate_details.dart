@@ -1,3 +1,4 @@
+import 'package:common_utils/common_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 
@@ -14,7 +15,7 @@ class ShopPagesShopPageEvaluateDetails extends StatelessWidget {
       ),
       body: SingleChildScrollView(
         child: Html(
-          data: details,
+          data: TextUtil.isEmpty(details) ? '' : details,
         ),
       ),
     );
