@@ -34,7 +34,7 @@ class _ShareShopPageCommodityAdminState extends State<ShareShopPageCommodityAdmi
           builder: (context, sanpshop) {
             if (sanpshop.hasData) {
               ShopTypeAndEssentialMessageVo shopTypeAndEssentialMessageVo = sanpshop.data;
-              return ShopPagesShopPageEvaluate(shopTypeAndEssentialMessageVo.data.commodityTypeList, widget.id, widget.shopPagesBloc);
+              return ShopPagesShopPageEvaluate(shopTypeAndEssentialMessageVo.data.commodityTypeList, widget.id, widget.shopPagesBloc, true);
             } else {
               return showLoading();
             }

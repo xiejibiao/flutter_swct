@@ -9,12 +9,14 @@ import 'package:flutter_swcy/vo/shop/shop_type_and_essential_message_vo.dart';
 class ShopPagesShopPageEvaluate extends StatefulWidget {
   final List<CommodityTypeList> commodityTypeList;
   final int id;
+  final ShopPagesBloc bloc;
+  final bool isAdmin;
   ShopPagesShopPageEvaluate(
     this.commodityTypeList,
     this.id,
-    this.bloc
+    this.bloc,
+    this.isAdmin    
   );
-  final ShopPagesBloc bloc;
   _ShopPagesShopPageEvaluateState createState() => _ShopPagesShopPageEvaluateState();
 }
 
@@ -26,8 +28,8 @@ class _ShopPagesShopPageEvaluateState extends State<ShopPagesShopPageEvaluate> {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  ShopPagesShopPageEvaluateLeftNavi(widget.commodityTypeList, widget.id, widget.bloc),
-                  ShopPagesShopPageEvaluateRightList(widget.bloc)
+                  ShopPagesShopPageEvaluateLeftNavi(widget.commodityTypeList, widget.id, widget.bloc, widget.isAdmin),
+                  ShopPagesShopPageEvaluateRightList(widget.bloc, widget.isAdmin)
                 ],
               );
   }

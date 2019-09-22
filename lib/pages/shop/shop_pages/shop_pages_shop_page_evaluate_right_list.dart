@@ -9,13 +9,16 @@ import 'package:flutter_swcy/bloc/shop/shop_pages_bloc.dart';
 import 'package:flutter_swcy/common/loading.dart';
 import 'package:flutter_swcy/common/the_end_baseline.dart';
 import 'package:flutter_swcy/pages/person/shareshop/share_shop_page_commodity_admin_add.dart';
+import 'package:flutter_swcy/pages/shop/shop_page_search_default_page.dart';
 import 'package:flutter_swcy/pages/shop/shop_pages/shop_pages_shop_page_evaluate_details.dart';
 import 'package:flutter_swcy/vo/shop/commodity_page_by_commodity_type_vo.dart';
 
 class ShopPagesShopPageEvaluateRightList extends StatelessWidget {
   final ShopPagesBloc bloc;
+  final bool isAdmin;
   ShopPagesShopPageEvaluateRightList(
-    this.bloc
+    this.bloc,
+    this.isAdmin
   );
   final GlobalKey<RefreshFooterState> _footerKey = GlobalKey<RefreshFooterState>();
   @override
@@ -33,11 +36,12 @@ class ShopPagesShopPageEvaluateRightList extends StatelessWidget {
           } else {
             CommodityPageByCommodityTypeVo commodityPageByCommodityTypeVo = sanpshop.data;
             if (commodityPageByCommodityTypeVo.data.list.length == 0) {
-              // return Container(
-              //   width: ScreenUtil().setWidth(570),
-              //   child: ShopPageSearchDefaultPage(),
-              // );
-              return _buildAddCommodity(bloc, context);
+              return isAdmin ? 
+                _buildAddCommodity(bloc, context) : 
+                Container(
+                  width: ScreenUtil().setWidth(570),
+                  child: ShopPageSearchDefaultPage(),
+                );
             } else {
               return EasyRefresh(
                 refreshFooter: ClassicsFooter(
@@ -69,7 +73,7 @@ class ShopPagesShopPageEvaluateRightList extends StatelessWidget {
                         if (sanpshop.data) {
                           return Column(
                             children: <Widget>[
-                              _buildAddCommodity(bloc, context),
+                              isAdmin ? _buildAddCommodity(bloc, context) : Text(''),
                               TheEndBaseline()
                             ],
                           );

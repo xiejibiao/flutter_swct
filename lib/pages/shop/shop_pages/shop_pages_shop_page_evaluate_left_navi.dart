@@ -11,10 +11,12 @@ class ShopPagesShopPageEvaluateLeftNavi extends StatelessWidget {
   final List<CommodityTypeList> commodityTypeList;
   final int id;
   final ShopPagesBloc bloc;
+  final bool isAdmin;
   ShopPagesShopPageEvaluateLeftNavi(
     this.commodityTypeList,
     this.id,
-    this.bloc
+    this.bloc,
+    this.isAdmin,
   );
   @override
   Widget build(BuildContext context) {
@@ -41,41 +43,40 @@ class ShopPagesShopPageEvaluateLeftNavi extends StatelessWidget {
 
   Widget _leftInkWellItem (int index, List<CommodityTypeList> commodityTypeList, ShopPagesBloc bloc, int commodityTypeListLength, BuildContext context) {
     if (index == commodityTypeListLength) {
-      return InkWell(
-        onTap: () {
-          _textEditingController.text = '';
-          _showAddDialog(context, bloc);
-        },
-        child: Container(
-          alignment: Alignment.center,
-          height: ScreenUtil().setHeight(100),
-          padding: EdgeInsets.only(left: 10),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            border: Border(
-              bottom: BorderSide(width: 1, color: Colors.black12)
-            )
-          ),
-          child: Text(
-            '+',
-            softWrap: false,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(58)
+      return isAdmin ?
+        InkWell(
+          onTap: () {
+            _textEditingController.text = '';
+            _showAddDialog(context, bloc);
+          },
+          child: Container(
+            alignment: Alignment.center,
+            height: ScreenUtil().setHeight(100),
+            padding: EdgeInsets.only(left: 10),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border(
+                bottom: BorderSide(width: 1, color: Colors.black12)
+              )
+            ),
+            child: Text(
+              '+',
+              softWrap: false,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontSize: ScreenUtil().setSp(58)
+              ),
             ),
           ),
-        ),
-      );
-      // return Container();
+        ) : 
+        Container();
     } else {
       bool isSelected = bloc.thisIndexIsSelected(index);
       return InkWell(
         onTap: () {
           bloc.setLeftIndex(index);
         },
-        onLongPress: () {
-          _onLongPressShowDialog(context, bloc, commodityTypeList[index]);
-        },
+        onLongPress: isAdmin ? () => _onLongPressShowDialog(context, bloc, commodityTypeList[index]) : null,
         child: Container(
           alignment: Alignment.centerLeft,
           height: ScreenUtil().setHeight(100),
