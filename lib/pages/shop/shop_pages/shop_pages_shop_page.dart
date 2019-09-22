@@ -63,7 +63,7 @@ class ShopPagesShopPage extends StatelessWidget {
               ),
               body: TabBarView(
                 children: [
-                  ShopPagesShopPageEvaluate(shopTypeAndEssentialMessageVo.data.commodityTypeList, id),
+                  ShopPagesShopPageEvaluate(shopTypeAndEssentialMessageVo.data.commodityTypeList, id, _bloc),
                   ShopPagesShopPageDetails(),
                 ],
               ),

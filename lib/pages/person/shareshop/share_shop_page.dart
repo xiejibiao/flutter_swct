@@ -5,7 +5,6 @@ import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_swcy/bloc/bloc_provider.dart';
 import 'package:flutter_swcy/bloc/person/share_shop_page_bloc.dart';
-import 'package:flutter_swcy/bloc/person/share_shop_page_commodity_admin_bloc.dart';
 import 'package:flutter_swcy/bloc/shop/shop_pages_bloc.dart';
 import 'package:flutter_swcy/common/loading.dart';
 import 'package:flutter_swcy/common/message_dialog.dart';
@@ -20,6 +19,7 @@ class ShareShopPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ShareShopPageBloc _bloc = BlocProvider.of<ShareShopPageBloc>(context);
+    final ShopPagesBloc _shopPagesBloc = BlocProvider.of<ShopPagesBloc>(context);
     _bloc.getMyStorePage(context);
     return Scaffold(
       appBar: AppBar(
@@ -59,7 +59,7 @@ class ShareShopPage extends StatelessWidget {
                 ),
                 child: ListView(
                   children: <Widget>[
-                    _buildStoreItem(myStorePageVo, _bloc),
+                    _buildStoreItem(myStorePageVo, _bloc, _shopPagesBloc),
                     _bloc.isEnd ? TheEndBaseline() : Text('')
                   ],
                 ),
@@ -74,7 +74,7 @@ class ShareShopPage extends StatelessWidget {
     );
   }
 
-  Widget _buildStoreItem(MyStorePageVo myStorePageVo, ShareShopPageBloc bloc) {
+  Widget _buildStoreItem(MyStorePageVo myStorePageVo, ShareShopPageBloc bloc, ShopPagesBloc shopPagesBloc) {
     return ListView.builder(
       shrinkWrap: true,
       physics: NeverScrollableScrollPhysics(),
@@ -111,7 +111,7 @@ class ShareShopPage extends StatelessWidget {
                           ],
                         ),
                       ),
-                      _buildButtom(myStorePageVo.data.list[index].isChecked, TextUtil.isEmpty(myStorePageVo.data.list[index].licenseCode) ? false : true, context, myStorePageVo.data.list[index], bloc)
+                      _buildButtom(myStorePageVo.data.list[index].isChecked, TextUtil.isEmpty(myStorePageVo.data.list[index].licenseCode) ? false : true, context, myStorePageVo.data.list[index], bloc, shopPagesBloc)
                     ],
                   )
                 ],
@@ -124,7 +124,7 @@ class ShareShopPage extends StatelessWidget {
   }
 
   // 审核状态、是否申请认证
-  Widget _buildButtom(int status, bool isAuthentication, BuildContext context, MyStorePageItem myStorePageItem, ShareShopPageBloc bloc) {
+  Widget _buildButtom(int status, bool isAuthentication, BuildContext context, MyStorePageItem myStorePageItem, ShareShopPageBloc bloc, ShopPagesBloc shopPagesBloc) {
     if (isAuthentication) {
       switch (status) {
         // 审核中
@@ -133,7 +133,7 @@ class ShareShopPage extends StatelessWidget {
           break;
         // 产品上架
         case 1:
-          return _buildProductsOnShelvesButtom(context, myStorePageItem.id);
+          return _buildProductsOnShelvesButtom(context, myStorePageItem.id, shopPagesBloc);
           break;
         // 审核失败
         default:
@@ -158,7 +158,7 @@ class ShareShopPage extends StatelessWidget {
   }
 
   // 产品上架
-  Widget _buildProductsOnShelvesButtom(BuildContext context, int id) {
+  Widget _buildProductsOnShelvesButtom(BuildContext context, int id, ShopPagesBloc bloc) {
     return Container(
       height: ScreenUtil().setHeight(70),
       width: ScreenUtil().setWidth(445),
@@ -176,11 +176,7 @@ class ShareShopPage extends StatelessWidget {
           child: Text('产品上架'),
         ),
         onTap: () {
-          Navigator.push(context, 
-            CupertinoPageRoute(builder: (context) => 
-              BlocProvider(bloc: ShopPagesBloc(), 
-                child: BlocProvider(bloc: ShareShopPageCommodityAdminBloc(), 
-                  child: ShareShopPageCommodityAdmin(id)))));
+          Navigator.push(context, CupertinoPageRoute(builder: (context) => ShareShopPageCommodityAdmin(id, bloc)));
         },
       ),
     );

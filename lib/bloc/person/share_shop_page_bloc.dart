@@ -80,7 +80,7 @@ class ShareShopPageBloc extends BlocBase {
 
   // 获取相册文件并上传
   getShorePhoto() async {
-    await ImageUpload().uploadImage().then((val) {
+    await ImageUpload().tailoringUploadImage().then((val) {
       if (!TextUtil.isEmpty(val)) {
         _shorePhotoSink.add(val);
       }
@@ -298,7 +298,47 @@ class ShareShopPageBloc extends BlocBase {
     });
   }
 
+  bool _checkAddCommodityParameter(String cover, String name, double price, String specs) {
+    if (TextUtil.isEmpty(cover)) {
+      showToast('请上传封面图');
+      return false;
+    }
+    if (TextUtil.isEmpty(name)) {
+      showToast('请输入商品名称');
+      return false;
+    }
+    if (price == null) {
+      showToast('请输入单价');
+      return false;
+    }
+    if (TextUtil.isEmpty(specs)) {
+      showToast('请输入规格');
+      return false;
+    }
+    return true;
+  }
 
+  /// 添加商品
+  addCommodity(BuildContext context, String cover, String name, double price, String specs, int typeId) {
+    if (_checkAddCommodityParameter(cover, name, price, specs)) {
+      var formData = {
+        'cover': cover,
+        'name': name,
+        'price': price,
+        'specs': specs,
+        'typeId': typeId
+      };
+      requestPost('addCommodity', formData: formData).then((val) {
+        CommenVo commenVo = CommenVo.fromJson(val);
+        if(commenVo.code == '200') {
+          showToast('添加商品成功');
+          Navigator.pop(context);
+        } else {
+          showToast(commenVo.message);
+        }
+      });
+    }
+  }
 
   @override
   void dispose() {

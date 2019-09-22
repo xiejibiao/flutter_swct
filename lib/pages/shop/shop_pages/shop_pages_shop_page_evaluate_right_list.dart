@@ -3,22 +3,28 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_swcy/bloc/bloc_provider.dart';
+import 'package:flutter_swcy/bloc/person/share_shop_page_bloc.dart';
+import 'package:flutter_swcy/bloc/person/share_shop_page_commodity_admin_bloc.dart';
 import 'package:flutter_swcy/bloc/shop/shop_pages_bloc.dart';
 import 'package:flutter_swcy/common/loading.dart';
 import 'package:flutter_swcy/common/the_end_baseline.dart';
-import 'package:flutter_swcy/pages/shop/shop_page_search_default_page.dart';
+import 'package:flutter_swcy/pages/person/shareshop/share_shop_page_commodity_admin_add.dart';
 import 'package:flutter_swcy/pages/shop/shop_pages/shop_pages_shop_page_evaluate_details.dart';
 import 'package:flutter_swcy/vo/shop/commodity_page_by_commodity_type_vo.dart';
 
 class ShopPagesShopPageEvaluateRightList extends StatelessWidget {
+  final ShopPagesBloc bloc;
+  ShopPagesShopPageEvaluateRightList(
+    this.bloc
+  );
   final GlobalKey<RefreshFooterState> _footerKey = GlobalKey<RefreshFooterState>();
   @override
   Widget build(BuildContext context) {
-    final ShopPagesBloc _bloc = BlocProvider.of<ShopPagesBloc>(context);
+    // final ShopPagesBloc _bloc = BlocProvider.of<ShopPagesBloc>(context);
     return Container(
       width: ScreenUtil().setWidth(570),
       child: StreamBuilder(
-        stream: _bloc.commodityPageByCommodityTypeVoStream,
+        stream: bloc.commodityPageByCommodityTypeVoStream,
         builder: (context, sanpshop) {
           if (!sanpshop.hasData) {
             return Container(
@@ -28,10 +34,11 @@ class ShopPagesShopPageEvaluateRightList extends StatelessWidget {
           } else {
             CommodityPageByCommodityTypeVo commodityPageByCommodityTypeVo = sanpshop.data;
             if (commodityPageByCommodityTypeVo.data.list.length == 0) {
-              return Container(
-                width: ScreenUtil().setWidth(570),
-                child: ShopPageSearchDefaultPage(),
-              );
+              // return Container(
+              //   width: ScreenUtil().setWidth(570),
+              //   child: ShopPageSearchDefaultPage(),
+              // );
+              return _buildAddCommodity(bloc, context);
             } else {
               return EasyRefresh(
                 refreshFooter: ClassicsFooter(
@@ -53,37 +60,17 @@ class ShopPagesShopPageEvaluateRightList extends StatelessWidget {
                       physics: NeverScrollableScrollPhysics(),
                       itemCount: commodityPageByCommodityTypeVo.data.list.length,
                       itemBuilder: (context, index) {
-                        return _buildGoodsItem(commodityPageByCommodityTypeVo.data.list[index], context, _bloc);
+                        return _buildGoodsItem(commodityPageByCommodityTypeVo.data.list[index], context, bloc);
                       }
                     ),
                     StreamBuilder(
                       initialData: false,
-                      stream: _bloc.isTheEndStream,
+                      stream: bloc.isTheEndStream,
                       builder: (context, sanpshop) {
                         if (sanpshop.data) {
                           return Column(
                             children: <Widget>[
-                              InkWell(
-                                onTap: () {
-                                  print('添加商品');
-                                },
-                                onLongPress: () {
-                                  print('长按');
-                                },
-                                child: Card(
-                                  child: Container(
-                                    alignment: Alignment.center,
-                                    height: ScreenUtil().setHeight(235),
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: <Widget>[
-                                        Text('+', style: TextStyle(fontSize: ScreenUtil().setSp(68))),
-                                        Text('添加商品', style: TextStyle(fontSize: ScreenUtil().setSp(38)))
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
+                              _buildAddCommodity(bloc, context),
                               TheEndBaseline()
                             ],
                           );
@@ -95,7 +82,7 @@ class ShopPagesShopPageEvaluateRightList extends StatelessWidget {
                   ],
                 ),
                 loadMore: () {
-                  return _bloc.loadMoreCommodityPageByCommodityTypeId();
+                  return bloc.loadMoreCommodityPageByCommodityTypeId();
                 },
               );
             }
@@ -179,6 +166,36 @@ class ShopPagesShopPageEvaluateRightList extends StatelessWidget {
           borderRadius: BorderRadius.circular(20.0)
         ),
         child: Text('加入购物车'),
+      ),
+    );
+  }
+
+  // 添加商品框
+  Widget _buildAddCommodity(ShopPagesBloc bloc, BuildContext context) {
+    return InkWell(
+      onTap: () {
+        int commodityTypeId = bloc.commodityTypeList[bloc.leftIndex].id;
+        String commodityTypeName = bloc.commodityTypeList[bloc.leftIndex].name;
+        Navigator.push(context, 
+          CupertinoPageRoute(builder: (context) => 
+            BlocProvider(bloc: ShareShopPageBloc(), 
+              child: BlocProvider(bloc: ShareShopPageCommodityAdminBloc(), child: ShareShopPageCommodityAdminAdd(commodityTypeId, commodityTypeName))
+            )
+          )
+        );
+      },
+      child: Card(
+        child: Container(
+          alignment: Alignment.center,
+          height: ScreenUtil().setHeight(235),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text('+', style: TextStyle(fontSize: ScreenUtil().setSp(68))),
+              Text('添加商品', style: TextStyle(fontSize: ScreenUtil().setSp(38)))
+            ],
+          ),
+        ),
       ),
     );
   }

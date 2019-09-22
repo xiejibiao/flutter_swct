@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_swcy/bloc/bloc_provider.dart';
 import 'package:flutter_swcy/bloc/person/share_shop_page_bloc.dart';
+import 'package:flutter_swcy/bloc/shop/shop_pages_bloc.dart';
 import 'package:flutter_swcy/my_widget.dart';
 import 'package:flutter_swcy/pages/person/person_about_page.dart';
 import 'package:flutter_swcy/pages/person/person_achievement_page.dart';
@@ -31,7 +32,7 @@ class PersonPageItemButtom extends StatelessWidget {
           _item(context, Icons.textsms, '消息', PersonSmsPage()),
           _item(context, Icons.insert_chart, '我的业绩', PersonAchievementPage()),
           _item(context, Icons.sms_failed, '意见与建议', PersonComplaintsPage()),
-          _item(context, Icons.store, '我的分享店', BlocProvider(bloc: ShareShopPageBloc(), child: ShareShopPage(),)),
+          _item(context, Icons.store, '我的分享店', BlocProvider(bloc: ShareShopPageBloc(), child: BlocProvider(bloc: ShopPagesBloc(), child: ShareShopPage()))),
           _item(context, Icons.extension, '关于', PersonAboutPage()),
         ],
       ),

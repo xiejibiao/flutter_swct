@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/widgets.dart';
 import 'package:flutter_qiniu/flutter_qiniu.dart';
 import 'package:flutter_swcy/service/service_method.dart';
 import 'package:flutter_swcy/vo/qiniu_token_vo.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:oktoast/oktoast.dart';
 
@@ -38,6 +41,34 @@ class ImageUpload {
     });
     return resultKeys;
   }
+
+  /// 先裁剪再上传（仅限单张图片）
+  Future<String> tailoringUploadImage() async {
+    List<Asset> list = [];
+    await _getListAsset(maxImages: 1, selectionLimitReachedText: '请勿选择多张图片').then((val) {
+      list = val;
+    });
+    if (list.length <= 0) {
+      return '';
+    }
+    String filePath = await list[0].filePath;
+    // 裁剪图片
+    File croppedFile = await ImageCropper.cropImage(
+      sourcePath: filePath,
+      ratioX: 1.0,
+      ratioY: 1.0,
+      maxWidth: 512,
+      maxHeight: 512,
+    );
+
+    var qiNiuTokenData = await _getQiNiuToken();
+    QiNiuTokenVo qiNiuTokenVo = QiNiuTokenVo.fromJson(qiNiuTokenData);
+    String key = DateTime.now().millisecondsSinceEpoch.toString() + '.' + croppedFile.path.split('.').last;
+    final qiniu = FlutterQiniu(zone: QNFixedZone.zone2);
+    String resultKey = await qiniu.uploadFile(croppedFile.path.toString(), key, qiNiuTokenVo.data.token);
+    return '$QI_NIU_URI$resultKey';
+  }
+  
 
   /// 上传一张图片
   Future<String> uploadImage() async {

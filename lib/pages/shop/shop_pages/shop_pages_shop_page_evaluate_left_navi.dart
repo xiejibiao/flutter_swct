@@ -11,15 +11,17 @@ class ShopPagesShopPageEvaluateLeftNavi extends StatelessWidget {
   final TextEditingController _textEditingController = TextEditingController();
   final List<CommodityTypeList> commodityTypeList;
   final int id;
+  final ShopPagesBloc bloc;
   ShopPagesShopPageEvaluateLeftNavi(
     this.commodityTypeList,
-    this.id
+    this.id,
+    this.bloc
   );
   @override
   Widget build(BuildContext context) {
-    final ShopPagesBloc _bloc = BlocProvider.of<ShopPagesBloc>(context);
+    // final ShopPagesBloc _bloc = BlocProvider.of<ShopPagesBloc>(context);
     return StreamBuilder(
-      stream: _bloc.leftIndexStream,
+      stream: bloc.leftIndexStream,
       builder: (context, sanpshop) {
         return Container(
           width: ScreenUtil().setWidth(180),
@@ -31,7 +33,7 @@ class ShopPagesShopPageEvaluateLeftNavi extends StatelessWidget {
           child: ListView.builder(
             itemCount: commodityTypeList.length + 1,
             itemBuilder: (context, index) {
-              return _leftInkWellItem(index, commodityTypeList, _bloc, commodityTypeList.length, context);
+              return _leftInkWellItem(index, commodityTypeList, bloc, commodityTypeList.length, context);
             },
           ),
         );
