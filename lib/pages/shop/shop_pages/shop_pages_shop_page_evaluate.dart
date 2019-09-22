@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_swcy/bloc/bloc_provider.dart';
+import 'package:flutter_swcy/bloc/person/share_shop_page_bloc.dart';
 import 'package:flutter_swcy/bloc/shop/shop_pages_bloc.dart';
 import 'package:flutter_swcy/pages/shop/shop_page_search_default_page.dart';
 import 'package:flutter_swcy/pages/shop/shop_pages/shop_pages_shop_page_evaluate_left_navi.dart';
@@ -29,7 +31,7 @@ class _ShopPagesShopPageEvaluateState extends State<ShopPagesShopPageEvaluate> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   ShopPagesShopPageEvaluateLeftNavi(widget.commodityTypeList, widget.id, widget.bloc, widget.isAdmin),
-                  ShopPagesShopPageEvaluateRightList(widget.bloc, widget.isAdmin)
+                  BlocProvider(bloc: ShareShopPageBloc(), child: ShopPagesShopPageEvaluateRightList(widget.bloc, widget.isAdmin))
                 ],
               );
   }

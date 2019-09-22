@@ -7,6 +7,7 @@ import 'package:flutter_swcy/bloc/person/share_shop_page_bloc.dart';
 import 'package:flutter_swcy/bloc/person/share_shop_page_commodity_admin_bloc.dart';
 import 'package:flutter_swcy/bloc/shop/shop_pages_bloc.dart';
 import 'package:flutter_swcy/common/loading.dart';
+import 'package:flutter_swcy/common/message_dialog.dart';
 import 'package:flutter_swcy/common/the_end_baseline.dart';
 import 'package:flutter_swcy/pages/person/shareshop/share_shop_page_commodity_admin_add.dart';
 import 'package:flutter_swcy/pages/shop/shop_page_search_default_page.dart';
@@ -23,6 +24,7 @@ class ShopPagesShopPageEvaluateRightList extends StatelessWidget {
   final GlobalKey<RefreshFooterState> _footerKey = GlobalKey<RefreshFooterState>();
   @override
   Widget build(BuildContext context) {
+    final ShareShopPageBloc _shareShopPageBloc = BlocProvider.of<ShareShopPageBloc>(context);
     return Container(
       width: ScreenUtil().setWidth(570),
       child: StreamBuilder(
@@ -63,7 +65,7 @@ class ShopPagesShopPageEvaluateRightList extends StatelessWidget {
                       physics: NeverScrollableScrollPhysics(),
                       itemCount: commodityPageByCommodityTypeVo.data.list.length,
                       itemBuilder: (context, index) {
-                        return _buildGoodsItem(commodityPageByCommodityTypeVo.data.list[index], context, bloc);
+                        return _buildGoodsItem(commodityPageByCommodityTypeVo.data.list[index], context, bloc, _shareShopPageBloc);
                       }
                     ),
                     StreamBuilder(
@@ -95,11 +97,12 @@ class ShopPagesShopPageEvaluateRightList extends StatelessWidget {
     );
   }
 
-  Widget _buildGoodsItem (CommodityList commodityList, BuildContext context, ShopPagesBloc bloc) {
+  Widget _buildGoodsItem (CommodityList commodityList, BuildContext context, ShopPagesBloc bloc, ShareShopPageBloc shareShopPageBloc) {
     return InkWell(
       onTap: () {
         Navigator.push(context, CupertinoPageRoute(builder: (context) => ShopPagesShopPageEvaluateDetails(commodityList.detail)));
       },
+      onLongPress: isAdmin ? () => _onLongPressShowDeleteAndEditDialog(context, shareShopPageBloc, commodityList, bloc) : null,
       child: Container(
         height: ScreenUtil().setHeight(235),
         child: Card(
@@ -200,6 +203,61 @@ class ShopPagesShopPageEvaluateRightList extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  /// 长按商品弹出删除，修改按钮
+  _onLongPressShowDeleteAndEditDialog(BuildContext context, ShareShopPageBloc bloc, CommodityList commodityList, ShopPagesBloc shopPagesBloc) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return MessageDialog(
+          title: '操作确认',
+          widget: Container(
+            padding: EdgeInsets.symmetric(horizontal: 10.0),
+            child: Text('请确认操作！', style: TextStyle(fontSize: ScreenUtil().setSp(32))),
+          ),
+          onCloseEvent: () {
+            Navigator.pop(context);
+            _showDeleteCommodityDialog(context, bloc, commodityList, shopPagesBloc);
+          },
+          onPositivePressEvent: () {
+            Navigator.pop(context);
+          },
+          onIconCloseEvent: () {
+            Navigator.pop(context);
+          },
+          negativeText: '删除',
+          positiveText: '修改',
+        );
+      }
+    );
+  }
+
+  /// 删除商品
+  _showDeleteCommodityDialog(BuildContext context, ShareShopPageBloc bloc, CommodityList commodityList, ShopPagesBloc shopPagesBloc) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return MessageDialog(
+          title: '删除确认',
+          widget: Container(
+            padding: EdgeInsets.symmetric(horizontal: 10.0),
+            child: Text('确认删除此商品？', style: TextStyle(fontSize: ScreenUtil().setSp(32), color: Colors.red)),
+          ),
+          onCloseEvent: () {
+            Navigator.pop(context);
+          },
+          onPositivePressEvent: () {
+            Navigator.pop(context);
+            bloc.deleteCommodity(commodityList.id, shopPagesBloc);
+          },
+          negativeText: '取消',
+          positiveText: '确认',
+        );
+      }
     );
   }
 }

@@ -195,6 +195,19 @@ class ShopPagesBloc extends BlocBase {
     _commodityPageByCommodityTypeVoSink.add(commodityPageByCommodityTypeVo);
   }
 
+  /// 删除商品成功后，删除对象
+  removeCommodityById(int id) {
+    int removeIndex = 0;
+    for(int i = 0; i < commodityPageByCommodityTypeVo.data.list.length; i++) {
+      if (commodityPageByCommodityTypeVo.data.list[i].id == id) {
+        removeIndex = i;
+        break;
+      }
+    }
+    commodityPageByCommodityTypeVo.data.list.removeAt(removeIndex);
+    _commodityPageByCommodityTypeVoSink.add(commodityPageByCommodityTypeVo);
+  }
+
   // ----------------------------------------------------------------------------------------------------------------------------
   
   // 进入商家时，必须初始化此值

@@ -301,6 +301,7 @@ class ShareShopPageBloc extends BlocBase {
     });
   }
 
+  /// 检验添加商品参数
   bool _checkAddCommodityParameter(String cover, String name, double price, String specs) {
     if (TextUtil.isEmpty(cover)) {
       showToast('请上传封面图');
@@ -354,6 +355,22 @@ class ShareShopPageBloc extends BlocBase {
         }
       });
     }
+  }
+
+  /// 删除商品
+  deleteCommodity(int id, ShopPagesBloc bloc) {
+    var formData = {
+      'id': id
+    };
+    requestPost('deleteCommodity', formData: formData).then((val) {
+      CommenVo commenVo = CommenVo.fromJson(val);
+      if (commenVo.code == '200') {
+        showToast('删除成功');
+        bloc.removeCommodityById(id);
+      } else {
+        showToast(commenVo.message);
+      }
+    });
   }
 
   @override
