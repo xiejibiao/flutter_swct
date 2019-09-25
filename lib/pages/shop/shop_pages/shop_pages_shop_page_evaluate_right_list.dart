@@ -104,7 +104,7 @@ class ShopPagesShopPageEvaluateRightList extends StatelessWidget {
       onTap: () {
         if (isAdmin) {
           shareShopPageCommodityAdminBloc.getItems(commodityList.detail);
-          Navigator.push(context, CupertinoPageRoute(builder: (context) => ShareShopPageCommodityDetail(commodityList.detail, commodityList.id, shareShopPageCommodityAdminBloc, bloc)));
+          Navigator.push(context, CupertinoPageRoute(builder: (context) => ShareShopPageCommodityDetail(commodityList.detail, commodityList.id, shareShopPageCommodityAdminBloc, bloc, false, shareShopPageBloc)));
         } else {
           Navigator.push(context, CupertinoPageRoute(builder: (context) => ShopPagesShopPageEvaluateDetails(commodityList.detail)));
         }

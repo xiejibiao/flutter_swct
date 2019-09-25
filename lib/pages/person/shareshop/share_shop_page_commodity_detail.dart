@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_list_drag_and_drop/drag_and_drop_list.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_swcy/bloc/bloc_provider.dart';
+import 'package:flutter_swcy/bloc/person/share_shop_page_bloc.dart';
 import 'package:flutter_swcy/bloc/person/share_shop_page_commodity_admin_bloc.dart';
 import 'package:flutter_swcy/bloc/shop/shop_pages_bloc.dart';
 import 'package:flutter_swcy/common/commodity_detail_util.dart';
@@ -11,14 +12,18 @@ import 'package:flutter_swcy/pages/person/shareshop/share_shop_page_commodity_de
 
 class ShareShopPageCommodityDetail extends StatelessWidget {
   final String detail;
-  final int commodityId;
+  final int id;
   final ShareShopPageCommodityAdminBloc bloc;
   final ShopPagesBloc shopPagesBloc;
+  final bool isStore;
+  final ShareShopPageBloc shareShopPageBloc;
   ShareShopPageCommodityDetail(
     this.detail,
-    this.commodityId,
+    this.id,
     this.bloc,
-    this.shopPagesBloc
+    this.shopPagesBloc,
+    this.isStore,
+    this.shareShopPageBloc
   );
   
   @override
@@ -30,7 +35,7 @@ class ShareShopPageCommodityDetail extends StatelessWidget {
           IconButton(
             icon: Text('预览'),
             onPressed: () {
-              Navigator.push(context, CupertinoPageRoute(builder: (context) => BlocProvider(bloc: ShareShopPageCommodityAdminBloc(), child: ShareShopPageCommodityDetailComplete(bloc.items, commodityId, shopPagesBloc))));
+              Navigator.push(context, CupertinoPageRoute(builder: (context) => BlocProvider(bloc: ShareShopPageCommodityAdminBloc(), child: ShareShopPageCommodityDetailComplete(bloc.items, id, shopPagesBloc, isStore, shareShopPageBloc))));
             },
           ),
         ],

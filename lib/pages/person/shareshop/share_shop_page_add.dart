@@ -245,7 +245,6 @@ class _ShareShopPageAddState extends State<ShareShopPageAdd> {
             if (TextUtil.isEmpty(_industryTempConroller.text)) {
               showToast('请选择行业');
             } else {
-              print(_industryTempConroller.text);
               StoreIndustryListFromCacheVo storeIndustryListFromCacheVo = StoreIndustryListFromCacheVo.fromJson(json.decode(_industryTempConroller.text));
               _industryId = storeIndustryListFromCacheVo.id;
               _industryName = storeIndustryListFromCacheVo.name;

@@ -1,10 +1,12 @@
 import 'package:common_utils/common_utils.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_swcy/bloc/bloc_provider.dart';
 import 'package:flutter_swcy/bloc/person/person_info_receiving_address_bloc.dart';
 import 'package:flutter_swcy/bloc/shop/shop_pages_bloc.dart';
 import 'package:flutter_swcy/common/loading.dart';
+import 'package:flutter_swcy/pages/person/person_info_receiving_address_add.dart';
 import 'package:flutter_swcy/vo/person/receiving_address_vo.dart';
 import 'package:flutter_swcy/vo/shop/commodity_info_vo.dart';
 
@@ -42,7 +44,7 @@ class ShopPagesShopPageShopingcarSettlement extends StatelessWidget {
                     children: <Widget>[
                       ListView(
                         children: <Widget>[
-                          receivingAddressVo.data.length > 0 ? _buildAddressCard(receivingAddressVo.data[0]) : _buildAddAddressCard(),
+                          receivingAddressVo.data.length > 0 ? _buildAddressCard(receivingAddressVo.data[0]) : _buildAddAddressCard(context),
                           _buildShopAndCommodityInfoVoList(map['list']),
                           _buildPayType(),
                         ],
@@ -89,7 +91,7 @@ class ShopPagesShopPageShopingcarSettlement extends StatelessWidget {
   }
 
   // 暂无收货地址时
-  Widget _buildAddAddressCard() {
+  Widget _buildAddAddressCard(BuildContext context) {
     return Card(
       child: ListTile(
         title: Text('请添加收货地址'),
@@ -98,7 +100,9 @@ class ShopPagesShopPageShopingcarSettlement extends StatelessWidget {
           size: 38,
         ),
         onTap: () {
-          print('点击添加收货地址');
+          Navigator.push(context, CupertinoPageRoute(builder: (context) => BlocProvider(bloc: PersonInfoReceivingAddressBloc(), child: PersonInfoReceivingAddress(null)))).then((val) {
+            // _bloc.getReceivingAddressListByUId(context);
+          });
         },
       ),
     );

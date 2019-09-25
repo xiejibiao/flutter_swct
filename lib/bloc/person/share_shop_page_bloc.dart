@@ -35,10 +35,9 @@ class ShareShopPageBloc extends BlocBase {
   Sink<Location> get _locationSink => _locationController.sink;
   Stream<Location> get locationStream => _locationController.stream;
 
-  // 我的共享点列表
+  // 我的共享店列表
   getMyStorePage(BuildContext context) async {
     await getToken().then((token) async {
-      print(token);
       _pageNumber = 0;
       var formData = {
         'pageNumber': _pageNumber,
@@ -404,6 +403,7 @@ class ShareShopPageBloc extends BlocBase {
     return commodityList;
   }
 
+  /// 上架、下架
   upperShelfAndLowerShelf(int id, ShopPagesBloc bloc) {
     var formData = {
       'id': id
@@ -418,6 +418,19 @@ class ShareShopPageBloc extends BlocBase {
           showToast(commodityVo.message);
         }
     });
+  }
+
+  // 修改分享店详情后，重新修改分享店详情字段
+  resetStoreDescription(String description, int id) {
+    int editIndex = 0;
+    for(int i = 0; i < _myStorePageVo.data.list.length; i++) {
+      if (_myStorePageVo.data.list[i].id == id) {
+        editIndex = i;
+        break;
+      }
+    }
+    _myStorePageVo.data.list[editIndex].description= description;
+    _myStorePageVoSink.add(_myStorePageVo);
   }
 
   @override

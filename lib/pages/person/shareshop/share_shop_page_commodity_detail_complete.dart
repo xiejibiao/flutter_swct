@@ -2,18 +2,23 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_swcy/bloc/bloc_provider.dart';
+import 'package:flutter_swcy/bloc/person/share_shop_page_bloc.dart';
 import 'package:flutter_swcy/bloc/person/share_shop_page_commodity_admin_bloc.dart';
 import 'package:flutter_swcy/bloc/shop/shop_pages_bloc.dart';
 import 'package:flutter_swcy/common/commodity_detail_util.dart';
 
 class ShareShopPageCommodityDetailComplete extends StatelessWidget {
   final List<dynamic> items;
-  final int commodityId;
+  final int id;
   final ShopPagesBloc shopPagesBloc;
+  final ShareShopPageBloc shareShopPageBloc;
+  final bool isStore;
   ShareShopPageCommodityDetailComplete(
     this.items, 
-    this.commodityId,
-    this.shopPagesBloc
+    this.id,
+    this.shopPagesBloc,
+    this.isStore,
+    this.shareShopPageBloc
   );
 
   @override
@@ -28,7 +33,11 @@ class ShareShopPageCommodityDetailComplete extends StatelessWidget {
             icon: Text('保存'),
             onPressed: () {
               String detial = json.encode(items);
-              _bloc.editCommodityDetail(context, detial, commodityId, shopPagesBloc);
+              if (isStore) {
+                _bloc.editStoreDescription(context, detial, id, shareShopPageBloc);
+              } else {
+                _bloc.editCommodityDetail(context, detial, id, shopPagesBloc);
+              }
             },
           )
         ],

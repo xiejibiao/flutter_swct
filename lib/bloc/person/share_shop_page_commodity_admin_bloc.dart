@@ -4,6 +4,7 @@ import 'package:common_utils/common_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swcy/bloc/bloc_provider.dart';
+import 'package:flutter_swcy/bloc/person/share_shop_page_bloc.dart';
 import 'package:flutter_swcy/bloc/shop/shop_pages_bloc.dart';
 import 'package:flutter_swcy/common/commodity_detail_util.dart';
 import 'package:flutter_swcy/common/image_upload.dart';
@@ -27,16 +28,35 @@ class ShareShopPageCommodityAdminBloc extends BlocBase {
   }
 
   /// 修改商品详情
-  editCommodityDetail(BuildContext context, String detail, int commodityId, ShopPagesBloc shopPagesBloc) {
+  editCommodityDetail(BuildContext context, String detail, int id, ShopPagesBloc shopPagesBloc) {
     var formData = {
       'detail': detail,
-      'id': commodityId
+      'id': id
     };
     requestPost('editCommodityDetail', formData: formData).then((val) {
       CommenVo commenVo = CommenVo.fromJson(val);
       if(commenVo.code == '200') {
         showToast('编辑成功');
-        shopPagesBloc.resetCommodityDetail(detail, commodityId);
+        shopPagesBloc.resetCommodityDetail(detail, id);
+        Navigator.pop(context);
+        Navigator.pop(context);
+      } else {
+        showToast(commenVo.message);
+      }
+    });
+  }
+
+  /// 修改分享店详情
+  editStoreDescription(BuildContext context, String detail, int id, ShareShopPageBloc shareShopPageBloc) {
+    var formData = {
+      'description': detail,
+      'id': id
+    };
+    requestPost('editStoreDescription', formData: formData).then((val) {
+      CommenVo commenVo = CommenVo.fromJson(val);
+      if (commenVo.code == '200') {
+        showToast('修改成功');
+        shareShopPageBloc.resetStoreDescription(detail, id);
         Navigator.pop(context);
         Navigator.pop(context);
       } else {
