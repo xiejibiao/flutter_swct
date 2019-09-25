@@ -223,6 +223,19 @@ class ShopPagesBloc extends BlocBase {
     _commodityPageByCommodityTypeVoSink.add(commodityPageByCommodityTypeVo);
   }
 
+  // 修改商品详情后，重新修改商品详情字段
+  resetCommodityDetail(String detail, int id) {
+    int editIndex = 0;
+    for(int i = 0; i < commodityPageByCommodityTypeVo.data.list.length; i++) {
+      if (commodityPageByCommodityTypeVo.data.list[i].id == id) {
+        editIndex = i;
+        break;
+      }
+    }
+    commodityPageByCommodityTypeVo.data.list[editIndex].detail= detail;
+    _commodityPageByCommodityTypeVoSink.add(commodityPageByCommodityTypeVo);
+  }
+
   // ----------------------------------------------------------------------------------------------------------------------------
   
   // 进入商家时，必须初始化此值

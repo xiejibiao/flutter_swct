@@ -26,6 +26,7 @@ const servicePath = {
   'getQiNiuToken': serviceBaseUrl + '/store/getQiNiuToken',                                           // 获取七牛云上传文件Token
   'getMyStorePage': serviceBaseUrl + '/store/getMyStorePage',                                         // 获取我的共享店
   'getStoreById': serviceBaseUrl + '/store/getStoreById',                                             // 获取门店
+  'editCommodityDetail': serviceBaseUrl + '/store/editCommodityDetail',                               // 编辑商品详情
   'getPersonAndAdList': serviceBaseUrl + '/person/getPersonAndAdList',                                // 获取基本信息与广告
   'upDateAvatar': serviceBaseUrl + '/person/upDateAvatar',                                            // 修改头像
   'getPersonInfo': serviceBaseUrl + '/person/getPersonInfo',                                          // 获取用户基本信息

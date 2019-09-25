@@ -10,6 +10,7 @@ import 'package:flutter_swcy/common/loading.dart';
 import 'package:flutter_swcy/common/message_dialog.dart';
 import 'package:flutter_swcy/common/the_end_baseline.dart';
 import 'package:flutter_swcy/pages/person/shareshop/share_shop_page_commodity_admin_add_edit.dart';
+import 'package:flutter_swcy/pages/person/shareshop/share_shop_page_commodity_detail.dart';
 import 'package:flutter_swcy/pages/shop/shop_page_search_default_page.dart';
 import 'package:flutter_swcy/pages/shop/shop_pages/shop_pages_shop_page_evaluate_details.dart';
 import 'package:flutter_swcy/vo/shop/commodity_page_by_commodity_type_vo.dart';
@@ -25,6 +26,7 @@ class ShopPagesShopPageEvaluateRightList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ShareShopPageBloc _shareShopPageBloc = BlocProvider.of<ShareShopPageBloc>(context);
+    final ShareShopPageCommodityAdminBloc _shareShopPageCommodityAdminBloc = BlocProvider.of<ShareShopPageCommodityAdminBloc>(context);
     return Container(
       width: ScreenUtil().setWidth(570),
       child: StreamBuilder(
@@ -65,7 +67,7 @@ class ShopPagesShopPageEvaluateRightList extends StatelessWidget {
                       physics: NeverScrollableScrollPhysics(),
                       itemCount: commodityPageByCommodityTypeVo.data.list.length,
                       itemBuilder: (context, index) {
-                        return _buildGoodsItem(commodityPageByCommodityTypeVo.data.list[index], context, bloc, _shareShopPageBloc);
+                        return _buildGoodsItem(commodityPageByCommodityTypeVo.data.list[index], context, bloc, _shareShopPageBloc, _shareShopPageCommodityAdminBloc);
                       }
                     ),
                     StreamBuilder(
@@ -97,10 +99,15 @@ class ShopPagesShopPageEvaluateRightList extends StatelessWidget {
     );
   }
 
-  Widget _buildGoodsItem (CommodityList commodityList, BuildContext context, ShopPagesBloc bloc, ShareShopPageBloc shareShopPageBloc) {
+  Widget _buildGoodsItem (CommodityList commodityList, BuildContext context, ShopPagesBloc bloc, ShareShopPageBloc shareShopPageBloc, ShareShopPageCommodityAdminBloc shareShopPageCommodityAdminBloc) {
     return InkWell(
       onTap: () {
-        Navigator.push(context, CupertinoPageRoute(builder: (context) => ShopPagesShopPageEvaluateDetails(commodityList.detail)));
+        if (isAdmin) {
+          shareShopPageCommodityAdminBloc.getItems(commodityList.detail);
+          Navigator.push(context, CupertinoPageRoute(builder: (context) => ShareShopPageCommodityDetail(commodityList.detail, commodityList.id, shareShopPageCommodityAdminBloc, bloc)));
+        } else {
+          Navigator.push(context, CupertinoPageRoute(builder: (context) => ShopPagesShopPageEvaluateDetails(commodityList.detail)));
+        }
       },
       onLongPress: isAdmin ? () => _onLongPressShowDeleteAndEditDialog(context, shareShopPageBloc, commodityList, bloc) : null,
       child: Container(
@@ -208,7 +215,7 @@ class ShopPagesShopPageEvaluateRightList extends StatelessWidget {
         Navigator.push(context, 
           CupertinoPageRoute(builder: (context) => 
             BlocProvider(bloc: ShareShopPageBloc(), 
-              child: BlocProvider(bloc: ShareShopPageCommodityAdminBloc(), child: ShareShopPageCommodityAdminAddEdit(commodityTypeId, commodityTypeName, bloc, true))
+              child: ShareShopPageCommodityAdminAddEdit(commodityTypeId, commodityTypeName, bloc, true)
             )
           )
         );
@@ -252,7 +259,7 @@ class ShopPagesShopPageEvaluateRightList extends StatelessWidget {
             Navigator.push(context, 
               CupertinoPageRoute(builder: (context) => 
                 BlocProvider(bloc: ShareShopPageBloc(), 
-                  child: BlocProvider(bloc: ShareShopPageCommodityAdminBloc(), child: ShareShopPageCommodityAdminAddEdit(commodityTypeId, commodityTypeName, shopPagesBloc, false, item: commodityList))
+                  child: ShareShopPageCommodityAdminAddEdit(commodityTypeId, commodityTypeName, shopPagesBloc, false, item: commodityList)
                 )
               )
             );
