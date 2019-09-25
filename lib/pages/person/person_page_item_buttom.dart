@@ -4,8 +4,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_swcy/bloc/bloc_provider.dart';
 import 'package:flutter_swcy/bloc/person/share_shop_page_bloc.dart';
 import 'package:flutter_swcy/bloc/shop/shop_pages_bloc.dart';
-import 'package:flutter_swcy/draggable_page.dart';
-import 'package:flutter_swcy/my_widget.dart';
 import 'package:flutter_swcy/pages/person/person_about_page.dart';
 import 'package:flutter_swcy/pages/person/person_achievement_page.dart';
 import 'package:flutter_swcy/pages/person/person_assets_page.dart';
@@ -26,11 +24,9 @@ class PersonPageItemButtom extends StatelessWidget {
         children: <Widget>[
           _item(context, Icons.attach_money, '我的资产', PersonAssetsPage()),
           _item(context, Icons.group, '我的团队', PersonTeamPage()),
-          _item(context, Icons.store, '我的盟店', MyWidget()),
-          // _item(context, Icons.store, '我的盟店', null),
+          _item(context, Icons.store, '我的盟店', null),
           // _item(context, Icons.star, '收藏', null),
           _item(context, Icons.star, '地图测试', TestMyMap()),
-          _item(context, Icons.star, '拖拽测试', DraggablePage()),
           _item(context, Icons.textsms, '消息', PersonSmsPage()),
           _item(context, Icons.insert_chart, '我的业绩', PersonAchievementPage()),
           _item(context, Icons.sms_failed, '意见与建议', PersonComplaintsPage()),
