@@ -23,7 +23,6 @@ class PersonFollowPageBloc extends BlocBase {
   MyStorePageVo _myStorePageVo;
   getMyFollowPage(BuildContext context) {
     getToken().then((token) {
-      print(token);
       var formData = {
         'pageNumber': 0,
         'pageSize': _pageSize

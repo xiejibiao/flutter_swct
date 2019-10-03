@@ -14,6 +14,7 @@ import 'package:flutter_swcy/pages/person/shareshop/share_shop_page_add.dart';
 import 'package:flutter_swcy/pages/person/shareshop/share_shop_page_authentication.dart';
 import 'package:flutter_swcy/pages/person/shareshop/share_shop_page_commodity_admin.dart';
 import 'package:flutter_swcy/pages/person/shareshop/share_shop_page_commodity_detail.dart';
+import 'package:flutter_swcy/pages/shop/shop_page_search_default_page.dart';
 import 'package:flutter_swcy/vo/shop/my_store_page_vo.dart';
 
 class ShareShopPage extends StatelessWidget {
@@ -44,7 +45,7 @@ class ShareShopPage extends StatelessWidget {
           } else {
             MyStorePageVo myStorePageVo = sanpshop.data;
             if (myStorePageVo.data.list.length <= 0) {
-              return showLoading(); 
+              return ShopPageSearchDefaultPage(); 
             } else {
               return EasyRefresh(
                 refreshFooter: ClassicsFooter(

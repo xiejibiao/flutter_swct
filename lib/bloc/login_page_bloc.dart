@@ -79,12 +79,9 @@ class LoginPageBloc extends BlocBase{
   // 初始化微信登录授权成功监听
   initFluwxAuthListen(BuildContext context) {
     fluwx.responseFromAuth.listen((data) {
-      print('\n\n\n');
-      print('data: $data');
-      print('code: ${data.code}');
-      print('errCode: ${data.errCode}');
-      print('\n\n\n');
-      login(context);
+      if (data.errCode == 0) {
+        login(context, data.code);
+      }
     });
   }
 
@@ -97,13 +94,12 @@ class LoginPageBloc extends BlocBase{
     }
   }
 
-  login (BuildContext context) async {
+  login (BuildContext context, String code) async {
     final PersonInfoPageBloc pageBloc = BlocProvider.of<PersonInfoPageBloc>(context);
     var formData = {
-      'phone': '13724603643',
-      'password': '11111111q',
+      'code': code,
     };
-    await requestPost('login', formData: formData).then((val) {
+    await requestPost('applogin', formData: formData).then((val) {
       LoginVo loginVo = LoginVo.fromJson(val);
       if (loginVo.code == '200') {
         saveToken(loginVo.data.accessToken);

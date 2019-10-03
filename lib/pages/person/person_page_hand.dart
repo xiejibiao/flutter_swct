@@ -73,26 +73,37 @@ class PersonPageHand extends StatelessWidget {
 
   // 昵称等信息
   Widget _nikeName (String nikeName) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: <Widget>[
-        Text(nikeName,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(44)
+    return Container(
+      width: ScreenUtil().setWidth(420),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Text(
+            nikeName,
+            style: TextStyle(
+              fontSize: ScreenUtil().setSp(44)
+            ),
+            overflow: TextOverflow.ellipsis,
           ),
-        ),
-        Text('团力级别: ${personVo.data.star}',
-          style: TextStyle(
-              fontSize: ScreenUtil().setSp(32)
+          Text('团力级别: ${personVo.data.star}',
+            style: TextStyle(
+                fontSize: ScreenUtil().setSp(32)
+            ),
           ),
-        ),
-        Text('信用度: ${personVo.data.credit}',
-          style: TextStyle(
-              fontSize: ScreenUtil().setSp(32)
-          ),
-        ),
-      ],
+          personVo.data.credit == null ?  
+            Text('信用度: 0',
+              style: TextStyle(
+                  fontSize: ScreenUtil().setSp(32)
+              ),
+            ) : 
+            Text('信用度: ${personVo.data.credit}',
+              style: TextStyle(
+                  fontSize: ScreenUtil().setSp(32)
+              ),
+            ),
+        ],
+      ),
     );
   }
 

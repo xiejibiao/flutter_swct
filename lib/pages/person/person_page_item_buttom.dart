@@ -28,7 +28,7 @@ class PersonPageItemButtom extends StatelessWidget {
           _item(context, Icons.attach_money, '我的资产', PersonAssetsPage()),
           _item(context, Icons.group, '我的团队', PersonTeamPage()),
           _item(context, Icons.store, '我的盟店', null),
-          _item(context, Icons.star, '收藏', BlocProvider(bloc: PersonFollowPageBloc(), child: PersonFollowPage())),
+          _item(context, Icons.star, '关注', BlocProvider(bloc: PersonFollowPageBloc(), child: PersonFollowPage())),
           // _item(context, Icons.star, '地图测试', TestMyMap()),
           _item(context, Icons.textsms, '消息', PersonSmsPage()),
           _item(context, Icons.insert_chart, '我的业绩', PersonAchievementPage()),

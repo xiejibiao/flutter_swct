@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swcy/bloc/bloc_provider.dart';
 import 'package:flutter_swcy/bloc/login_page_bloc.dart';
+import 'package:flutter_swcy/bloc/person/person_info_page_bloc.dart';
 import 'package:flutter_swcy/common/shared_preferences.dart';
 import 'package:flutter_swcy/pages/login/login_page.dart';
 import 'package:flutter_swcy/service/service_method.dart';
@@ -267,7 +268,7 @@ class PersonPageBloc extends BlocBase {
       cleanToken();
       isLogoutLoading = false;
       _isLogoutLoadingSink.add(false);
-      Navigator.pushAndRemoveUntil(context, CupertinoPageRoute(builder: (context) => BlocProvider(bloc: LoginPageBloc(), child: LoginPage())), (route) => route == null);
+      Navigator.pushAndRemoveUntil(context, CupertinoPageRoute(builder: (context) => BlocProvider(bloc: PersonInfoPageBloc(), child: BlocProvider(bloc: LoginPageBloc(), child: LoginPage()))), (route) => route == null);
       // getToken().then((token) {
       //   var formData = {
       //     'accessToken': token

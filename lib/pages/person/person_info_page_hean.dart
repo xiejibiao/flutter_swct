@@ -20,7 +20,7 @@ class PersonInfoPageHead extends StatelessWidget {
     return SliverAppBar(
         expandedHeight: ScreenUtil().setHeight(750),
         flexibleSpace: FlexibleSpaceBar(
-          title: Text(personInfoVo.data.nikeName),
+          title: Text(personInfoVo.data.nikeName, style: TextStyle(fontSize: ScreenUtil().setSp(32))),
           background: _avatar(context, _bloc),
         ),
         actions: <Widget>[
