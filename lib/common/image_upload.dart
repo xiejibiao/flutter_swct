@@ -55,18 +55,23 @@ class ImageUpload {
     // 裁剪图片
     File croppedFile = await ImageCropper.cropImage(
       sourcePath: filePath,
-      ratioX: 1.0,
-      ratioY: 1.0,
+      ratioX: 3.0,
+      ratioY: 1.5,
+      // ratioX: 1.0,
+      // ratioY: 1.0,
       maxWidth: 512,
-      maxHeight: 512,
+      maxHeight: 300,
+      // maxHeight: 512,
     );
-
-    var qiNiuTokenData = await _getQiNiuToken();
-    QiNiuTokenVo qiNiuTokenVo = QiNiuTokenVo.fromJson(qiNiuTokenData);
-    String key = DateTime.now().millisecondsSinceEpoch.toString() + '.' + croppedFile.path.split('.').last;
-    final qiniu = FlutterQiniu(zone: QNFixedZone.zone2);
-    String resultKey = await qiniu.uploadFile(croppedFile.path.toString(), key, qiNiuTokenVo.data.token);
-    return '$QI_NIU_URI$resultKey';
+    if (croppedFile != null) {
+      var qiNiuTokenData = await _getQiNiuToken();
+      QiNiuTokenVo qiNiuTokenVo = QiNiuTokenVo.fromJson(qiNiuTokenData);
+      String key = DateTime.now().millisecondsSinceEpoch.toString() + '.' + croppedFile.path.split('.').last;
+      final qiniu = FlutterQiniu(zone: QNFixedZone.zone2);
+      String resultKey = await qiniu.uploadFile(croppedFile.path.toString(), key, qiNiuTokenVo.data.token);
+      return '$QI_NIU_URI$resultKey';
+    }
+    return '';
   }
   
 

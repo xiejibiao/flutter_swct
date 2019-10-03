@@ -28,6 +28,7 @@ const servicePath = {
   'getStoreById': serviceBaseUrl + '/store/getStoreById',                                             // 获取门店
   'editCommodityDetail': serviceBaseUrl + '/store/editCommodityDetail',                               // 编辑商品详情
   'editStoreDescription': serviceBaseUrl + '/store/editStoreDescription',                             // 编辑门店详情
+  'getMyFollowPage': serviceBaseUrl + '/store/getMyFollowPage',                                       // 获取我的关注门店列表
   'getPersonAndAdList': serviceBaseUrl + '/person/getPersonAndAdList',                                // 获取基本信息与广告
   'upDateAvatar': serviceBaseUrl + '/person/upDateAvatar',                                            // 修改头像
   'getPersonInfo': serviceBaseUrl + '/person/getPersonInfo',                                          // 获取用户基本信息

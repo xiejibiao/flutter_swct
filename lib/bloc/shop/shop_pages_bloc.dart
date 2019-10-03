@@ -77,10 +77,10 @@ class ShopPagesBloc extends BlocBase {
       await requestPost('getShopTypeAndEssentialMessage', formData: formData, token: token, context: context).then((data) async {
         ShopTypeAndEssentialMessageVo shopTypeAndEssentialMessageVo = ShopTypeAndEssentialMessageVo.fromJson(data);
         commodityTypeList = shopTypeAndEssentialMessageVo.data.commodityTypeList;
+        _isFollow = shopTypeAndEssentialMessageVo.data.follow;
+        _isFollowSink.add(_isFollow);
         if (shopTypeAndEssentialMessageVo.data.commodityTypeList.length > 0) {
           commodityTypeId = shopTypeAndEssentialMessageVo.data.commodityTypeList[leftIndex].id;
-          _isFollow = shopTypeAndEssentialMessageVo.data.follow;
-          _isFollowSink.add(_isFollow);
           await getCommodityPageByCommodityTypeId(isAdmin);
         }
         _shopTypeAndEssentialMessageVoSink.add(shopTypeAndEssentialMessageVo);
