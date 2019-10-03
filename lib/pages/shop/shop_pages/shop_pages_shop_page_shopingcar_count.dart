@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_swcy/bloc/bloc_provider.dart';
 import 'package:flutter_swcy/bloc/shop/shop_pages_bloc.dart';
 import 'package:flutter_swcy/vo/shop/commodity_info_vo.dart';
 
 class ShopPagesShopPageShopingcarCount extends StatelessWidget {
   final CommodityInfoVo commodityInfoVo;
+  final ShopPagesBloc shopPagesBloc;
   ShopPagesShopPageShopingcarCount(
-    this.commodityInfoVo
+    {
+      @required this.commodityInfoVo,
+      @required this.shopPagesBloc
+    }
   );
   @override
   Widget build(BuildContext context) {
-    final ShopPagesBloc _bloc = BlocProvider.of<ShopPagesBloc>(context);
     return Container(
       width: ScreenUtil().setWidth(165),
       margin: EdgeInsets.only(top: 5.0),
@@ -20,9 +22,9 @@ class ShopPagesShopPageShopingcarCount extends StatelessWidget {
       ),
       child: Row(
         children: <Widget>[
-          _reduceBtn(_bloc),
+          _reduceBtn(shopPagesBloc),
           _countArea(),
-          _addBtn(_bloc)
+          _addBtn(shopPagesBloc)
         ],
       ),
     );
@@ -31,7 +33,9 @@ class ShopPagesShopPageShopingcarCount extends StatelessWidget {
   Widget _reduceBtn(ShopPagesBloc bloc) {
     return InkWell(
       onTap: () {
-        bloc.increaseOrReduceOperation(id: commodityInfoVo.id, isIncrease: false);
+        if (commodityInfoVo.delFlag != 1) {
+          bloc.increaseOrReduceOperation(id: commodityInfoVo.id, isIncrease: false);
+        }
       },
       child: Container(
         width: ScreenUtil().setWidth(45),
@@ -51,7 +55,9 @@ class ShopPagesShopPageShopingcarCount extends StatelessWidget {
   Widget _addBtn(ShopPagesBloc bloc) {
     return InkWell(
       onTap: () {
-        bloc.increaseOrReduceOperation(id: commodityInfoVo.id, isIncrease: true);
+        if (commodityInfoVo.delFlag != 1) {
+          bloc.increaseOrReduceOperation(id: commodityInfoVo.id, isIncrease: true);
+        }
       },
       child: Container(
         width: ScreenUtil().setWidth(45),

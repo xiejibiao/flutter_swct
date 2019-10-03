@@ -7,24 +7,29 @@ import 'package:flutter_swcy/bloc/person/person_info_receiving_address_bloc.dart
 import 'package:flutter_swcy/bloc/shop/shop_pages_bloc.dart';
 import 'package:flutter_swcy/common/loading.dart';
 import 'package:flutter_swcy/pages/person/person_info_receiving_address_add.dart';
+import 'package:flutter_swcy/pages/person/person_info_receiving_address_page.dart';
 import 'package:flutter_swcy/vo/person/receiving_address_vo.dart';
+import 'package:flutter_swcy/vo/person/save_receiving_address_vo.dart';
 import 'package:flutter_swcy/vo/shop/commodity_info_vo.dart';
+import 'package:oktoast/oktoast.dart';
 
 class ShopPagesShopPageShopingcarSettlement extends StatelessWidget {
   final int id;
   final String shopName;
+  final ShopPagesBloc shopPagesBloc;
   ShopPagesShopPageShopingcarSettlement(
     {
       @required this.id,
-      @required this.shopName
+      @required this.shopName,
+      @required this.shopPagesBloc
     }
   );
   @override
   Widget build(BuildContext context) {
     final PersonInfoReceivingAddressBloc _bloc = BlocProvider.of<PersonInfoReceivingAddressBloc>(context);
-    final ShopPagesBloc _shopPagesBloc = BlocProvider.of<ShopPagesBloc>(context);
     _bloc.getReceivingAddressListByUId(context);
-    _shopPagesBloc.getShopingCarCommoditysByIsCheckFormTrue(id);
+    shopPagesBloc.getShopingCarCommoditysByIsCheckFormTrue();
+    ReceivingAddress receivingAddress;
     return Scaffold(
       appBar: AppBar(
         title: Text('结算'),
@@ -34,8 +39,11 @@ class ShopPagesShopPageShopingcarSettlement extends StatelessWidget {
         builder: (context, sanpshop) {
           if (sanpshop.hasData) {
             ReceivingAddressVo receivingAddressVo = sanpshop.data;
+            if (receivingAddressVo.data.length > 0) {
+              receivingAddress = receivingAddressVo.data[0];
+            }
             return StreamBuilder(
-              stream: _shopPagesBloc.settlementCommodityInfoVoListStream,
+              stream: shopPagesBloc.settlementCommodityInfoVoListStream,
               builder: (context, sanpshop) {
                 if (sanpshop.hasData) {
                   Map<String, dynamic> map = sanpshop.data;
@@ -44,12 +52,20 @@ class ShopPagesShopPageShopingcarSettlement extends StatelessWidget {
                     children: <Widget>[
                       ListView(
                         children: <Widget>[
-                          receivingAddressVo.data.length > 0 ? _buildAddressCard(receivingAddressVo.data[0]) : _buildAddAddressCard(context),
+                          receivingAddressVo.data.length > 0 ? 
+                            StreamBuilder(
+                              initialData: 0,
+                              stream: _bloc.receivingAddressIndexStream,
+                              builder: (context, sanpshop) {
+                                receivingAddress = receivingAddressVo.data[sanpshop.data];
+                                return _buildAddressCard(receivingAddressVo.data[sanpshop.data], context, _bloc);
+                              },
+                            ) : _buildAddAddressCard(context, _bloc),
                           _buildShopAndCommodityInfoVoList(map['list']),
                           _buildPayType(),
                         ],
                       ),
-                      _buildPriceAndPayButtom(price)
+                      _buildPriceAndPayButtom(price, shopPagesBloc, context, receivingAddress, id, map['list'])
                     ],
                   );
                 } else {
@@ -66,7 +82,7 @@ class ShopPagesShopPageShopingcarSettlement extends StatelessWidget {
   }
 
   // 默认获取第一个收货地址
-  Widget _buildAddressCard(ReceivingAddress receivingAddress) {
+  Widget _buildAddressCard(ReceivingAddress receivingAddress, BuildContext context, PersonInfoReceivingAddressBloc personInfoReceivingAddressBloc) {
     return Card(
       child: ListTile(
         title: Row(
@@ -84,14 +100,14 @@ class ShopPagesShopPageShopingcarSettlement extends StatelessWidget {
           size: 38,
         ),
         onTap: () {
-          print('点击地址');
+          Navigator.push(context, CupertinoPageRoute(builder: (context) => PersonInfoReceivingAddressPage(personInfoReceivingAddressBloc: personInfoReceivingAddressBloc, isSelectedAddress: true)));
         },
       ),
     );
   }
 
   // 暂无收货地址时
-  Widget _buildAddAddressCard(BuildContext context) {
+  Widget _buildAddAddressCard(BuildContext context, PersonInfoReceivingAddressBloc personInfoReceivingAddressBloc) {
     return Card(
       child: ListTile(
         title: Text('请添加收货地址'),
@@ -101,7 +117,8 @@ class ShopPagesShopPageShopingcarSettlement extends StatelessWidget {
         ),
         onTap: () {
           Navigator.push(context, CupertinoPageRoute(builder: (context) => BlocProvider(bloc: PersonInfoReceivingAddressBloc(), child: PersonInfoReceivingAddress(null)))).then((val) {
-            // _bloc.getReceivingAddressListByUId(context);
+            SaveReceivingAddressData saveReceivingAddressData = val;
+            personInfoReceivingAddressBloc.updateReceivingAddressList(saveReceivingAddressData);
           });
         },
       ),
@@ -151,7 +168,7 @@ class ShopPagesShopPageShopingcarSettlement extends StatelessWidget {
                       Image.network(
                         commodityInfoVos[index].cover,
                         width: ScreenUtil().setWidth(100),
-                        height: ScreenUtil().setHeight(100),
+                        height: ScreenUtil().setWidth(100),
                         fit: BoxFit.fill,
                       ),
                       Column(
@@ -204,7 +221,7 @@ class ShopPagesShopPageShopingcarSettlement extends StatelessWidget {
             trailing: Checkbox(
               value: true,
               checkColor: Colors.white,
-              activeColor: Colors.red,
+              activeColor: Colors.blue,
               onChanged: (val) {},
             ),
           )
@@ -214,7 +231,7 @@ class ShopPagesShopPageShopingcarSettlement extends StatelessWidget {
   }
 
   // 支付金额，提交订单
-  Widget _buildPriceAndPayButtom(double price) {
+  Widget _buildPriceAndPayButtom(double price, ShopPagesBloc shopPagesBloc, BuildContext context, ReceivingAddress receivingAddress, int storeId, List map) {
     return Positioned(
       bottom: 0,
       left: 0,
@@ -239,7 +256,12 @@ class ShopPagesShopPageShopingcarSettlement extends StatelessWidget {
             ),
             InkWell(
               onTap: () {
-                print('点击提交订单');
+                if (receivingAddress != null) {
+                  shopPagesBloc.wxPayListen(context);
+                  shopPagesBloc.wxPay(context, receivingAddress.id, storeId, map);
+                } else {
+                  showToast('请选择收货地址');
+                }
               },
               child: Container(
                 alignment: Alignment.center,

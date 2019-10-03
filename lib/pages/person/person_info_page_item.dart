@@ -24,7 +24,7 @@ class PersonInfoPageItem extends StatelessWidget {
         _buildItem('assets/image_icon/icon_mailbox.png', '邮箱', PersonInfoEditMailboxPage(), context, value: personInfoVo.data.email),
         _buildItem('assets/image_icon/icon_qr_code.png', '我的分享码', PersonSharePage(), context),
         _buildItem('assets/image_icon/icon_edit_password.png', '修改密码', PersonInfoEditPasswordPage(), context),
-        _buildItem('assets/image_icon/icon_receiving_address.png', '收货地址', BlocProvider(bloc: PersonInfoReceivingAddressBloc(), child: PersonInfoReceivingAddressPage()), context),
+        _buildItem('assets/image_icon/icon_receiving_address.png', '收货地址', BlocProvider(bloc: PersonInfoReceivingAddressBloc(), child: PersonInfoReceivingAddressPage(isSelectedAddress: false)), context),
       ],
     );
   }

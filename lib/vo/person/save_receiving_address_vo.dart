@@ -1,19 +1,14 @@
-class ReceivingAddressVo {
+class SaveReceivingAddressVo {
   String code;
   String message;
-  List<ReceivingAddress> data;
+  SaveReceivingAddressData data;
 
-  ReceivingAddressVo({this.code, this.message, this.data});
+  SaveReceivingAddressVo({this.code, this.message, this.data});
 
-  ReceivingAddressVo.fromJson(Map<String, dynamic> json) {
+  SaveReceivingAddressVo.fromJson(Map<String, dynamic> json) {
     code = json['code'];
     message = json['message'];
-    if (json['data'] != null) {
-      data = new List<ReceivingAddress>();
-      json['data'].forEach((v) {
-        data.add(new ReceivingAddress.fromJson(v));
-      });
-    }
+    data = json['data'] != null ? new SaveReceivingAddressData.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -21,13 +16,13 @@ class ReceivingAddressVo {
     data['code'] = this.code;
     data['message'] = this.message;
     if (this.data != null) {
-      data['data'] = this.data.map((v) => v.toJson()).toList();
+      data['data'] = this.data.toJson();
     }
     return data;
   }
 }
 
-class ReceivingAddress {
+class SaveReceivingAddressData {
   int id;
   String uid;
   String receiverName;
@@ -39,7 +34,7 @@ class ReceivingAddress {
   String cityName;
   String areaName;
 
-  ReceivingAddress(
+  SaveReceivingAddressData(
       {this.id,
       this.uid,
       this.receiverName,
@@ -51,7 +46,7 @@ class ReceivingAddress {
       this.cityName,
       this.areaName});
 
-  ReceivingAddress.fromJson(Map<String, dynamic> json) {
+  SaveReceivingAddressData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     uid = json['uid'];
     receiverName = json['receiverName'];

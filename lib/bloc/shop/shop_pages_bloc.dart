@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:common_utils/common_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swcy/bloc/bloc_provider.dart';
 import 'package:flutter_swcy/common/preference_utils.dart';
@@ -10,8 +11,10 @@ import 'package:flutter_swcy/vo/shop/commodity_info_vo.dart';
 import 'package:flutter_swcy/vo/shop/commodity_page_by_commodity_type_vo.dart';
 import 'package:flutter_swcy/vo/shop/commodity_shopingcar_vo.dart';
 import 'package:flutter_swcy/vo/shop/shop_type_and_essential_message_vo.dart';
+import 'package:flutter_swcy/vo/unified_order_vo.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:rxdart/subjects.dart';
+import 'package:fluwx/fluwx.dart' as fluwx;
 
 class ShopPagesBloc extends BlocBase {
 
@@ -385,7 +388,9 @@ class ShopPagesBloc extends BlocBase {
     List<dynamic> carts = _shoppingCarStringList == '[]' ? [] : json.decode(_shoppingCarStringList);
     if (carts.isNotEmpty) {
       carts.forEach((cart) {
-        cart['isCheck'] = checkState; // 所有状态跟随全选修改
+        if(cart['delFlag'] != 1) {
+          cart['isCheck'] = checkState; // 所有状态跟随全选修改
+        }
       });
     }
     _notifyChanges(carts);
@@ -409,6 +414,10 @@ class ShopPagesBloc extends BlocBase {
           for(int j = 0; j < carts.length; j++) {
             if (carts[j]['id'] == item.id) {
               carts[j]['price'] = item.price;
+              if (item.delFlag == 1) {
+                carts[j]['delFlag'] = item.delFlag;
+                carts[j]['isCheck'] = false;
+              }
               break;
             }
           }
@@ -419,29 +428,84 @@ class ShopPagesBloc extends BlocBase {
   }
 
   // 获取选中的购物车商品
-  getShopingCarCommoditysByIsCheckFormTrue(int shopId) {
-    PreferenceUtils.instance.getString(key: '${commodityKey}_$shopId', defaultValue: '[]').then((value) {
-      List<CommodityInfoVo> commodityInfoVos = CommodityInfoVo.fromJsonList(json.decode(value));
-      List<CommodityInfoVo> newCommodityInfoVos = [];
-      int count = 0;
-      double pricr = 0.0;
-      Map<String, dynamic> map = Map<String, dynamic>();
-      commodityInfoVos.forEach((item) {
-        if (item.isCheck) {
-          newCommodityInfoVos.add(item);
-          count += item.count;
-          pricr += item.count * item.price;
+  getShopingCarCommoditysByIsCheckFormTrue() {
+    List<dynamic> tempCommodityInfoVos = _shoppingCarStringList == '[]' ? [] : json.decode(_shoppingCarStringList);
+    List<CommodityInfoVo> commodityInfoVos = CommodityInfoVo.fromJsonList(tempCommodityInfoVos);
+    List<CommodityInfoVo> newCommodityInfoVos = [];
+    int count = 0;
+    double pricr = 0.0;
+    Map<String, dynamic> map = Map<String, dynamic>();
+    commodityInfoVos.forEach((item) {
+      if (item.isCheck) {
+        newCommodityInfoVos.add(item);
+        count += item.count;
+        pricr += item.count * item.price;
+      }
+    });
+    map.addAll(
+      {
+        'list': newCommodityInfoVos,
+        'count': count,
+        'price': pricr
+      }
+    );
+    _settlementCommodityInfoVoListSink.add(map);    
+  }
+  // ----------------------------------------------------------------------------------------------------------------------------
+  List<int> _ids = [];
+  /// 微信支付
+  wxPay(BuildContext context, int addressId, int storeId, List list) {
+    var map = {};
+    // LinkedHashMap map = new LinkedHashMap();
+    for(int i = 0; i < list.length; i++) {
+      map['${list[i].id}'] = list[i].count;
+      _ids.add(list[i].id);
+    }
+    getToken().then((token) {
+      Map<String, dynamic> formData = {
+        'addressId': addressId,
+        'idAndCount': map,
+        "storeId": storeId
+      };
+      requestPost('wxPay', formData: formData, context: context, token: token).then((val) {
+        UnifiedOrderVo unifiedOrderVo = UnifiedOrderVo.fromJson(val);
+        if (unifiedOrderVo.code == '200') {
+          double _timeStamp = (DateUtil.getNowDateMs()) / 1000;
+          int temp = int.parse(_timeStamp.toStringAsFixed(0));
+          fluwx.pay(
+            appId: unifiedOrderVo.data.appid.toString(),
+            partnerId: unifiedOrderVo.data.mchId.toString(),
+            prepayId: unifiedOrderVo.data.prepayId.toString(),
+            packageValue: 'Sign=WXPay',
+            nonceStr: unifiedOrderVo.data.nonceStr.toString(),
+            timeStamp: unifiedOrderVo.data.sign,
+            sign: temp.toString(),
+            signType: '',
+            extData: ''
+          );
+        } else {
+          showToast('下单异常');
         }
       });
-      map.addAll(
-        {
-          'list': newCommodityInfoVos,
-          'count': count,
-          'price': pricr
-        }
-      );
-      _settlementCommodityInfoVoListSink.add(map);
-    });    
+    });
+  }
+
+  /// 监听微信支付状态
+  wxPayListen (BuildContext context) {
+    getCommodityInfoVos();
+    fluwx.responseFromPayment.listen((data) {
+      if (data.errCode == 0) {
+        showToast('支付成功');
+        _ids.forEach((id) {
+          removeCarts(id: id);
+        });
+        Navigator.pop(context);
+      } else if (data.errCode == -2) {
+        showToast('取消支付');
+      } else if (data.errCode == -1) {
+        showToast('支付异常');
+      }
+    });
   }
 
   @override

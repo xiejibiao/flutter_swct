@@ -4,14 +4,20 @@ import 'package:flutter_swcy/common/shared_preferences.dart';
 import 'package:flutter_swcy/service/service_method.dart';
 import 'package:flutter_swcy/vo/commen_vo.dart';
 import 'package:flutter_swcy/vo/person/receiving_address_vo.dart';
+import 'package:flutter_swcy/vo/person/save_receiving_address_vo.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:rxdart/rxdart.dart';
 
 class PersonInfoReceivingAddressBloc extends BlocBase {
-  
+
+  ReceivingAddressVo _receivingAddressVo;
   BehaviorSubject<ReceivingAddressVo> _receivingAddressVoController = BehaviorSubject<ReceivingAddressVo>();
   Sink<ReceivingAddressVo> get _receivingAddressVoSink => _receivingAddressVoController.sink;
   Stream<ReceivingAddressVo> get receivingAddressVoStream => _receivingAddressVoController.stream;
+
+  BehaviorSubject<int> _receivingAddressIndexController = BehaviorSubject<int>();
+  Sink<int> get _receivingAddressIndexSink => _receivingAddressIndexController.sink;
+  Stream<int> get receivingAddressIndexStream => _receivingAddressIndexController.stream;
 
   String _receiverName, _receiverPhone, _address, _zipCode, _provinceName, _cityName, _areaName;
 
@@ -56,28 +62,28 @@ class PersonInfoReceivingAddressBloc extends BlocBase {
         'areaName': _areaName,
       };
       await requestPost('saveReceivingAddress', formData: formData, context: context, token: token).then((val) {
-        CommenVo commenVo = CommenVo.fromJson(val);
-        if (commenVo.code == '200') {
+        SaveReceivingAddressVo saveReceivingAddressVo = SaveReceivingAddressVo.fromJson(val);
+        if (saveReceivingAddressVo.code == '200') {
           showToast('添加收货地址成功');
-          Navigator.pop(context);
+          Navigator.pop(context, saveReceivingAddressVo.data);
         } else {
-          showToast(commenVo.message);
+          showToast(saveReceivingAddressVo.message);
         }
       });
     });
   }
 
-  // 获取用户收货地址列表
+  /// 获取用户收货地址列表
   getReceivingAddressListByUId(BuildContext context) async {
     await getToken().then((token) {
       requestPost('getReceivingAddressListByUId', token: token, context: context).then((val) {
-        ReceivingAddressVo receivingAddressVo = ReceivingAddressVo.fromJson(val);
-        _receivingAddressVoSink.add(receivingAddressVo);
+        _receivingAddressVo = ReceivingAddressVo.fromJson(val);
+        _receivingAddressVoSink.add(_receivingAddressVo);
       });
     });
   }
 
-  // 删除收货地址
+  /// 删除收货地址
   deleteReceivingAddressById({@required int id, @required BuildContext context}) async {
     var formData = {
       'id': id
@@ -117,9 +123,32 @@ class PersonInfoReceivingAddressBloc extends BlocBase {
     });
   }
 
+  /// 更新收货地址列表
+  updateReceivingAddressList(SaveReceivingAddressData saveReceivingAddressData) async {
+    ReceivingAddress receivingAddress = ReceivingAddress(
+      id: saveReceivingAddressData.id,
+      uid: saveReceivingAddressData.uid,
+      receiverName: saveReceivingAddressData.receiverName,
+      receiverPhone: saveReceivingAddressData.receiverPhone,
+      address: saveReceivingAddressData.address,
+      zipCode: saveReceivingAddressData.zipCode,
+      delFlag: saveReceivingAddressData.delFlag,
+      provinceName: saveReceivingAddressData.provinceName,
+      cityName: saveReceivingAddressData.cityName,
+      areaName: saveReceivingAddressData.areaName
+    );
+    _receivingAddressVo.data.insert(0, receivingAddress);
+    _receivingAddressVoSink.add(_receivingAddressVo);
+  }
+
+  /// 修改收货地址下标
+  updateReceivingAddressIndex(int index) {
+    _receivingAddressIndexSink.add(index);
+  }
 
   @override
   void dispose() {
     _receivingAddressVoController.close();
+    _receivingAddressIndexController.close();
   }
 }

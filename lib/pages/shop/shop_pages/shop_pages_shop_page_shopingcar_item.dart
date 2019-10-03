@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_swcy/bloc/bloc_provider.dart';
 import 'package:flutter_swcy/bloc/shop/shop_pages_bloc.dart';
 import 'package:flutter_swcy/common/message_dialog.dart';
 import 'package:flutter_swcy/pages/shop/shop_pages/shop_pages_shop_page_shopingcar_count.dart';
@@ -8,30 +7,44 @@ import 'package:flutter_swcy/vo/shop/commodity_info_vo.dart';
 
 class ShopPagesShopPageShopingcarItem extends StatelessWidget {
   final CommodityInfoVo commodityInfoVo;
+  final ShopPagesBloc shopPagesBloc;
   ShopPagesShopPageShopingcarItem(
-    this.commodityInfoVo
+    {
+      @required this.commodityInfoVo,
+      @required this.shopPagesBloc
+    }
   );
 
   @override
   Widget build(BuildContext context) {
-    final ShopPagesBloc _bloc = BlocProvider.of<ShopPagesBloc>(context);
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 2.0, horizontal: 5.0),
-      padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 5.0),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border(
-          bottom: BorderSide(width: 1, color: Colors.black12),
-        )
-      ),
-      child: Row(
-        children: <Widget>[
-          _commodityCheckBt(_bloc),
-          _commodityCover(),
-          _commodityName(),
-          _commodityPrice(_bloc, context)
-        ],
-      ),
+    return Stack(
+      children: <Widget>[
+        Container(
+          margin: EdgeInsets.symmetric(vertical: 2.0, horizontal: 5.0),
+          padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 5.0),
+          decoration: BoxDecoration(
+            color: commodityInfoVo.delFlag == 1 ? Colors.grey[200] : Colors.white,
+            border: Border(
+              bottom: BorderSide(width: 1, color: Colors.black12),
+            )
+          ),
+          child: Row(
+            children: <Widget>[
+              _commodityCheckBt(shopPagesBloc),
+              _commodityCover(),
+              _commodityName(),
+              _commodityPrice(shopPagesBloc, context)
+            ],
+          ),
+        ),
+        commodityInfoVo.delFlag == 1 ?
+          Positioned(
+            top: 0,
+            right: 0,
+            child: ImageIcon(AssetImage('assets/image_icon/icon_Invalid.png'), size: 60),
+          ) :
+          Container()
+      ],
     );
   }
 
@@ -42,7 +55,9 @@ class ShopPagesShopPageShopingcarItem extends StatelessWidget {
         value: commodityInfoVo.isCheck,
         activeColor: Colors.blue,
         onChanged: (val) {
-          bloc.changeCartState(id: commodityInfoVo.id, checked: val);
+          if (commodityInfoVo.delFlag != 1) {
+            bloc.changeCartState(id: commodityInfoVo.id, checked: val);
+          }
         },
       ),
     );
@@ -69,7 +84,7 @@ class ShopPagesShopPageShopingcarItem extends StatelessWidget {
       child: Column(
         children: <Widget>[
           Text(commodityInfoVo.name),
-          ShopPagesShopPageShopingcarCount(commodityInfoVo)
+          ShopPagesShopPageShopingcarCount(commodityInfoVo: commodityInfoVo, shopPagesBloc: shopPagesBloc)
         ],
       ),
     );

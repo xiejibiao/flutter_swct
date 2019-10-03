@@ -81,9 +81,10 @@ class ShopPagesShopPage extends StatelessWidget {
                       AMapNavi().startNavi(lat: lat, lon: lng, naviType: AMapNavi.drive);
                       break;
                     default:
-                      Navigator.push(context, CupertinoPageRoute(builder: (context) => BlocProvider(child: ShopPagesShopPageShopingcar(id: id, shopName: shopName), bloc: ShopPagesBloc()))).then((val) {
-                        _bloc.getCommodityInfoVos();
-                      });
+                      // Navigator.push(context, CupertinoPageRoute(builder: (context) => BlocProvider(child: ShopPagesShopPageShopingcar(id: id, shopName: shopName), bloc: ShopPagesBloc()))).then((val) {
+                      //   _bloc.getCommodityInfoVos();
+                      // });
+                      Navigator.push(context, CupertinoPageRoute(builder: (context) => ShopPagesShopPageShopingcar(id: id, shopName: shopName, shopPagesBloc: _bloc)));
                   }
                 },
               ),

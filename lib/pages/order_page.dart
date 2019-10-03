@@ -9,10 +9,11 @@ import 'package:flutter_swcy/vo/order/order_vo.dart';
 
 class OrderPage extends StatelessWidget {
   final GlobalKey<RefreshFooterState> _footerKey = GlobalKey<RefreshFooterState>();
+  final GlobalKey<RefreshHeaderState> _refreshHeaderStateKey = GlobalKey<RefreshHeaderState>();
   @override
   Widget build(BuildContext context) {
     final OrderPageBloc _bloc = BlocProvider.of<OrderPageBloc>(context);
-    _bloc.getOrderPage(context);
+    _bloc.getOrderPage(context, false);
     return Scaffold(
       appBar: AppBar(
         title: Text('订单'),
@@ -25,7 +26,18 @@ class OrderPage extends StatelessWidget {
           } else {
             if (_bloc.orderPageVo.data.list.length == 0) {
               return Center(
-                child: ImageIcon(AssetImage('assets/image_icon/icon_order.png')),
+                child: InkWell(
+                  onTap: () {
+                    _bloc.getOrderPage(context, true);
+                  },
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      ImageIcon(AssetImage('assets/image_icon/icon_order.png'), size: 150, color: Colors.grey),
+                      Text('点击刷新')
+                    ],
+                  ),
+                ),
               );
             } else {
               return EasyRefresh(
@@ -41,6 +53,18 @@ class OrderPage extends StatelessWidget {
                   loadReadyText: '松手加载...',
                   loadText: '上拉加载更多...',
                 ),
+                refreshHeader: ClassicsHeader(
+                  key: _refreshHeaderStateKey,
+                  bgColor: Colors.blue[200],
+                  textColor: Colors.white,
+                  moreInfoColor: Colors.white,
+                  showMore: true,
+                  moreInfo: '上次刷新 %T',
+                  refreshText: '加载中...',
+                  refreshReadyText: '松手刷新...',
+                  refreshingText: '刷新完成...',
+                  refreshedText: '刷新完成...',
+                ),
                 child: ListView(
                   children: <Widget>[
                     _orderList(_bloc.orderPageVo.data.list.length, _bloc.orderPageVo.data.list),
@@ -49,6 +73,9 @@ class OrderPage extends StatelessWidget {
                 ),
                 loadMore: () {
                   return _bloc.loadMoreOrderPage(context);
+                },
+                onRefresh: () {
+                  return _bloc.getOrderPage(context, true);
                 },
               );
             }

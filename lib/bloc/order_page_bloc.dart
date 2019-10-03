@@ -21,7 +21,10 @@ class OrderPageBloc extends BlocBase {
   int pageSize = 10;
   bool isEnd = false;
   
-  getOrderPage(BuildContext context) async {
+  getOrderPage(BuildContext context, bool isOnRefresh) async {
+    if (isOnRefresh) {
+      _isFirst = isOnRefresh;
+    }
     if (_isFirst) {
       return await getToken().then((token) async {
         this.pageNumber = 0;

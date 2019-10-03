@@ -39,7 +39,7 @@ dependencies:
   rxdart: ^0.22.1
   flutter_html: ^0.10.4
   city_pickers: ^0.1.23
-  fluwx: ^0.6.0
+  fluwx: ^1.1.0
   zefyr: ^0.6.1
   flutter_sujian_select: ^1.0.1
   flutter_qiniu: ^0.1.2

@@ -10,9 +10,20 @@ import 'package:flutter_swcy/pages/person/person_info_receiving_address_add.dart
 import 'package:flutter_swcy/vo/person/receiving_address_vo.dart';
 
 class PersonInfoReceivingAddressPage extends StatelessWidget {
+  final PersonInfoReceivingAddressBloc personInfoReceivingAddressBloc;
+  final bool isSelectedAddress;
+  PersonInfoReceivingAddressPage(
+    {
+      this.personInfoReceivingAddressBloc,
+      @required this.isSelectedAddress
+    }
+  );
   @override
   Widget build(BuildContext context) {
-    final PersonInfoReceivingAddressBloc _bloc = BlocProvider.of<PersonInfoReceivingAddressBloc>(context);
+    PersonInfoReceivingAddressBloc _bloc = personInfoReceivingAddressBloc;
+    if (_bloc == null) {
+      _bloc = BlocProvider.of<PersonInfoReceivingAddressBloc>(context);
+    }
     _bloc.getReceivingAddressListByUId(context);
     return Scaffold(
       backgroundColor: Colors.grey[200],
@@ -43,7 +54,13 @@ class PersonInfoReceivingAddressPage extends StatelessWidget {
               return ListView.builder(
                 itemCount: receivingAddressVo.data.length,
                 itemBuilder: (context, index) {
-                  return _buildAddressItem(receivingAddressVo.data[index], context, _bloc);
+                  return InkWell(
+                    child: _buildAddressItem(receivingAddressVo.data[index], context, _bloc),
+                    onTap: !isSelectedAddress ? null : () {
+                                                          _bloc.updateReceivingAddressIndex(index);
+                                                          Navigator.pop(context);
+                                                        },
+                  );
                 },
               );
             }

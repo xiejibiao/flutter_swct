@@ -78,7 +78,7 @@ class _PersonInfoReceivingAddressTextFormFieldColumnState extends State<PersonIn
               showToast('请输入收货人');
               return '';
             } else {
-              return '';
+              return null;
             }
           },
           onSaved: (val) {
@@ -119,10 +119,58 @@ class _PersonInfoReceivingAddressTextFormFieldColumnState extends State<PersonIn
                 showToast('请选择所在地区');
                 return '';
               } else {
-                return '';
+                return null;
               }
             },
           ),
+        ),
+        TextFormField(
+          initialValue: widget.receivingAddress == null ? '' : widget.receivingAddress.address,          
+          decoration: InputDecoration(
+            icon: Image.asset(
+              'assets/image_icon/icon_receiving_address.png',
+              width: ScreenUtil().setWidth(48),
+              color: Colors.black38,
+            ),
+            labelText: '详细地址',
+            labelStyle: TextStyle(
+              color: Colors.black38
+            ),
+            enabledBorder: UnderlineInputBorder(
+              borderSide: BorderSide(
+                color: Colors.black12
+              )
+            ),
+            focusedBorder: UnderlineInputBorder(
+              borderSide: BorderSide(
+                color: Colors.black12
+              )
+            ),
+            focusedErrorBorder: UnderlineInputBorder(
+              borderSide: BorderSide(
+                color: Colors.black12
+              )
+            ),
+            errorStyle: TextStyle(
+              color: Colors.black38
+            ),
+            errorBorder: UnderlineInputBorder(
+              borderSide: BorderSide(
+                color: Colors.black12
+              )
+            )
+          ),
+          validator: (val) {
+            if(ObjectUtil.isEmptyString(val)) {
+              showToast('请输入详细地址');
+              return '';
+            } else {
+              return null;
+            }
+          },
+          onSaved: (val) {
+            widget.bloc.setAddress(val);
+          },
         ),
         TextFormField(
           initialValue: widget.receivingAddress == null ? '' : widget.receivingAddress.receiverPhone,          
@@ -166,59 +214,11 @@ class _PersonInfoReceivingAddressTextFormFieldColumnState extends State<PersonIn
               showToast('您的手机号码未输入或输入有误');
               return '';
             } else {
-              return '';
+              return null;
             }
           },
           onSaved: (val) {
             widget.bloc.setReceiverPhone(val);
-          },
-        ),
-        TextFormField(
-          initialValue: widget.receivingAddress == null ? '' : widget.receivingAddress.address,          
-          decoration: InputDecoration(
-            icon: Image.asset(
-              'assets/image_icon/icon_receiving_address.png',
-              width: ScreenUtil().setWidth(48),
-              color: Colors.black38,
-            ),
-            labelText: '详细地址',
-            labelStyle: TextStyle(
-              color: Colors.black38
-            ),
-            enabledBorder: UnderlineInputBorder(
-              borderSide: BorderSide(
-                color: Colors.black12
-              )
-            ),
-            focusedBorder: UnderlineInputBorder(
-              borderSide: BorderSide(
-                color: Colors.black12
-              )
-            ),
-            focusedErrorBorder: UnderlineInputBorder(
-              borderSide: BorderSide(
-                color: Colors.black12
-              )
-            ),
-            errorStyle: TextStyle(
-              color: Colors.black38
-            ),
-            errorBorder: UnderlineInputBorder(
-              borderSide: BorderSide(
-                color: Colors.black12
-              )
-            )
-          ),
-          validator: (val) {
-            if(ObjectUtil.isEmptyString(val)) {
-              showToast('请输入详细地址');
-              return '';
-            } else {
-              return '';
-            }
-          },
-          onSaved: (val) {
-            widget.bloc.setAddress(val);
           },
         ),
         TextFormField(
