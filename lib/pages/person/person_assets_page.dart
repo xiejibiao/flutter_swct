@@ -23,11 +23,11 @@ class PersonAssetsPage extends StatelessWidget {
             return SingleChildScrollView(
               child: Column(
                 children: <Widget>[
-                  _myCard('我的资产', assetsVo.data.assets, 'assets/image_icon/icon_money1.png', null, context),
-                  _myCard('我的钱包', assetsVo.data.money, 'assets/image_icon/icon_money.png', null, context),
-                  _myCard('在途佣金', assetsVo.data.commission, 'assets/image_icon/icon_commission.png', null, context),
-                  _myCard('我的理财', assetsVo.data.finance, 'assets/image_icon/icon_conduct.png', null, context),
-                  _myCard('授信额度', assetsVo.data.creditLine, 'assets/image_icon/icon_credit.png', null, context)
+                  _myCard('我的资产', assetsVo.data == null ? 0 : assetsVo.data.assets, 'assets/image_icon/icon_money1.png', null, context),
+                  _myCard('我的钱包', assetsVo.data == null ? 0 : assetsVo.data.money, 'assets/image_icon/icon_money.png', null, context),
+                  _myCard('在途佣金', assetsVo.data == null ? 0 : assetsVo.data.commission, 'assets/image_icon/icon_commission.png', null, context),
+                  _myCard('我的理财', assetsVo.data == null ? 0 : assetsVo.data.finance, 'assets/image_icon/icon_conduct.png', null, context),
+                  _myCard('授信额度', assetsVo.data == null ? 0 : assetsVo.data.creditLine, 'assets/image_icon/icon_credit.png', null, context)
                 ],
               ),
             );

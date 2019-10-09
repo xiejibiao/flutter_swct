@@ -28,6 +28,7 @@ class PersonInfo {
   String nikeName;
   String email;
   bool authentication;
+  String phone;
 
   PersonInfo({this.id, this.avatar, this.nikeName, this.email, this.authentication});
 
@@ -37,6 +38,7 @@ class PersonInfo {
     nikeName = json['nikeName'];
     email = json['email'];
     authentication = json['authentication'];
+    phone = json['phone'];
   }
 
   Map<String, dynamic> toJson() {
@@ -46,6 +48,7 @@ class PersonInfo {
     data['nikeName'] = this.nikeName;
     data['email'] = this.email;
     data['authentication'] = this.authentication;
+    data['phone'] = this.phone;
     return data;
   }
 }

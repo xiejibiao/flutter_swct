@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_swcy/bloc/bloc_provider.dart';
 import 'package:flutter_swcy/bloc/person/person_info_page_bloc.dart';
+import 'package:flutter_swcy/bloc/person_page_phone_authentication_bloc.dart';
 import 'package:flutter_swcy/common/shared_preferences.dart';
 import 'package:flutter_swcy/service/service_method.dart';
 import 'package:flutter_swcy/vo/login_vo.dart';
@@ -51,36 +52,36 @@ class LoginPageBloc extends BlocBase{
   }
 
   // 登录校验，登录
-  loginOnPressed (BuildContext context, GlobalKey<FormState> formKey) async {
-    final PersonInfoPageBloc pageBloc = BlocProvider.of<PersonInfoPageBloc>(context);
-    if (formKey.currentState.validate()) {
-      FocusScope.of(context).requestFocus(FocusNode());
-      formKey.currentState.save();
-      var formData = {
-        'phone': phone,
-        'password': password,
-      };
-      await requestPost('login', formData: formData).then((val) {
-        LoginVo loginVo = LoginVo.fromJson(val);
-        if (loginVo.code == '200') {
-          saveToken(loginVo.data.accessToken);
-          pageBloc.getPersonInfo(context);
-        } else {
-          showToast(loginVo.message);
-        }
-      });
-    } else {
-      setAutovalidate(true);
-    }
-  }
+  // loginOnPressed (BuildContext context, GlobalKey<FormState> formKey) async {
+  //   final PersonInfoPageBloc pageBloc = BlocProvider.of<PersonInfoPageBloc>(context);
+  //   if (formKey.currentState.validate()) {
+  //     FocusScope.of(context).requestFocus(FocusNode());
+  //     formKey.currentState.save();
+  //     var formData = {
+  //       'phone': phone,
+  //       'password': password,
+  //     };
+  //     await requestPost('login', formData: formData).then((val) {
+  //       LoginVo loginVo = LoginVo.fromJson(val);
+  //       if (loginVo.code == '200') {
+  //         saveToken(loginVo.data.accessToken);
+  //         // pageBloc.getPersonInfo(context);
+  //       } else {
+  //         showToast(loginVo.message);
+  //       }
+  //     });
+  //   } else {
+  //     setAutovalidate(true);
+  //   }
+  // }
 
 
   // 改版后的方式
   // 初始化微信登录授权成功监听
-  initFluwxAuthListen(BuildContext context) {
+  initFluwxAuthListen(BuildContext context, PersonPagePhoneAuthenticationBloc pagePhoneAuthenticationBloc) {
     fluwx.responseFromAuth.listen((data) {
       if (data.errCode == 0) {
-        login(context, data.code);
+        login(context, data.code, pagePhoneAuthenticationBloc);
       }
     });
   }
@@ -94,7 +95,7 @@ class LoginPageBloc extends BlocBase{
     }
   }
 
-  login (BuildContext context, String code) async {
+  login (BuildContext context, String code, PersonPagePhoneAuthenticationBloc pagePhoneAuthenticationBloc) async {
     final PersonInfoPageBloc pageBloc = BlocProvider.of<PersonInfoPageBloc>(context);
     var formData = {
       'code': code,
@@ -103,7 +104,7 @@ class LoginPageBloc extends BlocBase{
       LoginVo loginVo = LoginVo.fromJson(val);
       if (loginVo.code == '200') {
         saveToken(loginVo.data.accessToken);
-        pageBloc.getPersonInfo(context);
+        pageBloc.getPersonInfo(context, pagePhoneAuthenticationBloc);
       } else {
         showToast(loginVo.message);
       }

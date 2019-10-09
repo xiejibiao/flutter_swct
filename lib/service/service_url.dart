@@ -1,6 +1,6 @@
 // const serviceBaseUrl = 'http://192.168.1.127:8086';
-// const serviceBaseUrl = 'http://192.168.1.109:8086';
-const serviceBaseUrl = 'http://192.168.1.107:8086';
+const serviceBaseUrl = 'http://192.168.1.109:8086';
+// const serviceBaseUrl = 'http://192.168.1.107:8086';
 const servicePath = {
   'login': serviceBaseUrl + '/account/login',                                                         // 登录
   'getSmsCode': serviceBaseUrl + '/account/getSmsCode',                                               // 获取验证码
@@ -47,6 +47,7 @@ const servicePath = {
   'getReceivingAddressListByUId': serviceBaseUrl + '/person/getReceivingAddressListByUId',            // 获取收货地址
   'deleteReceivingAddressById': serviceBaseUrl + '/person/deleteReceivingAddressById',                // 删除收货地址
   'updateReceivingAddress': serviceBaseUrl + '/person/updateReceivingAddress',                        // 修改收货地址
+  'authenticationPhone': serviceBaseUrl + '/person/authenticationPhone',                              // 认证手机号
   'getOrderPage': serviceBaseUrl + '/order/getOrderPage',                                             // 获取订单列表
   'getOrderDetailById': serviceBaseUrl + '/order/getOrderDetailById',                                 // 获取订单详情
   'applogin': serviceBaseUrl + '/mp/applogin',                                                        // 微信登录

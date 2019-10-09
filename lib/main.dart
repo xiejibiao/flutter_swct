@@ -5,6 +5,7 @@ import 'package:flutter_swcy/bloc/home_page_bloc.dart';
 import 'package:flutter_swcy/bloc/order_page_bloc.dart';
 import 'package:flutter_swcy/bloc/person/person_info_page_bloc.dart';
 import 'package:flutter_swcy/bloc/person_page_bloc.dart';
+import 'package:flutter_swcy/bloc/person_page_phone_authentication_bloc.dart';
 import 'package:flutter_swcy/bloc/shop_page_bloc.dart';
 import 'package:flutter_swcy/pages/init_page.dart';
 import 'package:oktoast/oktoast.dart';
@@ -23,7 +24,10 @@ void main() async {
             bloc: PersonPageBloc(),
             child: BlocProvider(
               bloc: ShopPageBloc(),
-              child: MyApp(),
+              child: BlocProvider(
+                bloc: PersonPagePhoneAuthenticationBloc(),
+                child: MyApp(),
+              ),
             ),
           ),
         ),

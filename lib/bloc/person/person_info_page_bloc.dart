@@ -8,10 +8,12 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_swcy/bloc/bloc_provider.dart';
 import 'package:flutter_swcy/bloc/index_page_bloc.dart';
 import 'package:flutter_swcy/bloc/login_page_bloc.dart';
+import 'package:flutter_swcy/bloc/person_page_phone_authentication_bloc.dart';
 import 'package:flutter_swcy/common/shared_preferences.dart';
 import 'package:flutter_swcy/pages/index_page.dart';
 import 'package:flutter_swcy/pages/login/login_page.dart';
 import 'package:flutter_swcy/pages/person/person_info_edit_nike_name.page.dart';
+import 'package:flutter_swcy/pages/person/person_page_phone_authentication.dart';
 import 'package:flutter_swcy/service/service_method.dart';
 import 'package:flutter_swcy/vo/commen_vo.dart';
 import 'package:flutter_swcy/vo/person/authentication_msg_vo.dart';
@@ -49,7 +51,7 @@ class PersonInfoPageBloc extends BlocBase {
   Stream<bool> get authenticationLoadingStream => _authenticationLoadingController.stream;
 
   
-  getPersonInfo(BuildContext context) {
+  getPersonInfo(BuildContext context, PersonPagePhoneAuthenticationBloc pagePhoneAuthenticationBloc) {
     getToken().then((token) {
       if (token == null) {
         Navigator.pushAndRemoveUntil(context, CupertinoPageRoute(builder: (context) => BlocProvider(bloc: LoginPageBloc(), child: LoginPage())), (route) => route == null);
@@ -57,11 +59,13 @@ class PersonInfoPageBloc extends BlocBase {
         getPerson(context, token).then((val) async {
           PersonInfoVo personInfoVo = val;
           if (personInfoVo.code == '200') {
-            if (personInfoVo.data.nikeName == '' || personInfoVo.data.nikeName == null) {
+            if (TextUtil.isEmpty(personInfoVo.data.nikeName)) {
               Navigator.pushAndRemoveUntil(context, CupertinoPageRoute(builder: (context) => PersonInfoEditNikeNamePage(true)), (route) => route == null);
+            } else if (TextUtil.isEmpty(personInfoVo.data.phone)) {
+              Navigator.pushAndRemoveUntil(context, CupertinoPageRoute(builder: (context) => BlocProvider(child: PersonPagePhoneAuthentication(pagePhoneAuthenticationBloc), bloc: PersonPagePhoneAuthenticationBloc())), (route) => route == null);
             } else {
               Navigator.pushAndRemoveUntil(context, CupertinoPageRoute(builder: (context) => BlocProvider(bloc: IndexPageBloc(), child: IndexPage())), (route) => route == null);
-            }            
+            }         
           } else {
             cleanToken();
             Navigator.pushAndRemoveUntil(context, CupertinoPageRoute(builder: (context) => BlocProvider(bloc: LoginPageBloc(), child: LoginPage())), (route) => route == null);

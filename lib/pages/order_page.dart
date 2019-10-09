@@ -25,11 +25,11 @@ class OrderPage extends StatelessWidget {
             return showLoading();
           } else {
             if (_bloc.orderPageVo.data.list.length == 0) {
-              return Center(
-                child: InkWell(
-                  onTap: () {
-                    _bloc.getOrderPage(context, true);
-                  },
+              return InkWell(
+                onTap: () {
+                  _bloc.getOrderPage(context, true);
+                },
+                child: Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[

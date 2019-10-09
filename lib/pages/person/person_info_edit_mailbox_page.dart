@@ -28,25 +28,23 @@ class PersonInfoEditMailboxPage extends StatelessWidget {
 
   // 输入框
   Widget _bodyCard (BuildContext context, String email, PersonInfoPageBloc bloc) {
-    return Card(
-      child: Padding(
-        padding: EdgeInsets.all(5.0),
-        child: TextFormField(
-          style: TextStyle(
-            height: 1.2
-          ),
-          initialValue: email,
-          autofocus: true,
-          maxLength: 20,
-          decoration: InputDecoration(
-            labelText: '请输入邮箱',
-            counterText: '',
-          ),
-          textInputAction: TextInputAction.done,
-          onFieldSubmitted: (value) {
-            bloc.upDateMailbox(context, value);
-          },
+    return Padding(
+      padding: EdgeInsets.all(10.0),
+      child: TextFormField(
+        style: TextStyle(
+          height: 1.2
         ),
+        initialValue: email,
+        autofocus: true,
+        maxLength: 20,
+        decoration: InputDecoration(
+          labelText: '请输入邮箱',
+          counterText: '',
+        ),
+        textInputAction: TextInputAction.done,
+        onFieldSubmitted: (value) {
+          bloc.upDateMailbox(context, value);
+        },
       ),
     );
   }

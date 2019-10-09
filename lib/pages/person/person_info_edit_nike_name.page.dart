@@ -32,25 +32,23 @@ class PersonInfoEditNikeNamePage extends StatelessWidget {
 
   // 输入框
   Widget _bodyCard (BuildContext context, String nikeName, PersonInfoPageBloc bloc) {
-    return Card(
-      child: Padding(
-        padding: EdgeInsets.all(5.0),
-        child: TextFormField(
-          style: TextStyle(
-            height: 1.2
-          ),
-          initialValue: nikeName,
-          autofocus: true,
-          maxLength: 6,
-          decoration: InputDecoration(
-            labelText: '请输入昵称',
-            counterText: '',
-          ),
-          textInputAction: TextInputAction.done,
-          onFieldSubmitted: (value) {
-            bloc.upDateNikeName(context, value, isInitNikeName);
-          },
+    return Padding(
+      padding: EdgeInsets.all(10.0),
+      child: TextFormField(
+        style: TextStyle(
+          height: 1.2
         ),
+        initialValue: nikeName,
+        autofocus: true,
+        maxLength: 6,
+        decoration: InputDecoration(
+          labelText: '请输入昵称',
+          counterText: '',
+        ),
+        textInputAction: TextInputAction.done,
+        onFieldSubmitted: (value) {
+          bloc.upDateNikeName(context, value, isInitNikeName);
+        },
       ),
     );
   }

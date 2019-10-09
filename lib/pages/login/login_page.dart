@@ -3,12 +3,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_swcy/bloc/bloc_provider.dart';
 import 'package:flutter_swcy/bloc/login_page_bloc.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_swcy/bloc/person_page_phone_authentication_bloc.dart';
 
 class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final LoginPageBloc _bloc = BlocProvider.of<LoginPageBloc>(context);
-    _bloc.initFluwxAuthListen(context);
+    PersonPagePhoneAuthenticationBloc pagePhoneAuthenticationBloc = BlocProvider.of<PersonPagePhoneAuthenticationBloc>(context);
+    _bloc.initFluwxAuthListen(context, pagePhoneAuthenticationBloc);
     return Scaffold(
       backgroundColor: Color(0xFF0A0922),
       body: Stack(
