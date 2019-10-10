@@ -164,7 +164,7 @@ class _ShareShopPageCommodityAdminAddEditState extends State<ShareShopPageCommod
         },
       ),
       onTap: () async {
-        await bloc.getShorePhoto();
+        await bloc.addCommodityGetShorePhoto();
       },
     );
   }

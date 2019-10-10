@@ -26,14 +26,22 @@ class ShopPagesShopPageEvaluate extends StatefulWidget {
 class _ShopPagesShopPageEvaluateState extends State<ShopPagesShopPageEvaluate> {
   @override
   Widget build(BuildContext context) {
-    return widget.commodityTypeList.length == 0 ? 
+    return !widget.isAdmin ? 
+            widget.commodityTypeList.length == 0 ? 
               ShopPageSearchDefaultPage() : 
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   ShopPagesShopPageEvaluateLeftNavi(widget.commodityTypeList, widget.id, widget.bloc, widget.isAdmin),
-                  BlocProvider(bloc: ShareShopPageBloc(), child: BlocProvider(bloc: ShareShopPageCommodityAdminBloc(), child: ShopPagesShopPageEvaluateRightList(widget.bloc, widget.isAdmin)))
+                  BlocProvider(bloc: ShareShopPageBloc(), child: BlocProvider(bloc: ShareShopPageCommodityAdminBloc(), child: ShopPagesShopPageEvaluateRightList(widget.bloc, widget.isAdmin, widget.commodityTypeList.length)))
                 ],
-              );
+              ) : 
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                ShopPagesShopPageEvaluateLeftNavi(widget.commodityTypeList, widget.id, widget.bloc, widget.isAdmin),
+                BlocProvider(bloc: ShareShopPageBloc(), child: BlocProvider(bloc: ShareShopPageCommodityAdminBloc(), child: ShopPagesShopPageEvaluateRightList(widget.bloc, widget.isAdmin, widget.commodityTypeList.length)))
+              ],
+            );
   }
 }

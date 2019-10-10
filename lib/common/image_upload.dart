@@ -55,13 +55,10 @@ class ImageUpload {
     // 裁剪图片
     File croppedFile = await ImageCropper.cropImage(
       sourcePath: filePath,
-      ratioX: 3.0,
-      ratioY: 1.5,
-      // ratioX: 1.0,
-      // ratioY: 1.0,
+      ratioX: 1.0,
+      ratioY: 1.0,
       maxWidth: 512,
-      maxHeight: 300,
-      // maxHeight: 512,
+      maxHeight: 512,
     );
     if (croppedFile != null) {
       var qiNiuTokenData = await _getQiNiuToken();

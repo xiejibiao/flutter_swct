@@ -33,7 +33,7 @@ class PersonPageItemButtom extends StatelessWidget {
           _item(context, Icons.textsms, '消息', PersonSmsPage()),
           _item(context, Icons.insert_chart, '我的业绩', PersonAchievementPage()),
           _item(context, Icons.sms_failed, '意见与建议', PersonComplaintsPage()),
-          _item(context, Icons.store, '我的分享店', BlocProvider(bloc: ShareShopPageBloc(), child: BlocProvider(bloc: ShopPagesBloc(), child: BlocProvider(bloc: ShareShopPageCommodityAdminBloc(), child: ShareShopPage())))),
+          _item(context, Icons.store, '我的共享店', BlocProvider(bloc: ShareShopPageBloc(), child: BlocProvider(bloc: ShopPagesBloc(), child: BlocProvider(bloc: ShareShopPageCommodityAdminBloc(), child: ShareShopPage())))),
           _item(context, Icons.extension, '关于', PersonAboutPage()),
         ],
       ),

@@ -18,9 +18,11 @@ import 'package:flutter_swcy/vo/shop/commodity_page_by_commodity_type_vo.dart';
 class ShopPagesShopPageEvaluateRightList extends StatelessWidget {
   final ShopPagesBloc bloc;
   final bool isAdmin;
+  final int commodityTypeListLength;
   ShopPagesShopPageEvaluateRightList(
     this.bloc,
-    this.isAdmin
+    this.isAdmin,
+    this.commodityTypeListLength
   );
   final GlobalKey<RefreshFooterState> _footerKey = GlobalKey<RefreshFooterState>();
   @override
@@ -33,10 +35,12 @@ class ShopPagesShopPageEvaluateRightList extends StatelessWidget {
         stream: bloc.commodityPageByCommodityTypeVoStream,
         builder: (context, sanpshop) {
           if (!sanpshop.hasData) {
-            return Container(
+            return commodityTypeListLength > 0 ?
+            Container(
               width: ScreenUtil().setWidth(570),
               child: showLoading(),
-            );
+            ) :
+            ShopPageSearchDefaultPage();
           } else {
             CommodityPageByCommodityTypeVo commodityPageByCommodityTypeVo = sanpshop.data;
             if (commodityPageByCommodityTypeVo.data.list.length == 0) {

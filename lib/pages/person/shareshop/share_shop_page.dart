@@ -19,6 +19,7 @@ import 'package:flutter_swcy/vo/shop/my_store_page_vo.dart';
 
 class ShareShopPage extends StatelessWidget {
   final GlobalKey<RefreshFooterState> _footerKey = GlobalKey<RefreshFooterState>();
+  final GlobalKey<RefreshHeaderState> _refreshHeaderStateKey = GlobalKey<RefreshHeaderState>();
   @override
   Widget build(BuildContext context) {
     final ShareShopPageBloc _bloc = BlocProvider.of<ShareShopPageBloc>(context);
@@ -27,7 +28,7 @@ class ShareShopPage extends StatelessWidget {
     _bloc.getMyStorePage(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text('我的分享店'),
+        title: Text('我的共享店'),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.add, size: 32),
@@ -61,6 +62,18 @@ class ShareShopPage extends StatelessWidget {
                   loadText: '上拉加载更多...',
                   loadedText: '加载完成'
                 ),
+                refreshHeader: ClassicsHeader(
+                  key: _refreshHeaderStateKey,
+                  bgColor: Colors.blue[200],
+                  textColor: Colors.white,
+                  moreInfoColor: Colors.white,
+                  showMore: true,
+                  moreInfo: '上次刷新 %T',
+                  refreshText: '加载中...',
+                  refreshReadyText: '松手刷新...',
+                  refreshingText: '刷新完成...',
+                  refreshedText: '刷新完成...',
+                ),
                 child: ListView(
                   children: <Widget>[
                     _buildStoreItem(myStorePageVo, _bloc, _shopPagesBloc, _shareShopPageCommodityAdminBloc),
@@ -69,6 +82,9 @@ class ShareShopPage extends StatelessWidget {
                 ),
                 loadMore: () {
                   return _bloc.getMyStorePageLoadMore(context);
+                },
+                onRefresh: () {
+                  return _bloc.getMyStorePage(context);
                 },
               );
             }
@@ -219,8 +235,7 @@ class ShareShopPage extends StatelessWidget {
             barrierDismissible: false,
             builder: (BuildContext context) {
               return MessageDialog(
-                // message: myStorePageItem.reason,
-                widget: Text(myStorePageItem.reason, style: TextStyle(fontSize: ScreenUtil().setSp(32))),
+                widget: Text(TextUtil.isEmpty(myStorePageItem.reason) ? '' : myStorePageItem.reason, style: TextStyle(fontSize: ScreenUtil().setSp(32))),
                 onCloseEvent: () {
                   Navigator.pop(context);
                 },

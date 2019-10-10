@@ -23,14 +23,61 @@ class ShareShopPageAdd extends StatefulWidget {
 class _ShareShopPageAddState extends State<ShareShopPageAdd> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   List<StoreIndustryListFromCacheVo> _industryList = [];
-  // 省市区控制器
+  /// 省市区控制器
   final TextEditingController _provinceAndCityController = TextEditingController();
-  // 行业控制器
+  /// 行业控制器
   final TextEditingController _industryConroller = TextEditingController();
-  // 行业临时控制器
+  /// 行业临时控制器
   final TextEditingController _industryTempConroller = TextEditingController();
-  String _photo, _address, _provinceName, _cityName, _areaName, _industryName, _legalPerson, _name, _area, _lat, _lng;
-  int _industryId, _industryIndex = 0;
+  /// 共享星级控制器
+  final TextEditingController _starCodeConroller = TextEditingController();
+  /// 共享星级临时控制器
+  final TextEditingController _starCodeTempConroller = TextEditingController();
+  String _photo, _address, _provinceName, _cityName, _areaName, _industryName, _legalPerson, _name, _area, _lat, _lng, _phone;
+  int _industryId, _industryIndex = 0, _starCode, _starCodeIndex = 0;
+
+  final _starCodeList = [
+    {
+      'id': 1,
+      'title': '1星共享'
+    },
+    {
+      'id': 2,
+      'title': '2星共享'
+    },
+    {
+      'id': 3,
+      'title': '3星共享'
+    },
+    {
+      'id': 4,
+      'title': '4星共享'
+    },
+    {
+      'id': 5,
+      'title': '5星共享'
+    },
+    {
+      'id': 6,
+      'title': '6星共享'
+    },
+    {
+      'id': 7,
+      'title': '7星共享'
+    },
+    {
+      'id': 8,
+      'title': '8星共享'
+    },
+    {
+      'id': 9,
+      'title': '9星共享'
+    },
+    {
+      'id': 10,
+      'title': '10星共享'
+    }
+  ];
 
   @override
   void initState() { 
@@ -118,8 +165,6 @@ class _ShareShopPageAddState extends State<ShareShopPageAdd> {
                           alignment: Alignment.centerRight,
                           child: Text('平方'),
                         ),
-                        // suffixText: '平方',
-                        
                       ),
                       onSaved: (String value) {
                         _area = value;
@@ -128,6 +173,14 @@ class _ShareShopPageAddState extends State<ShareShopPageAdd> {
                       inputFormatters: [
                         WhitelistingTextInputFormatter(RegExp("^[0-9,.]*\$")),
                       ],
+                    ),
+                    TextFormField(
+                      decoration: InputDecoration(
+                        labelText: '联系电话'
+                      ),
+                      onSaved: (String value) {
+                        _phone = value;
+                      },
                     ),
                     InkWell(
                       child: TextFormField(
@@ -144,6 +197,25 @@ class _ShareShopPageAddState extends State<ShareShopPageAdd> {
                           context: context,
                           builder: (BuildContext context){
                             return _buildSelectedIndustry();
+                          }
+                        );
+                      },
+                    ),
+                    InkWell(
+                      child: TextFormField(
+                        controller: _starCodeConroller,
+                        enabled: false,
+                        decoration: InputDecoration(
+                          labelText: '共享星级',
+                        ),
+                      ),
+                      onTap: () async {
+                        _starCodeConroller.text = _starCodeList[_starCodeIndex]['title'];
+                        _starCodeTempConroller.text = _starCodeList[_starCodeIndex]['id'].toString();
+                        showModalBottomSheet(
+                          context: context,
+                          builder: (BuildContext context){
+                            return _buildSelectedStarCode();
                           }
                         );
                       },
@@ -216,6 +288,31 @@ class _ShareShopPageAddState extends State<ShareShopPageAdd> {
     );
   }
 
+  // 星级选择器
+  Widget _buildSelectedStarCode() {
+    return Container(
+      alignment: Alignment.centerLeft,
+      height: ScreenUtil().setHeight(450),
+      child: SingleChildScrollView(
+        child: SelectGroup<int>(
+          index: _starCodeIndex,
+          direction: SelectDirection.vertical,
+          space: EdgeInsets.all(10),
+          selectColor: Colors.blue,
+          items: _starCodeList.map((item) {
+            return SelectItem(label: item['title'], value: int.parse(item['id'].toString()));
+          }).toList(),
+          onSingleSelect: (int index){
+            _starCodeIndex = index;
+            _starCodeConroller.text = _starCodeList[_starCodeIndex]['title'];
+            _starCodeTempConroller.text = _starCodeList[_starCodeIndex]['id'].toString();
+            Navigator.pop(context);
+          },
+        ),
+      ),
+    );
+  }
+
   // 提交，添加认证按钮
   Widget _buildButtom(ShareShopPageBloc bloc) {
     return Row(
@@ -244,10 +341,13 @@ class _ShareShopPageAddState extends State<ShareShopPageAdd> {
             // 行业
             if (TextUtil.isEmpty(_industryTempConroller.text)) {
               showToast('请选择行业');
+            } else if (TextUtil.isEmpty(_starCodeTempConroller.text)) {
+              showToast('请选择共享星级');
             } else {
               StoreIndustryListFromCacheVo storeIndustryListFromCacheVo = StoreIndustryListFromCacheVo.fromJson(json.decode(_industryTempConroller.text));
               _industryId = storeIndustryListFromCacheVo.id;
               _industryName = storeIndustryListFromCacheVo.name;
+              _starCode = int.parse(_starCodeTempConroller.text);
               _formKey.currentState.save();
               bloc.submitEssentialMsg(
                           context: context,
@@ -262,33 +362,12 @@ class _ShareShopPageAddState extends State<ShareShopPageAdd> {
                           area: _area, 
                           industryId: _industryId,
                           lat: _lat,
-                          lng: _lng);
+                          lng: _lng,
+                          starCode: _starCode,
+                          phone: _phone);
             }
           },
         ),
-        // FlatButton(
-        //   splashColor: Colors.white,
-        //   highlightColor: Colors.white,
-        //   child: Container(
-        //     alignment: Alignment.center,
-        //     width: ScreenUtil().setWidth(300),
-        //     height: ScreenUtil().setHeight(80),
-        //     decoration: BoxDecoration(
-        //       color: Color.fromRGBO(255, 192, 159, 1),
-        //       borderRadius: BorderRadius.circular(30)
-        //     ),
-        //     child: Text(
-        //       '添加认证',
-        //       style: TextStyle(
-        //         color: Colors.white,
-        //         fontSize: ScreenUtil().setSp(32)
-        //       ),
-        //     ),
-        //   ),
-        //   onPressed: () {
-        //     Navigator.push(context, CupertinoPageRoute(builder: (context) => BlocProvider(bloc: ShareShopPageBloc(), child: ShareShopPageAuthentication(id: null, bloc: null))));
-        //   },
-        // )
       ],
     );
   }

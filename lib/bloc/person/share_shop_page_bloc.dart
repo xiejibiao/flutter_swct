@@ -82,6 +82,15 @@ class ShareShopPageBloc extends BlocBase {
 
   // 获取相册文件并上传
   getShorePhoto() async {
+    await ImageUpload().uploadImage().then((val) {
+      if (!TextUtil.isEmpty(val)) {
+        _shorePhotoSink.add(val);
+      }
+    });
+  }
+
+  // 添加商品获取相册文件并上传
+  addCommodityGetShorePhoto() async {
     await ImageUpload().tailoringUploadImage().then((val) {
       if (!TextUtil.isEmpty(val)) {
         _shorePhotoSink.add(val);
@@ -121,7 +130,9 @@ class ShareShopPageBloc extends BlocBase {
       @required String legalPerson, 
       @required String name, 
       @required String area, 
-      @required int industryId
+      @required int industryId,
+      @required String phone,
+      @required int starCode
     }) {
     if (TextUtil.isEmpty(photo)) {
       showToast('请选择仓店封面');
@@ -149,6 +160,15 @@ class ShareShopPageBloc extends BlocBase {
     }
     if (TextUtil.isEmpty(industryName) || industryId == null) {
       showToast('请选择行业类型');
+      return false;
+    }
+    var phoneRegExp = RegExp('^((13[0-9])|(15[^4])|(166)|(17[0-8])|(18[0-9])|(19[8-9])|(147,145))\\d{8}\$');
+    if (!phoneRegExp.hasMatch(phone)) {
+      showToast('联系电话输入有误');
+      return false;
+    }
+    if (starCode == null) {
+      showToast('请选择共享星级');
       return false;
     }
     return true;
@@ -185,7 +205,9 @@ class ShareShopPageBloc extends BlocBase {
       @required String area, 
       @required int industryId,
       @required String lat,
-      @required String lng
+      @required String lng,
+      @required String phone,
+      @required int starCode
     }) {
     bool validateFormData = _validateEssentialMsg(
       photo: photo, 
@@ -197,7 +219,9 @@ class ShareShopPageBloc extends BlocBase {
       legalPerson: legalPerson,
       name: name, 
       area: area, 
-      industryId: industryId);
+      industryId: industryId,
+      phone: phone,
+      starCode: starCode);
 
     if (validateFormData) {
       _addStoreForUnlicensed(
@@ -213,7 +237,9 @@ class ShareShopPageBloc extends BlocBase {
         area: area, 
         industryId: industryId,
         lat: lat,
-        lng: lng
+        lng: lng,
+        phone: phone,
+        starCode: starCode
       );
     }
   }
@@ -246,6 +272,8 @@ class ShareShopPageBloc extends BlocBase {
     @required int industryId,
     @required String lat,
     @required String lng,
+    @required String phone,
+    @required int starCode
   }) async {
     await getToken().then((token) async {
       var formData = {
@@ -258,9 +286,11 @@ class ShareShopPageBloc extends BlocBase {
         'lat': lat,
         'legalPerson': legalPerson,
         'lng': lng,
+        'phone': phone,
         'photo': photo,
         'provinceName': provinceName,
-        'storeName': name
+        'starCode': starCode,
+        'storeName': name,
       };
       await requestPost('addStoreForUnlicensed', context: context, token: token, formData: formData).then((val) {
         AddStoreForunlicensedVo addStoreForunlicensedVo = AddStoreForunlicensedVo.fromJson(val);
