@@ -258,7 +258,7 @@ class _ShareShopPageAddState extends State<ShareShopPageAdd> {
         },
       ),
       onTap: () async {
-        await bloc.getShorePhoto();
+        await bloc.addCommodityGetShorePhoto();
       },
     );
   }

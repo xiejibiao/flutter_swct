@@ -3,9 +3,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_swcy/bloc/bloc_provider.dart';
 import 'package:flutter_swcy/bloc/index_page_bloc.dart';
 import 'package:flutter_swcy/pages/home_page.dart';
-import 'package:flutter_swcy/pages/shop_page.dart';
+// import 'package:flutter_swcy/pages/shop_page.dart';
 import 'package:flutter_swcy/pages/order_page.dart';
 import 'package:flutter_swcy/pages/person_page.dart';
+import 'package:flutter_swcy/pages/store_page.dart';
 
 class IndexPage extends StatelessWidget {
   // 底部导航
@@ -31,7 +32,8 @@ class IndexPage extends StatelessWidget {
   // 底部导航页
   final List<Widget> _bottomTabView = [
     HomePage(),
-    ShopPage(),
+    // ShopPage(),
+    StorePage(),
     OrderPage(),
     PersonPage()
   ];

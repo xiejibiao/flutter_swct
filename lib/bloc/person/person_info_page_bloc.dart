@@ -57,18 +57,23 @@ class PersonInfoPageBloc extends BlocBase {
         Navigator.pushAndRemoveUntil(context, CupertinoPageRoute(builder: (context) => BlocProvider(bloc: LoginPageBloc(), child: LoginPage())), (route) => route == null);
       } else {
         getPerson(context, token).then((val) async {
-          PersonInfoVo personInfoVo = val;
-          if (personInfoVo.code == '200') {
-            if (TextUtil.isEmpty(personInfoVo.data.nikeName)) {
-              Navigator.pushAndRemoveUntil(context, CupertinoPageRoute(builder: (context) => PersonInfoEditNikeNamePage(true)), (route) => route == null);
-            } else if (TextUtil.isEmpty(personInfoVo.data.phone)) {
-              Navigator.pushAndRemoveUntil(context, CupertinoPageRoute(builder: (context) => BlocProvider(child: PersonPagePhoneAuthentication(pagePhoneAuthenticationBloc), bloc: PersonPagePhoneAuthenticationBloc())), (route) => route == null);
-            } else {
-              Navigator.pushAndRemoveUntil(context, CupertinoPageRoute(builder: (context) => BlocProvider(bloc: IndexPageBloc(), child: IndexPage())), (route) => route == null);
-            }         
-          } else {
+          if (val == null) {
             cleanToken();
             Navigator.pushAndRemoveUntil(context, CupertinoPageRoute(builder: (context) => BlocProvider(bloc: LoginPageBloc(), child: LoginPage())), (route) => route == null);
+          } else {
+            PersonInfoVo personInfoVo = val;
+            if (personInfoVo.code == '200') {
+              if (TextUtil.isEmpty(personInfoVo.data.nikeName)) {
+                Navigator.pushAndRemoveUntil(context, CupertinoPageRoute(builder: (context) => PersonInfoEditNikeNamePage(true)), (route) => route == null);
+              } else if (TextUtil.isEmpty(personInfoVo.data.phone)) {
+                Navigator.pushAndRemoveUntil(context, CupertinoPageRoute(builder: (context) => BlocProvider(child: PersonPagePhoneAuthentication(pagePhoneAuthenticationBloc), bloc: PersonPagePhoneAuthenticationBloc())), (route) => route == null);
+              } else {
+                Navigator.pushAndRemoveUntil(context, CupertinoPageRoute(builder: (context) => BlocProvider(bloc: IndexPageBloc(), child: IndexPage())), (route) => route == null);
+              }         
+            } else {
+              cleanToken();
+              Navigator.pushAndRemoveUntil(context, CupertinoPageRoute(builder: (context) => BlocProvider(bloc: LoginPageBloc(), child: LoginPage())), (route) => route == null);
+            }
           }
         });
       }
@@ -100,6 +105,12 @@ class PersonInfoPageBloc extends BlocBase {
 
   Future getPerson(BuildContext context, String token) async {
     return await requestPost('getPersonInfo', token: token, context: context).then((val) {
+      if (val == null) {
+        showToast('token失效');
+        cleanToken();
+        Navigator.pushAndRemoveUntil(context, CupertinoPageRoute(builder: (context) => BlocProvider(bloc: LoginPageBloc(), child: LoginPage())), (route) => route == null);
+        return null;
+      }
       PersonInfoVo personInfoVo = PersonInfoVo.fromJson(val);
         if (personInfoVo.code == '200') {
           _personInfoVoSink.add(personInfoVo);

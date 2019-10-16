@@ -1,5 +1,5 @@
 // const serviceBaseUrl = 'http://192.168.1.127:8086';
-const serviceBaseUrl = 'http://192.168.1.109:8086';
+const serviceBaseUrl = 'http://192.168.1.106:8086';
 // const serviceBaseUrl = 'http://192.168.1.107:8086';
 const servicePath = {
   'login': serviceBaseUrl + '/account/login',                                                         // 登录
@@ -30,6 +30,7 @@ const servicePath = {
   'editCommodityDetail': serviceBaseUrl + '/store/editCommodityDetail',                               // 编辑商品详情
   'editStoreDescription': serviceBaseUrl + '/store/editStoreDescription',                             // 编辑门店详情
   'getMyFollowPage': serviceBaseUrl + '/store/getMyFollowPage',                                       // 获取我的关注门店列表
+  'newsGetPageStore': serviceBaseUrl + '/store/newsGetPageStore',                                     // 获取门店类型 + 门店列表
   'getPersonAndAdList': serviceBaseUrl + '/person/getPersonAndAdList',                                // 获取基本信息与广告
   'upDateAvatar': serviceBaseUrl + '/person/upDateAvatar',                                            // 修改头像
   'getPersonInfo': serviceBaseUrl + '/person/getPersonInfo',                                          // 获取用户基本信息
