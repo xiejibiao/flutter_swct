@@ -24,7 +24,7 @@ class PersonTeamPageHead extends StatelessWidget {
                   children: <Widget>[
                     Image.asset(
                       'assets/image_icon/icon_team.png',
-                      width: 80.0,
+                      width: ScreenUtil().setWidth(140),
                     ),
                     Expanded(
                       child: Column(
@@ -51,7 +51,7 @@ class PersonTeamPageHead extends StatelessWidget {
       title: Text(
         title,
         style: TextStyle(
-          fontSize: 18.0
+          fontSize: ScreenUtil().setSp(28)
         ),
       ),
       trailing: Text('$sum'),
