@@ -18,11 +18,14 @@ class OrderDetailsHand extends StatelessWidget {
           children: <Widget>[
             Column(
               children: <Widget>[
-                Image.network(
-                  orderPageVo.imageUrl,
-                  width: ScreenUtil().setWidth(150),
-                  height: ScreenUtil().setHeight(150),
-                  fit: BoxFit.fill,
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(8.0),
+                  child: Image.network(
+                    orderPageVo.imageUrl,
+                    width: ScreenUtil().setWidth(200),
+                    height: ScreenUtil().setWidth(200),
+                    fit: BoxFit.fill,
+                  ),
                 ),
                 SizedBox(height: ScreenUtil().setHeight(20)),
                 Text(

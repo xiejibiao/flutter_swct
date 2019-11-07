@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_swcy/bloc/bloc_provider.dart';
 import 'package:flutter_swcy/common/shared_preferences.dart';
 import 'package:flutter_swcy/service/service_method.dart';
+import 'package:flutter_swcy/vo/commen_vo.dart';
 import 'package:flutter_swcy/vo/order/order_vo.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:rxdart/rxdart.dart';
 
 class OrderPageBloc extends BlocBase {
@@ -69,6 +71,29 @@ class OrderPageBloc extends BlocBase {
       _isEndSink.add(false);
       isEnd = false;
     }
+  }
+
+  /// 确认收货
+  confirmReceipt(orderId) {
+    var formData = {
+      'orderId': orderId
+    };
+    getToken().then((token) {
+      requestPost('confirmReceipt', formData: formData, token: token).then((val) {
+        CommenVo commenVo = CommenVo.fromJson(val);
+        if (commenVo.code == '200') {
+          orderPageVo.data.list.forEach((item) {
+            if (item.id == orderId) {
+              item.status = 4;
+            }
+          });
+          _orderPageSink.add(orderPageVo);
+          showToast('确认收货成功');
+        } else {
+          showToast('订单状态异常');
+        }
+      });
+    });
   }
 
   @override

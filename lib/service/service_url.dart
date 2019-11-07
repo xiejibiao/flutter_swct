@@ -1,5 +1,5 @@
 // const serviceBaseUrl = 'http://192.168.1.127:8086';
-const serviceBaseUrl = 'http://192.168.1.106:8086';
+const serviceBaseUrl = 'http://192.168.2.110:8086';
 // const serviceBaseUrl = 'http://192.168.1.107:8086';
 const servicePath = {
   'login': serviceBaseUrl + '/account/login',                                                         // 登录
@@ -51,6 +51,7 @@ const servicePath = {
   'authenticationPhone': serviceBaseUrl + '/person/authenticationPhone',                              // 认证手机号
   'getOrderPage': serviceBaseUrl + '/order/getOrderPage',                                             // 获取订单列表
   'getOrderDetailById': serviceBaseUrl + '/order/getOrderDetailById',                                 // 获取订单详情
+  'confirmReceipt': serviceBaseUrl + '/order/confirmReceipt',                                         // 确认收货
   'applogin': serviceBaseUrl + '/mp/applogin',                                                        // 微信登录
   'wxPay': serviceBaseUrl + '/wxApi/wxPay',                                                           // 微信统一下单
 };

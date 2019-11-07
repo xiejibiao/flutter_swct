@@ -34,7 +34,7 @@ class OrderPage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       ImageIcon(AssetImage('assets/image_icon/icon_order.png'), size: 150, color: Colors.grey),
-                      Text('点击刷新')
+                      Text('点击刷新', style: TextStyle(color: Colors.grey))
                     ],
                   ),
                 ),

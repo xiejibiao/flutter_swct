@@ -30,11 +30,14 @@ class OrderDetailsList extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            Image.network(
-              orderDetailListVo.cover,
-              width: ScreenUtil().setWidth(100),
-              height: ScreenUtil().setHeight(100),
-              fit: BoxFit.fill,
+            ClipRRect(
+              borderRadius: BorderRadius.circular(8.0),
+              child: Image.network(
+                orderDetailListVo.cover,
+                width: ScreenUtil().setWidth(100),
+                height: ScreenUtil().setWidth(100),
+                fit: BoxFit.cover,
+              ),
             ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
