@@ -60,17 +60,14 @@ class PersonTeamPageList extends StatelessWidget {
     return Card(
       child: Padding(
         padding: EdgeInsets.all(10.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: <Widget>[
-            CircleAvatar(
-              radius: 28.0,
-              backgroundImage: NetworkImage('${personTeamList.avatar}')
-            ),
-            Text('${personTeamList.nikeName}', style: TextStyle(fontSize: ScreenUtil().setSp(28))),
-            Text('${personTeamList.phone}'),
-            Text('${personTeamList.achievement}'),
-          ],
+        child: ListTile(
+          leading:  CircleAvatar(
+            radius: 28.0,
+            backgroundImage: NetworkImage('${personTeamList.avatar}')
+          ),
+          title: Text('${personTeamList.nikeName}'),
+          subtitle: personTeamList.phone == null ? Container() : Text('${personTeamList.phone}'),
+          trailing: Text('${personTeamList.achievement}'),
         ),
       ),
     );
