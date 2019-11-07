@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_swcy/bloc/bloc_provider.dart';
 import 'package:flutter_swcy/bloc/person/person_info_page_bloc.dart';
 import 'package:flutter_swcy/bloc/person_page_phone_authentication_bloc.dart';
+import 'package:flutter_swcy/common/dialog_router.dart';
+import 'package:flutter_swcy/common/loading_dialog.dart';
 import 'package:flutter_swcy/common/shared_preferences.dart';
 import 'package:flutter_swcy/service/service_method.dart';
 import 'package:flutter_swcy/vo/login_vo.dart';
@@ -78,10 +80,11 @@ class LoginPageBloc extends BlocBase{
 
   // 改版后的方式
   // 初始化微信登录授权成功监听
-  initFluwxAuthListen(BuildContext context, PersonPagePhoneAuthenticationBloc pagePhoneAuthenticationBloc) {
+  initFluwxAuthListen(BuildContext context, PersonPagePhoneAuthenticationBloc pagePhoneAuthenticationBloc, PersonInfoPageBloc pageBloc) {
     fluwx.responseFromAuth.listen((data) {
       if (data.errCode == 0) {
-        login(context, data.code, pagePhoneAuthenticationBloc);
+        Navigator.of(context).push(DialogRouter(LoadingDialog(message: '登录中')));
+        login(context, data.code, pagePhoneAuthenticationBloc, pageBloc);
       }
     });
   }
@@ -95,8 +98,7 @@ class LoginPageBloc extends BlocBase{
     }
   }
 
-  login (BuildContext context, String code, PersonPagePhoneAuthenticationBloc pagePhoneAuthenticationBloc) async {
-    final PersonInfoPageBloc pageBloc = BlocProvider.of<PersonInfoPageBloc>(context);
+  login (BuildContext context, String code, PersonPagePhoneAuthenticationBloc pagePhoneAuthenticationBloc, PersonInfoPageBloc pageBloc) async {
     var formData = {
       'code': code,
     };
