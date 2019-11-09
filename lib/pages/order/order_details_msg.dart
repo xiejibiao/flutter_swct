@@ -20,42 +20,50 @@ class OrderDetailsMsg extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text('当前状态  ' + _getStatusStr(orderPageVo.status)),
+              _getStatusStr(orderPageVo.status),
               Text('支付时间  ' + DateUtil.getDateStrByMs(orderPageVo.payTime)),
               Text('支付方式  ${orderPageVo.payChannel}'),
               Text('交易单号  ${orderPageVo.payNum}'),
-              Text('订单编号  ${orderPageVo.id}')
+              Text('订单编号  ${orderPageVo.id}'),
+              Text('收货地址  ${orderPageVo.address}', overflow: TextOverflow.ellipsis)
             ],
           ),
         ),
       )
     );
   }
-
-  String _getStatusStr (int status) {
+  
+  Widget _getStatusStr (int status) {
+    Widget _widget;
     switch (status) {
-      // 未支付
-      case 0:
-        return '未支付';
-        break;
-      // 已支付
       case 1:
-        return '已支付';
+        _widget = _buildStatusContainer('assets/image_icon/icon_to_be_confirmed.png', Color(0xFFFF9900), '待确认');
         break;
-      // 代发货
       case 2:
-        return '代发货';
+        _widget = _buildStatusContainer('assets/image_icon/icon_to_be_shipped.png', Color(0xFF3399FF), '待发货');
         break;
-      // 已发货
       case 3:
-        return '已发货';
-        break;
-      // 待收货
-      case 4:
-        return '待收货';
+        _widget = _buildStatusContainer('assets/image_icon/icon_to_be_confirmed.png', Color(0xFFFF9900), '待收货');
         break;
       default:
-        return '申请退货';
+        _widget = _buildStatusContainer('assets/image_icon/icon_shipped.png', Color(0xFF00CC66), '已收货');
     }
+    return _widget;
+  }
+
+  Widget _buildStatusContainer(String iconPath, Color color, String msg) {
+    return Container(
+            child: Row(
+              children: <Widget>[
+                Text('当前状态 '),
+                ImageIcon(
+                  AssetImage(iconPath),
+                  size: 28,
+                  color: color
+                ),
+                Text(msg, style: TextStyle(color: Colors.grey[600])),
+              ],
+            ),
+          );
   }
 }

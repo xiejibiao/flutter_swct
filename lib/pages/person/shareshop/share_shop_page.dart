@@ -152,19 +152,19 @@ class ShareShopPage extends StatelessWidget {
     );
   }
 
-  // 审核状态、是否申请认证
+  /// 审核状态、是否申请认证
   Widget _buildButtom(int status, bool isAuthentication, BuildContext context, MyStorePageItem myStorePageItem, ShareShopPageBloc bloc, ShopPagesBloc shopPagesBloc) {
     if (isAuthentication) {
       switch (status) {
-        // 审核中
+        /// 审核中
         case 0:
           return _buildAuditInProgressButtom();
           break;
-        // 产品上架
+        /// 产品上架
         case 1:
           return _buildProductsOnShelvesButtom(context, myStorePageItem.id, shopPagesBloc);
           break;
-        // 审核失败
+        /// 审核失败
         default:
          return _buildAuditFailureButtom(myStorePageItem, context, bloc);
       }
@@ -173,7 +173,7 @@ class ShareShopPage extends StatelessWidget {
     }
   }
 
-  // 审核中
+  /// 审核中
   Widget _buildAuditInProgressButtom() {
     return Container(
       width: ScreenUtil().setWidth(445),
@@ -186,32 +186,36 @@ class ShareShopPage extends StatelessWidget {
     );
   }
 
-  // 产品上架
+  /// 产品上架
   Widget _buildProductsOnShelvesButtom(BuildContext context, int id, ShopPagesBloc bloc) {
-    return Container(
-      height: ScreenUtil().setHeight(70),
-      width: ScreenUtil().setWidth(445),
-      alignment: Alignment.bottomRight,
-      child: InkWell(
-        child: Container(
-          alignment: Alignment.center,
-          width: ScreenUtil().setWidth(180),
-          height: ScreenUtil().setHeight(50),
-          decoration: BoxDecoration(
-            border: Border.all(color: Colors.grey[300]),
-            borderRadius: BorderRadius.circular(8),
-            color: Colors.blue[300]
+    return Row(
+      children: <Widget>[
+        Container(
+          height: ScreenUtil().setHeight(70),
+          width: ScreenUtil().setWidth(445),
+          alignment: Alignment.bottomRight,
+          child: InkWell(
+            child: Container(
+              alignment: Alignment.center,
+              width: ScreenUtil().setWidth(180),
+              height: ScreenUtil().setHeight(50),
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.grey[300]),
+                borderRadius: BorderRadius.circular(8),
+                color: Colors.blue[300]
+              ),
+              child: Text('产品与订单', style: TextStyle(color: Colors.white)),
+            ),
+            onTap: () {
+              Navigator.push(context, CupertinoPageRoute(builder: (context) => ShareShopPageCommodityAdmin(id, bloc)));
+            },
           ),
-          child: Text('产品上架'),
-        ),
-        onTap: () {
-          Navigator.push(context, CupertinoPageRoute(builder: (context) => ShareShopPageCommodityAdmin(id, bloc)));
-        },
-      ),
+        )
+      ],
     );
   }
 
-  // 审核失败
+  /// 审核失败
   Widget _buildAuditFailureButtom(MyStorePageItem myStorePageItem, BuildContext context, ShareShopPageBloc bloc) {
     return Container(
       height: ScreenUtil().setHeight(70),
@@ -253,7 +257,7 @@ class ShareShopPage extends StatelessWidget {
     );
   }
 
-  // 认证
+  /// 认证
   Widget _buildAuthenticationButtom(BuildContext context, int id, ShareShopPageBloc bloc) {
     return Container(
       height: ScreenUtil().setHeight(70),
@@ -269,7 +273,7 @@ class ShareShopPage extends StatelessWidget {
             borderRadius: BorderRadius.circular(8),
             color: Colors.green[500]
           ),
-          child: Text('认证'),
+          child: Text('认证', style: TextStyle(color: Colors.white)),
         ),
         onTap: () {
           Navigator.push(context, CupertinoPageRoute(builder:( context) => BlocProvider(bloc: ShareShopPageBloc(), child: ShareShopPageAuthentication(id: id, bloc: bloc))));

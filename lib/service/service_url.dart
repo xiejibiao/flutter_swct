@@ -52,6 +52,7 @@ const servicePath = {
   'getOrderPage': serviceBaseUrl + '/order/getOrderPage',                                             // 获取订单列表
   'getOrderDetailById': serviceBaseUrl + '/order/getOrderDetailById',                                 // 获取订单详情
   'confirmReceipt': serviceBaseUrl + '/order/confirmReceipt',                                         // 确认收货
+  'getOrderPageByShopId': serviceBaseUrl + '/order/getOrderPageByShopId',                             // 获取门店订单Page
   'applogin': serviceBaseUrl + '/mp/applogin',                                                        // 微信登录
   'wxPay': serviceBaseUrl + '/wxApi/wxPay',                                                           // 微信统一下单
 };

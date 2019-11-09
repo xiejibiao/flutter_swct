@@ -74,12 +74,12 @@ class OrderPageBloc extends BlocBase {
   }
 
   /// 确认收货
-  confirmReceipt(orderId) {
+  confirmReceipt(orderId, BuildContext context) {
     var formData = {
       'orderId': orderId
     };
     getToken().then((token) {
-      requestPost('confirmReceipt', formData: formData, token: token).then((val) {
+      requestPost('confirmReceipt', formData: formData, token: token, context: context).then((val) {
         CommenVo commenVo = CommenVo.fromJson(val);
         if (commenVo.code == '200') {
           orderPageVo.data.list.forEach((item) {

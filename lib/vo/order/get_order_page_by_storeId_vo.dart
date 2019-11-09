@@ -1,14 +1,14 @@
-class OrderPageVo {
+class GetOrderPageByStoreIdVo {
   String code;
   String message;
-  OrderList data;
+  OrderPageData data;
 
-  OrderPageVo({this.code, this.message, this.data});
+  GetOrderPageByStoreIdVo({this.code, this.message, this.data});
 
-  OrderPageVo.fromJson(Map<String, dynamic> json) {
+  GetOrderPageByStoreIdVo.fromJson(Map<String, dynamic> json) {
     code = json['code'];
     message = json['message'];
-    data = json['data'] != null ? new OrderList.fromJson(json['data']) : null;
+    data = json['data'] != null ? new OrderPageData.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -22,20 +22,20 @@ class OrderPageVo {
   }
 }
 
-class OrderList {
-  List<OrderVo> list;
+class OrderPageData {
+  List<DataItem> list;
   int totalPage;
   int pageSize;
   int pageNumber;
   int count;
 
-  OrderList({this.list, this.totalPage, this.pageSize, this.pageNumber, this.count});
+  OrderPageData({this.list, this.totalPage, this.pageSize, this.pageNumber, this.count});
 
-  OrderList.fromJson(Map<String, dynamic> json) {
+  OrderPageData.fromJson(Map<String, dynamic> json) {
     if (json['list'] != null) {
-      list = new List<OrderVo>();
+      list = new List<DataItem>();
       json['list'].forEach((v) {
-        list.add(new OrderVo.fromJson(v));
+        list.add(new DataItem.fromJson(v));
       });
     }
     totalPage = json['totalPage'];
@@ -57,71 +57,59 @@ class OrderList {
   }
 }
 
-class OrderVo {
+class DataItem {
   String id;
   int status;
-  double money;
   int orderTime;
-  int storeId;
-  String storeName;
-  String imageUrl;
-  int payTime;
-  String payChannel;
-  String payNum;
   String uid;
-  String logisticsNum;
-  int addressId;
+  int storeId;
+  String avatar;
+  String nikeName;
   String address;
+  String provinceName;
+  String cityName;
+  String areaName;
 
-  OrderVo(
+  DataItem(
       {this.id,
       this.status,
-      this.money,
       this.orderTime,
-      this.storeId,
-      this.storeName,
-      this.imageUrl,
-      this.payTime,
-      this.payChannel,
-      this.payNum,
       this.uid,
-      this.logisticsNum,
-      this.addressId,
-      this.address});
+      this.storeId,
+      this.avatar,
+      this.nikeName,
+      this.address,
+      this.provinceName,
+      this.cityName,
+      this.areaName});
 
-  OrderVo.fromJson(Map<String, dynamic> json) {
+  DataItem.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     status = json['status'];
-    money = json['money'];
     orderTime = json['orderTime'];
-    storeId = json['storeId'];
-    storeName = json['storeName'];
-    imageUrl = json['imageUrl'];
-    payTime = json['payTime'];
-    payChannel = json['payChannel'];
-    payNum = json['payNum'];
     uid = json['uid'];
-    logisticsNum = json['logisticsNum'];
-    addressId = json['addressId'];
+    storeId = json['storeId'];
+    avatar = json['avatar'];
+    nikeName = json['nikeName'];
     address = json['address'];
+    provinceName = json['provinceName'];
+    cityName = json['cityName'];
+    areaName = json['areaName'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
     data['status'] = this.status;
-    data['money'] = this.money;
     data['orderTime'] = this.orderTime;
-    data['storeId'] = this.storeId;
-    data['storeName'] = this.storeName;
-    data['imageUrl'] = this.imageUrl;
-    data['payTime'] = this.payTime;
-    data['payChannel'] = this.payChannel;
-    data['payNum'] = this.payNum;
     data['uid'] = this.uid;
-    data['logisticsNum'] = this.logisticsNum;
-    data['addressId'] = this.addressId;
+    data['storeId'] = this.storeId;
+    data['avatar'] = this.avatar;
+    data['nikeName'] = this.nikeName;
     data['address'] = this.address;
+    data['provinceName'] = this.provinceName;
+    data['cityName'] = this.cityName;
+    data['areaName'] = this.areaName;
     return data;
   }
 }

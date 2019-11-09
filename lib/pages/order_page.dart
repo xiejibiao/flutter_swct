@@ -3,6 +3,7 @@ import 'package:flutter_swcy/bloc/bloc_provider.dart';
 import 'package:flutter_swcy/bloc/order_page_bloc.dart';
 import 'package:flutter_swcy/common/loading.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
+import 'package:flutter_swcy/common/order_default_image.dart';
 import 'package:flutter_swcy/common/the_end_baseline.dart';
 import 'package:flutter_swcy/pages/order/order_item.dart';
 import 'package:flutter_swcy/vo/order/order_vo.dart';
@@ -33,7 +34,7 @@ class OrderPage extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      ImageIcon(AssetImage('assets/image_icon/icon_order.png'), size: 150, color: Colors.grey),
+                      OrderDefaultImage(),
                       Text('点击刷新', style: TextStyle(color: Colors.grey))
                     ],
                   ),

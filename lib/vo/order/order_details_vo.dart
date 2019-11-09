@@ -111,6 +111,8 @@ class OrderPageVo {
   String payNum;
   String uid;
   String logisticsNum;
+  int addressId;
+  String address;
 
   OrderPageVo(
       {this.id,
@@ -124,7 +126,9 @@ class OrderPageVo {
       this.payChannel,
       this.payNum,
       this.uid,
-      this.logisticsNum});
+      this.logisticsNum,
+      this.addressId,
+      this.address});
 
   OrderPageVo.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -139,6 +143,8 @@ class OrderPageVo {
     payNum = json['payNum'];
     uid = json['uid'];
     logisticsNum = json['logisticsNum'];
+    addressId = json['addressId'];
+    address = json['address'];
   }
 
   Map<String, dynamic> toJson() {
@@ -155,6 +161,8 @@ class OrderPageVo {
     data['payNum'] = this.payNum;
     data['uid'] = this.uid;
     data['logisticsNum'] = this.logisticsNum;
+    data['addressId'] = this.addressId;
+    data['address'] = this.address;
     return data;
   }
 }
