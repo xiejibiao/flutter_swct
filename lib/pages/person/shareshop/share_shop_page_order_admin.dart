@@ -1,4 +1,5 @@
 import 'package:common_utils/common_utils.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -7,19 +8,27 @@ import 'package:flutter_swcy/bloc/order/share_shop_page_order_admin_bloc.dart';
 import 'package:flutter_swcy/common/loading.dart';
 import 'package:flutter_swcy/common/order_default_image.dart';
 import 'package:flutter_swcy/common/the_end_baseline.dart';
+import 'package:flutter_swcy/pages/person/shareshop/share_shop_page_order_admin_detail.dart';
 import 'package:flutter_swcy/vo/order/get_order_page_by_storeId_vo.dart';
 
-class ShareShopPageOrderAdmin extends StatelessWidget {
+class ShareShopPageOrderAdmin extends StatefulWidget {
   final int shopId;
   ShareShopPageOrderAdmin(
     this.shopId
   );
-  final GlobalKey<RefreshFooterState> _footerKey = GlobalKey<RefreshFooterState>();
+  @override
+  _ShareShopPageOrderAdminState createState() => _ShareShopPageOrderAdminState();
+}
 
+class _ShareShopPageOrderAdminState extends State<ShareShopPageOrderAdmin> {
+  final GlobalKey<RefreshFooterState> _footerKey = GlobalKey<RefreshFooterState>();
+  ShareShopPageOrderAdminBloc _bloc;
   @override
   Widget build(BuildContext context) {
-    final ShareShopPageOrderAdminBloc _bloc = BlocProvider.of<ShareShopPageOrderAdminBloc>(context);
-    _bloc.getOrderPageByShopId(shopId, context);
+    if (_bloc == null) {
+      _bloc = BlocProvider.of<ShareShopPageOrderAdminBloc>(context);
+      _bloc.getOrderPageByShopId(widget.shopId, context); 
+    }
     return Scaffold(
       appBar: AppBar(
         title: Text('订单管理'),
@@ -49,12 +58,12 @@ class ShareShopPageOrderAdmin extends StatelessWidget {
                 ),
                 child: ListView(
                   children: <Widget>[
-                    _shareShopOrderList(getOrderPageByStoreIdVo.data.list),
+                    _shareShopOrderList(getOrderPageByStoreIdVo.data.list, _bloc),
                     _bloc.isEnd ? TheEndBaseline() : Text('')
                   ],
                 ),
                 loadMore: () {
-                  return _bloc.loadMoreGetOrderPageByShopId(shopId, context);
+                  return _bloc.loadMoreGetOrderPageByShopId(widget.shopId, context);
                 }
               );
             }
@@ -64,7 +73,7 @@ class ShareShopPageOrderAdmin extends StatelessWidget {
     );
   }
 
-  Widget _shareShopOrderList (List<DataItem> list) {
+  Widget _shareShopOrderList (List<DataItem> list, ShareShopPageOrderAdminBloc bloc) {
     return ListView.builder(
       shrinkWrap: true,
       physics: NeverScrollableScrollPhysics(),
@@ -107,7 +116,7 @@ class ShareShopPageOrderAdmin extends StatelessWidget {
                 ),
               ),
               onTap: () {
-                print('订单详情');
+                Navigator.push(context, CupertinoPageRoute(builder: (context) => BlocProvider(child: ShareShopPageOrderAdminDetail(bloc, list[index].id), bloc: ShareShopPageOrderAdminBloc())));
               },
             ),
             Positioned(

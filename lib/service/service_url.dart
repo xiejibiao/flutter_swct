@@ -53,6 +53,9 @@ const servicePath = {
   'getOrderDetailById': serviceBaseUrl + '/order/getOrderDetailById',                                 // 获取订单详情
   'confirmReceipt': serviceBaseUrl + '/order/confirmReceipt',                                         // 确认收货
   'getOrderPageByShopId': serviceBaseUrl + '/order/getOrderPageByShopId',                             // 获取门店订单Page
+  'getShopOrderDetailByOrderId': serviceBaseUrl + '/order/getShopOrderDetailByOrderId',               // 获取共享店订单详情
+  'confirmationOfOrder': serviceBaseUrl + '/order/confirmationOfOrder',                               // 确认订单
+  'confirmShipment': serviceBaseUrl + '/order/confirmShipment',                                       // 确认发货
   'applogin': serviceBaseUrl + '/mp/applogin',                                                        // 微信登录
   'wxPay': serviceBaseUrl + '/wxApi/wxPay',                                                           // 微信统一下单
 };

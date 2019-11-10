@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_swcy/bloc/bloc_provider.dart';
 import 'package:flutter_swcy/common/shared_preferences.dart';
 import 'package:flutter_swcy/service/service_method.dart';
+import 'package:flutter_swcy/vo/commen_vo.dart';
 import 'package:flutter_swcy/vo/order/get_order_page_by_storeId_vo.dart';
+import 'package:flutter_swcy/vo/order/get_shop_order_detail_by_orderId_vo.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:rxdart/subjects.dart';
 
@@ -15,6 +17,12 @@ class ShareShopPageOrderAdminBloc extends BlocBase {
   Stream<GetOrderPageByStoreIdVo> get getOrderPageByStoreIdVoStream => _getOrderPageByStoreIdVoController.stream;
   bool isEnd = false;
 
+  GetShopOrderDetailByOrderIdVo _getShopOrderDetailByOrderIdVo;
+  BehaviorSubject<GetShopOrderDetailByOrderIdVo> _getShopOrderDetailByOrderIdVoController = BehaviorSubject<GetShopOrderDetailByOrderIdVo>();
+  Sink<GetShopOrderDetailByOrderIdVo> get _getShopOrderDetailByOrderIdVoSink => _getShopOrderDetailByOrderIdVoController.sink;
+  Stream<GetShopOrderDetailByOrderIdVo> get getShopOrderDetailByOrderIdVoStream => _getShopOrderDetailByOrderIdVoController.stream;
+
+  /// 获取订单列表
   getOrderPageByShopId(int storeId, BuildContext context) {
     getToken().then((token) {
       _pageNumber = 0;
@@ -33,6 +41,7 @@ class ShareShopPageOrderAdminBloc extends BlocBase {
     });
   }
 
+  /// 订单列表加载更多
   loadMoreGetOrderPageByShopId(int storeId, BuildContext context) {
     if (!isEnd) {
       getToken().then((token) {
@@ -53,7 +62,7 @@ class ShareShopPageOrderAdminBloc extends BlocBase {
     }
   }
 
-  /// 获取订单列表
+  /// API
   Future<GetOrderPageByStoreIdVo> _postAPI(String token, BuildContext context, var formData) {
     return requestPost('getOrderPageByShopId', token: token, context: context, formData: formData).then((val) {
       GetOrderPageByStoreIdVo getOrderPageByStoreIdVo = GetOrderPageByStoreIdVo.fromJson(val);
@@ -76,8 +85,85 @@ class ShareShopPageOrderAdminBloc extends BlocBase {
     }
   }
 
+  /// 获取订单详情
+  getShopOrderDetailByOrderId(String orderId, BuildContext context) {
+    getToken().then((token) {
+      var formData = {
+        'orderId': orderId
+      };
+      requestPost('getShopOrderDetailByOrderId', context: context, formData: formData, token: token).then((val) {
+        _getShopOrderDetailByOrderIdVo = GetShopOrderDetailByOrderIdVo.fromJson(val);
+        if (_getShopOrderDetailByOrderIdVo.code != '200') {
+          showToast(_getShopOrderDetailByOrderIdVo.message);
+        } else {
+          _getShopOrderDetailByOrderIdVoSink.add(_getShopOrderDetailByOrderIdVo);
+        }
+      });
+    });
+  }
+
+  /// 确认订单
+  confirmationOfOrder(String orderId, BuildContext context) {
+    getToken().then((token) {
+      var formData = {
+        'orderId': orderId
+      };
+      requestPost('confirmationOfOrder', formData: formData, token: token, context: context).then((val) {
+        CommenVo commenVo = CommenVo.fromJson(val);
+        if (commenVo.code == '200') {
+          _getShopOrderDetailByOrderIdVo.data.orderEssentialInfoVo.status = 2;
+          _getOrderPageByStoreIdVo.data.list.forEach((item) {
+            if (item.id == orderId) {
+              item.status = 2;
+            }
+          });
+          _getShopOrderDetailByOrderIdVoSink.add(_getShopOrderDetailByOrderIdVo);
+          showToast('确认订单成功');
+        } else if (commenVo.code == '209') {
+          showToast('订单状态异常');
+        } else {
+          showToast(commenVo.message);
+        }
+      });
+    });
+  }
+
+  /// 确认发货
+  confirmShipment(String orderId, String logisticsNum, BuildContext context) {
+    if (logisticsNum.isEmpty) {
+      showToast('请输入物流方式，或物流单号');
+      return;
+    }
+    getToken().then((token) {
+      var formData = {
+        'orderId': orderId,
+        'logisticsNum': logisticsNum
+      };
+      requestPost('confirmShipment', formData: formData, token: token, context: context).then((val) {
+        CommenVo commenVo = CommenVo.fromJson(val);
+        if (commenVo.code == '200') {
+          _getShopOrderDetailByOrderIdVo.data.orderEssentialInfoVo.status = 3;
+          _getOrderPageByStoreIdVo.data.list.forEach((item) {
+            if (item.id == orderId) {
+              item.status = 3;
+            }
+          });
+          _getOrderPageByStoreIdVoSink.add(_getOrderPageByStoreIdVo);
+          _getShopOrderDetailByOrderIdVoSink.add(_getShopOrderDetailByOrderIdVo);
+          showToast('确认发货成功');
+          Navigator.pop(context);
+        } else if (commenVo.code == '209') {
+          showToast('订单发货异常');
+        } else {
+          showToast(commenVo.message);
+        }
+      });
+    });
+  }
+
   @override
   void dispose() {
     _getOrderPageByStoreIdVoController.close();
+    _getShopOrderDetailByOrderIdVoController.close();
   }
 }
