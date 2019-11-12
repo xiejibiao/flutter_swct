@@ -77,6 +77,7 @@ class PersonPageBloc extends BlocBase {
   getPersonAndAdList(BuildContext context) {
     if (_isFirst) {
       return getToken().then((token) async {
+        print(token);
         return await requestPost('getPersonAndAdList', token: token, context: context).then((val) {
           PersonVo personVo = PersonVo.fromJson(val);
           _personVoSink.add(personVo);

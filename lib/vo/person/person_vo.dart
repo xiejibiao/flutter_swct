@@ -27,6 +27,7 @@ class PersonPageVo {
   List<HomeAdVo> homeAdVo;
   int star;
   int credit;
+  bool notBusiness;
 
   PersonPageVo({this.lgmnUserInfo, this.homeAdVo, this.star, this.credit});
 
@@ -42,6 +43,7 @@ class PersonPageVo {
     }
     star = json['star'];
     credit = json['credit'];
+    notBusiness = json['notBusiness'];
   }
 
   Map<String, dynamic> toJson() {
@@ -54,6 +56,7 @@ class PersonPageVo {
     }
     data['star'] = this.star;
     data['credit'] = this.credit;
+    data['notBusiness'] = this.notBusiness;
     return data;
   }
 }

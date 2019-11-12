@@ -27,7 +27,7 @@ class PersonPage extends StatelessWidget {
                 children: <Widget>[
                   PersonPageHand(personVo),
                   SwiperPage(personVo.data.homeAdVo),
-                  PersonPageItemButtom()
+                  PersonPageItemButtom(personVo.data.notBusiness)
                 ],
               ),
             );
