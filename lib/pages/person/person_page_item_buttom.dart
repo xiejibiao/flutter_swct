@@ -6,6 +6,7 @@ import 'package:flutter_swcy/bloc/person/person_follow_page_bloc.dart';
 import 'package:flutter_swcy/bloc/person/share_shop_page_bloc.dart';
 import 'package:flutter_swcy/bloc/person/share_shop_page_commodity_admin_bloc.dart';
 import 'package:flutter_swcy/bloc/shop/shop_pages_bloc.dart';
+import 'package:flutter_swcy/bloc/supplier_page_bloc.dart';
 import 'package:flutter_swcy/pages/person/person_about_page.dart';
 import 'package:flutter_swcy/pages/person/person_achievement_page.dart';
 import 'package:flutter_swcy/pages/person/person_assets_page.dart';
@@ -14,6 +15,7 @@ import 'package:flutter_swcy/pages/person/person_follow_page.dart';
 import 'package:flutter_swcy/pages/person/person_sms_page.dart';
 import 'package:flutter_swcy/pages/person/person_team_page.dart';
 import 'package:flutter_swcy/pages/person/shareshop/share_shop_page.dart';
+import 'package:flutter_swcy/pages/person/supplier/supplier_page.dart';
 // import 'package:flutter_swcy/test_my_map.dart';
 import 'package:oktoast/oktoast.dart';
 
@@ -29,7 +31,7 @@ class PersonPageItemButtom extends StatelessWidget {
       runSpacing: 10.0,
       children: <Widget>[
         _item(context, 'assets/image_icon/icon_shop.png', '我的共享店', BlocProvider(bloc: ShareShopPageBloc(), child: BlocProvider(bloc: ShopPagesBloc(), child: BlocProvider(bloc: ShareShopPageCommodityAdminBloc(), child: ShareShopPage()))), false),
-        _item(context, 'assets/image_icon/icon_supplier.png', '供应商', null, notBusiness),
+        _item(context, 'assets/image_icon/icon_supplier.png', '供应商', BlocProvider(bloc: SupplierPageBloc(), child: SupplierPage(),), notBusiness),
         _item(context, 'assets/image_icon/icon_money1.png', '我的资产', PersonAssetsPage(), false),
         _item(context, 'assets/image_icon/icon_team.png', '我的团队', PersonTeamPage(), false),
         _item(context, 'assets/image_icon/icon_follow.png', '关注', BlocProvider(bloc: PersonFollowPageBloc(), child: PersonFollowPage()), false),

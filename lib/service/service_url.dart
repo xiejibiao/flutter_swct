@@ -58,4 +58,13 @@ const servicePath = {
   'confirmShipment': serviceBaseUrl + '/order/confirmShipment',                                       // 确认发货
   'applogin': serviceBaseUrl + '/mp/applogin',                                                        // 微信登录
   'wxPay': serviceBaseUrl + '/wxApi/wxPay',                                                           // 微信统一下单
+  'getSupplierPage': serviceBaseUrl + '/supplier/getSupplierPage',                                    // 获取供应商列表
+  'loadMoreSupplierPage': serviceBaseUrl + '/supplier/loadMoreSupplierPage',                          // 加载更多供应商列表
+  'getSupplierCommodityPage': serviceBaseUrl + '/supplier/getSupplierCommodityPage',                  // 获取供应商商品列表
+  'loadMoreSupplierCommodityPage': serviceBaseUrl + '/supplier/loadMoreSupplierCommodityPage',        // 加载跟多供应商商品列表
+  'getSupplierCommodityLatestPrice': serviceBaseUrl + '/supplier/getSupplierCommodityLatestPrice',    // 获取商品最新价格
+  'getSupplierOrderPage': serviceBaseUrl + '/supplier/getSupplierOrderPage',                          // 供应商订单确认收货
+  'supplierOrderConfirmReceipt': serviceBaseUrl + '/supplier/supplierOrderConfirmReceipt',            // 加载更多供应商列表
+  'applyForReturn': serviceBaseUrl + '/supplier/applyForReturn',                                      // 申请退货
+  'supplierUnifiedOrderWxPay': serviceBaseUrl + '/wxApi/supplierUnifiedOrderWxPay',                   // 供应商统一下单
 };

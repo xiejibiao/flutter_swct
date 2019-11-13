@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyrefresh/ball_pulse_footer.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_swcy/bloc/bloc_provider.dart';
 import 'package:flutter_swcy/bloc/person_page_bloc.dart';
@@ -7,7 +8,6 @@ import 'package:flutter_swcy/common/the_end_baseline.dart';
 import 'package:flutter_swcy/vo/person/person_team_list_vo.dart';
 
 class PersonTeamPageList extends StatelessWidget {
-  final GlobalKey<RefreshFooterState> _footerKey = GlobalKey<RefreshFooterState>();
   @override
   Widget build(BuildContext context) {
     final PersonPageBloc _bloc = BlocProvider.of<PersonPageBloc>(context);
@@ -17,36 +17,27 @@ class PersonTeamPageList extends StatelessWidget {
         stream: _bloc.personTeamListVoStream,
         builder: (context, sanpshop) {
           if (sanpshop.hasData) {
-            return EasyRefresh(
-              refreshFooter: ClassicsFooter(
-                key: _footerKey,
-                bgColor: Colors.blue[200],
-                textColor: Colors.white,
-                moreInfoColor: Colors.white,
-                showMore: true,
-                loadingText: '加载中...',
-                moreInfo: '上次加载 %T',
-                noMoreText: '加载完成...',
-                loadReadyText: '松手加载...',
-                loadText: '上拉加载更多...',
-              ),
-              child: ListView(
-                children: <Widget>[
-                  ListView.builder(
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    itemCount: _bloc.personTeamListVo.data.list.length,
-                    itemBuilder: (context, index) {
-                      return _buildItem(_bloc.personTeamListVo.data.list[index]);
-                    },
+            return EasyRefresh.custom(
+                footer: BallPulseFooter(
+                  enableHapticFeedback: true,
+                  enableInfiniteLoad: false
+                ),
+                slivers: <Widget>[
+                  SliverList(
+                    delegate: SliverChildBuilderDelegate((context, index) {
+                        return _buildItem(_bloc.personTeamListVo.data.list[index]);
+                      },
+                      childCount: _bloc.personTeamListVo.data.list.length,
+                    ),
                   ),
-                  _bloc.myTeamIsEnd ? TheEndBaseline() : Text('')
+                  SliverToBoxAdapter(
+                    child: _bloc.myTeamIsEnd ? TheEndBaseline() : Container(),
+                  )
                 ],
-              ),
-              loadMore: () {
-                return _bloc.getMyTeamLoadMore(context);
-              },
-            );
+                onLoad: () async {
+                  await _bloc.getMyTeamLoadMore(context);
+                }
+              );
           } else {
             return showLoading();
           }

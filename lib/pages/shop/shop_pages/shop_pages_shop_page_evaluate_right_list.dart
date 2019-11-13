@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyrefresh/ball_pulse_footer.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_swcy/bloc/bloc_provider.dart';
@@ -24,7 +25,6 @@ class ShopPagesShopPageEvaluateRightList extends StatelessWidget {
     this.isAdmin,
     this.commodityTypeListLength
   );
-  final GlobalKey<RefreshFooterState> _footerKey = GlobalKey<RefreshFooterState>();
   @override
   Widget build(BuildContext context) {
     final ShareShopPageBloc _shareShopPageBloc = BlocProvider.of<ShareShopPageBloc>(context);
@@ -51,50 +51,41 @@ class ShopPagesShopPageEvaluateRightList extends StatelessWidget {
                   child: ShopPageSearchDefaultPage(),
                 );
             } else {
-              return EasyRefresh(
-                refreshFooter: ClassicsFooter(
-                  key: _footerKey,
-                  bgColor: Colors.blue[200],
-                  textColor: Colors.white,
-                  moreInfoColor: Colors.white,
-                  showMore: true,
-                  loadingText: '加载中...',
-                  moreInfo: '上次加载 %T',
-                  noMoreText: '加载完成...',
-                  loadReadyText: '松手加载...',
-                  loadText: '上拉加载更多...',
+              return EasyRefresh.custom(
+                footer: BallPulseFooter(
+                  enableHapticFeedback: true,
+                  enableInfiniteLoad: false
                 ),
-                child: ListView(
-                  children: <Widget>[
-                    ListView.builder(
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: commodityPageByCommodityTypeVo.data.list.length,
-                      itemBuilder: (context, index) {
+                slivers: <Widget>[
+                  SliverList(
+                    delegate: SliverChildBuilderDelegate((context, index) {
                         return _buildGoodsItem(commodityPageByCommodityTypeVo.data.list[index], context, bloc, _shareShopPageBloc, _shareShopPageCommodityAdminBloc);
-                      }
+                      },
+                      childCount:commodityPageByCommodityTypeVo.data.list.length,
                     ),
-                    StreamBuilder(
+                  ),
+                  SliverToBoxAdapter(
+                    child: StreamBuilder(
                       initialData: false,
                       stream: bloc.isTheEndStream,
                       builder: (context, sanpshop) {
                         if (sanpshop.data) {
                           return Column(
                             children: <Widget>[
-                              isAdmin ? _buildAddCommodity(bloc, context) : Text(''),
+                              isAdmin ? _buildAddCommodity(bloc, context) : Container(),
                               TheEndBaseline()
                             ],
                           );
                         } else {
-                          return Text('');
+                          return Container();
                         }
                       },
-                    )
-                  ],
-                ),
-                loadMore: () {
-                  return bloc.loadMoreCommodityPageByCommodityTypeId();
-                },
+                    ),
+                  )
+                ],
+                onLoad: () async {
+                  await bloc.loadMoreCommodityPageByCommodityTypeId();
+                }
               );
             }
           }

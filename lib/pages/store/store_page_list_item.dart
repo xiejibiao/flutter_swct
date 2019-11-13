@@ -8,22 +8,14 @@ import 'package:flutter_swcy/vo/shop/news_get_page_store_vo.dart';
 
 class StorePageListItem extends StatelessWidget {
   final StoreMap storeMap;
-  StorePageListItem(
-    this.storeMap
-  );
+  StorePageListItem(this.storeMap);
   @override
   Widget build(BuildContext context) {
-    return CustomScrollView(
-      shrinkWrap: true,
-      physics: NeverScrollableScrollPhysics(),
-      slivers: <Widget>[
-        SliverSafeArea(
-          sliver: SliverPadding(
-            padding: EdgeInsets.all(8.0),
-            sliver: SliverListItem(storeMap.list),
-          ),
-        )
-      ],
+    return SliverSafeArea(
+      sliver: SliverPadding(
+        padding: EdgeInsets.all(8.0),
+        sliver: SliverListItem(storeMap.list),
+      ),
     );
   }
 }
@@ -36,7 +28,7 @@ class SliverListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverList(
-      delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
+      delegate: SliverChildBuilderDelegate((context, index) {
           return InkWell(
             child: Padding(
               padding: EdgeInsets.only(bottom: 22.0),
@@ -64,14 +56,19 @@ class SliverListItem extends StatelessWidget {
                           children: <Widget>[
                             Text(
                               _list[index].storeName,
-                              style: TextStyle(fontSize: ScreenUtil().setSp(60), color: Colors.white),
-                            ),
-                            _list[index].juli == null ? 
-                              Text('') :
-                              Text(
-                                '${_list[index].juli / 1000} 公里',
-                                style: TextStyle(fontSize: ScreenUtil().setSp(32), color: Colors.white),
+                              style: TextStyle(
+                                fontSize: ScreenUtil().setSp(60),
+                                color: Colors.white
                               ),
+                            ),
+                            _list[index].juli == null
+                                ? Text('')
+                                : Text(
+                                    '${_list[index].juli / 1000} 公里',
+                                    style: TextStyle(
+                                        fontSize: ScreenUtil().setSp(32),
+                                        color: Colors.white),
+                                  ),
                           ],
                         ),
                       ),

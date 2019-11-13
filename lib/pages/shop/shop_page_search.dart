@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyrefresh/ball_pulse_footer.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_swcy/common/the_end_baseline.dart';
 import 'package:flutter_swcy/pages/shop/shop_page_grid_view_item.dart';
@@ -21,7 +22,6 @@ class _ShopPageSearchState extends State<ShopPageSearch> {
   ShopListVo shopListVo;
   bool isTheEnd = false;
   final textEditingController = TextEditingController();
-  final GlobalKey<RefreshFooterState> _footerKey = GlobalKey<RefreshFooterState>();
 
   @override
   Widget build(BuildContext context) {
@@ -78,31 +78,22 @@ class _ShopPageSearchState extends State<ShopPageSearch> {
   }
 
   Widget _buildEasyRefresh() {
-    return EasyRefresh(
-      refreshFooter: ClassicsFooter(
-        key: _footerKey,
-        bgColor: Colors.blue[200],
-        textColor: Colors.white,
-        moreInfoColor: Colors.white,
-        showMore: true,
-        loadingText: '加载中...',
-        moreInfo: '上次加载 %T',
-        noMoreText: '加载完成...',
-        loadReadyText: '松手加载...',
-        loadText: '上拉加载更多...',
+    return EasyRefresh.custom(
+      footer: BallPulseFooter(
+        enableHapticFeedback: true,
+        enableInfiniteLoad: false
       ),
-      child: ListView(
-        children: <Widget>[
-          ShopPageGridViewItem(shopListVo.data.list),
-          isTheEnd ? TheEndBaseline() : Text('')
-        ],
-      ),
-      loadMore: () {
+      slivers: <Widget>[
+        ShopPageGridViewItem(shopListVo.data.list),
+        SliverToBoxAdapter(
+          child: isTheEnd ? TheEndBaseline() : Container()
+        )
+      ],
+      onLoad: () async {
         if ((shopListVo.data.pageNumber + 1) < shopListVo.data.totalPage) {
-          loadMoreShopPage(widget.latitude, widget.longitude, textEditingController.text);
+          await loadMoreShopPage(widget.latitude, widget.longitude, textEditingController.text);
         }
-        return;
-      },
+      }
     );
   }
 

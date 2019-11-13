@@ -1,6 +1,8 @@
 import 'package:common_utils/common_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyrefresh/ball_pulse_footer.dart';
+import 'package:flutter_easyrefresh/ball_pulse_header.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_swcy/bloc/bloc_provider.dart';
@@ -18,8 +20,6 @@ import 'package:flutter_swcy/pages/shop/shop_page_search_default_page.dart';
 import 'package:flutter_swcy/vo/shop/my_store_page_vo.dart';
 
 class ShareShopPage extends StatelessWidget {
-  final GlobalKey<RefreshFooterState> _footerKey = GlobalKey<RefreshFooterState>();
-  final GlobalKey<RefreshHeaderState> _refreshHeaderStateKey = GlobalKey<RefreshHeaderState>();
   @override
   Widget build(BuildContext context) {
     final ShareShopPageBloc _bloc = BlocProvider.of<ShareShopPageBloc>(context);
@@ -48,43 +48,29 @@ class ShareShopPage extends StatelessWidget {
             if (myStorePageVo.data.list.length <= 0) {
               return ShopPageSearchDefaultPage(); 
             } else {
-              return EasyRefresh(
-                refreshFooter: ClassicsFooter(
-                  key: _footerKey,
-                  bgColor: Colors.blue[200],
-                  textColor: Colors.white,
-                  moreInfoColor: Colors.white,
-                  showMore: true,
-                  loadingText: '加载中...',
-                  moreInfo: '上次加载 %T',
-                  noMoreText: '加载完成...',
-                  loadReadyText: '松手加载...',
-                  loadText: '上拉加载更多...',
-                  loadedText: '加载完成'
+              return EasyRefresh.custom(
+                header: BallPulseHeader(),
+                footer: BallPulseFooter(
+                  enableHapticFeedback: true,
+                  enableInfiniteLoad: false
                 ),
-                refreshHeader: ClassicsHeader(
-                  key: _refreshHeaderStateKey,
-                  bgColor: Colors.blue[200],
-                  textColor: Colors.white,
-                  moreInfoColor: Colors.white,
-                  showMore: true,
-                  moreInfo: '上次刷新 %T',
-                  refreshText: '加载中...',
-                  refreshReadyText: '松手刷新...',
-                  refreshingText: '刷新完成...',
-                  refreshedText: '刷新完成...',
-                ),
-                child: ListView(
-                  children: <Widget>[
-                    _buildStoreItem(myStorePageVo, _bloc, _shopPagesBloc, _shareShopPageCommodityAdminBloc),
-                    _bloc.isEnd ? TheEndBaseline() : Text('')
-                  ],
-                ),
-                loadMore: () {
-                  return _bloc.getMyStorePageLoadMore(context);
+                slivers: <Widget>[
+                  SliverList(
+                    delegate: SliverChildBuilderDelegate((context, index) {
+                        return _buildStoreItem(myStorePageVo.data.list[index], _bloc, _shopPagesBloc, _shareShopPageCommodityAdminBloc, context);
+                      },
+                      childCount: myStorePageVo.data.list.length,
+                    ),
+                  ),
+                  SliverToBoxAdapter(
+                    child: _bloc.isEnd ? TheEndBaseline() : Container(),
+                  )
+                ],
+                onLoad: () async {
+                  await _bloc.getMyStorePageLoadMore(context);
                 },
-                onRefresh: () {
-                  return _bloc.getMyStorePage(context);
+                onRefresh: () async {
+                  await _bloc.getMyStorePage(context);
                 },
               );
             }
@@ -94,61 +80,54 @@ class ShareShopPage extends StatelessWidget {
     );
   }
 
-  Widget _buildStoreItem(MyStorePageVo myStorePageVo, ShareShopPageBloc bloc, ShopPagesBloc shopPagesBloc, ShareShopPageCommodityAdminBloc shareShopPageCommodityAdminBloc) {
-    return ListView.builder(
-      shrinkWrap: true,
-      physics: NeverScrollableScrollPhysics(),
-      itemCount: myStorePageVo.data.list.length,
-      itemBuilder: (context, index) {
-        return InkWell(
-          onTap: () {
-            shareShopPageCommodityAdminBloc.getItems(myStorePageVo.data.list[index].description);
-            Navigator.push(context, CupertinoPageRoute(builder: (context) => ShareShopPageCommodityDetail(myStorePageVo.data.list[index].description, myStorePageVo.data.list[index].id, shareShopPageCommodityAdminBloc, shopPagesBloc, true, bloc)));
-          },
+  Widget _buildStoreItem(MyStorePageItem myStorePageItem, ShareShopPageBloc bloc, ShopPagesBloc shopPagesBloc, ShareShopPageCommodityAdminBloc shareShopPageCommodityAdminBloc, BuildContext context) {
+    return InkWell(
+      onTap: () {
+        shareShopPageCommodityAdminBloc.getItems(myStorePageItem.description);
+        Navigator.push(context, CupertinoPageRoute(builder: (context) => ShareShopPageCommodityDetail(myStorePageItem.description, myStorePageItem.id, shareShopPageCommodityAdminBloc, shopPagesBloc, true, bloc)));
+      },
+      child: Container(
+        width: ScreenUtil().setWidth(750),
+        height: ScreenUtil().setHeight(200),
+        child: Card(
           child: Container(
-            width: ScreenUtil().setWidth(750),
-            height: ScreenUtil().setHeight(200),
-            child: Card(
-              child: Container(
-                padding: EdgeInsets.all(10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
+            padding: EdgeInsets.all(10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: Image.network(
+                    myStorePageItem.photo,
+                    fit: BoxFit.fill,
+                    width: ScreenUtil().setWidth(200),
+                    height: ScreenUtil().setWidth(200),
+                  ),
+                ),
+                SizedBox(width: ScreenUtil().setWidth(20)),
+                Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: Image.network(
-                        myStorePageVo.data.list[index].photo,
-                        fit: BoxFit.fill,
-                        width: ScreenUtil().setWidth(200),
-                        height: ScreenUtil().setWidth(200),
+                    Container(
+                      height: ScreenUtil().setHeight(70),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Text(myStorePageItem.storeName),
+                          Text(myStorePageItem.isChecked == 1 ? '持证上线' : '无证照上线'),
+                        ],
                       ),
                     ),
-                    SizedBox(width: ScreenUtil().setWidth(20)),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Container(
-                          height: ScreenUtil().setHeight(70),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Text(myStorePageVo.data.list[index].storeName),
-                              Text(myStorePageVo.data.list[index].isChecked == 1 ? '持证上线' : '无证照上线'),
-                            ],
-                          ),
-                        ),
-                        _buildButtom(myStorePageVo.data.list[index].isChecked, TextUtil.isEmpty(myStorePageVo.data.list[index].licenseCode) ? false : true, context, myStorePageVo.data.list[index], bloc, shopPagesBloc)
-                      ],
-                    )
+                    _buildButtom(myStorePageItem.isChecked, TextUtil.isEmpty(myStorePageItem.licenseCode) ? false : true, context, myStorePageItem, bloc, shopPagesBloc)
                   ],
-                ),
-              ),
+                )
+              ],
             ),
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 

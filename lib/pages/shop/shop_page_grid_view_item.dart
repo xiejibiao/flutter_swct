@@ -13,17 +13,11 @@ class ShopPageGridViewItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<StoreItem> _list = StoreItem().getStoreItemListFormShopDataList(_shopDataList);
-    return CustomScrollView(
-      shrinkWrap: true,
-      physics: NeverScrollableScrollPhysics(),
-      slivers: <Widget>[
-        SliverSafeArea(
-          sliver: SliverPadding(
-            padding: EdgeInsets.all(8.0),
-            sliver: SliverListItem(_list),
-          ),
-        )
-      ],
+    return SliverSafeArea(
+      sliver: SliverPadding(
+        padding: EdgeInsets.all(8.0),
+        sliver: SliverListItem(_list),
+      ),
     );
   }
 }
