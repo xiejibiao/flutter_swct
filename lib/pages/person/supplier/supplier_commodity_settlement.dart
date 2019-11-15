@@ -345,7 +345,7 @@ class SupplierCommoditySettlement extends StatelessWidget {
                           Text("商品单价： ￥${commodityInfoVos[index].price}"),
                         ],
                       ),
-                      Text("数量： ￥${commodityInfoVos[index].count}"),
+                      Text("数量： ${commodityInfoVos[index].count}"),
                     ],
                   ),
                 )
