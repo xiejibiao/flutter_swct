@@ -105,19 +105,24 @@ class ShopPagesBloc extends BlocBase {
     });
   }
 
-  loadMoreCommodityPageByCommodityTypeId() async {
+  loadMoreCommodityPageByCommodityTypeId(bool isAdmin) async {
     if ((pageNumber + 1) < commodityPageByCommodityTypeVo.data.totalPage) {
       pageNumber++;
       var formData = {
         'commodityTypeId': commodityTypeId,
         'pageNumber': pageNumber,
-        'pageSize': pageSize
+        'pageSize': pageSize,
+        'isAdmin': isAdmin
       };
       await requestPost('getCommodityPageByCommodityTypeId', formData: formData).then((data) {
         CommodityPageByCommodityTypeVo tempCommodityPageByCommodityTypeVo = CommodityPageByCommodityTypeVo.fromJson(data);
-        this.commodityPageByCommodityTypeVo.data.list.addAll(tempCommodityPageByCommodityTypeVo.data.list);
-        setIsTheEnd(commodityPageByCommodityTypeVo.data.totalPage);
-        _commodityPageByCommodityTypeVoSink.add(commodityPageByCommodityTypeVo);
+        if (tempCommodityPageByCommodityTypeVo.code == '200') {
+          this.commodityPageByCommodityTypeVo.data.list.addAll(tempCommodityPageByCommodityTypeVo.data.list);
+          setIsTheEnd(commodityPageByCommodityTypeVo.data.totalPage);
+          _commodityPageByCommodityTypeVoSink.add(commodityPageByCommodityTypeVo);
+        } else {
+          showToast(tempCommodityPageByCommodityTypeVo.message);
+        }
       });
     }
   }
@@ -417,6 +422,8 @@ class ShopPagesBloc extends BlocBase {
               if (item.delFlag == 1) {
                 carts[j]['delFlag'] = item.delFlag;
                 carts[j]['isCheck'] = false;
+              } else {
+                carts[j]['delFlag'] = item.delFlag;
               }
               break;
             }

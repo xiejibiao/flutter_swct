@@ -43,17 +43,13 @@ class ShopPagesShopPageShopingcar extends StatelessWidget {
                         return ShopPagesShopPageShopingcarItem(commodityInfoVo: commodityInfoVoList[index], shopPagesBloc: shopPagesBloc);
                       },
                     ) : ShopPageSearchDefaultPage(),
-                  Positioned(
-                    bottom: 0,
-                    left: 0,
-                    child: ShopPagesShopPageShopingcarBottom(id: id, shopName: shopName, shopPagesBloc: shopPagesBloc),
-                  )
                 ],
               ),
             );
           }
         },
       ),
+      bottomNavigationBar: ShopPagesShopPageShopingcarBottom(id: id, shopName: shopName, shopPagesBloc: shopPagesBloc),
     );
   }
 }

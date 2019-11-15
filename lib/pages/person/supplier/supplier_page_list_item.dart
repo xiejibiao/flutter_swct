@@ -1,5 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_swcy/bloc/bloc_provider.dart';
+import 'package:flutter_swcy/bloc/supplier_commodity_page_bloc.dart';
+import 'package:flutter_swcy/bloc/supplier_page_shoppingCar_bloc.dart';
+import 'package:flutter_swcy/pages/person/supplier/supplier_commodity_page.dart';
 import 'package:flutter_swcy/vo/supplier/get_supplier_page_vo.dart';
 
 class SupplierPageListItem extends StatelessWidget {
@@ -39,7 +44,7 @@ class SupplierPageListItem extends StatelessWidget {
                       Container(
                         width: ScreenUtil().setWidth(550),
                         child: Text(
-                          '${supplierInfoVo.name}1测试车按客户发卡机工行卡',
+                          '${supplierInfoVo.name}',
                           style: TextStyle(
                             fontSize: ScreenUtil().setSp(60),
                             color: Colors.white
@@ -56,7 +61,15 @@ class SupplierPageListItem extends StatelessWidget {
         ),
       ),
       onTap: () {
-        // Navigator.push(context, CupertinoPageRoute(builder: (context) => BlocProvider(bloc: ShopPagesBloc(), child: ShopPagesShopPage(_list[index].storeName, _list[index].id))));
+        Navigator.push(
+          context, 
+          CupertinoPageRoute(
+            builder: (context) => BlocProvider(
+              bloc: SupplierCommodityPageBloc(), 
+              child: BlocProvider(bloc: SupplierPageShoppingCarBloc(), child: SupplierCommodityPage(supplierInfoVo)) 
+            )
+          )
+        );
       },
     );
   }

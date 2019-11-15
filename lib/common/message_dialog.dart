@@ -3,12 +3,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class MessageDialog extends Dialog {
+  /// 中间展示部分
   final Widget widget;
+  /// 标题
   final String title;
+  /// 左侧按钮文字
   final String negativeText;
+  /// 右侧按钮文字
   final String positiveText;
+  /// 左侧按钮函数
   final Function onCloseEvent;
+  /// 右上角关闭函数（此函数不未null 时，右上角会展示关闭Icon）
   final Function onIconCloseEvent;
+  /// 右侧按钮函数
   final Function onPositivePressEvent;
 
   MessageDialog({

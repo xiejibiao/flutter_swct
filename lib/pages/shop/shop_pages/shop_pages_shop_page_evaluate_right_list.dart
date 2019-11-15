@@ -84,7 +84,7 @@ class ShopPagesShopPageEvaluateRightList extends StatelessWidget {
                   )
                 ],
                 onLoad: () async {
-                  await bloc.loadMoreCommodityPageByCommodityTypeId();
+                  await bloc.loadMoreCommodityPageByCommodityTypeId(isAdmin);
                 }
               );
             }

@@ -69,6 +69,8 @@ class ShopPagesShopPage extends StatelessWidget {
               ),
               bottomNavigationBar: BottomNavigationBar(
                 type: BottomNavigationBarType.fixed,
+                unselectedItemColor: Colors.blue,
+                unselectedFontSize: 14,
                 items: _getBottomNavigations(_bloc),
                 onTap: (index) {
                   switch (index) {
@@ -109,11 +111,11 @@ class ShopPagesShopPage extends StatelessWidget {
           stream: bloc.isFollowStream,
           initialData: false,
           builder: (context, sanpshop) {
-            return Row(
+            return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Icon(sanpshop.data ? Icons.star : Icons.star_border, color: sanpshop.data ? Colors.red : Colors.black),
-                Text(sanpshop.data ? '已收藏' : '收藏', style: TextStyle(color: Colors.black))
+                Icon(sanpshop.data ? Icons.star : Icons.star_border, color: sanpshop.data ? Colors.red : Colors.blue),
+                Text(sanpshop.data ? '已收藏' : '收藏', style: TextStyle(color: Colors.blue, fontSize: ScreenUtil().setSp(28)))
               ],
             );
           },
@@ -121,24 +123,41 @@ class ShopPagesShopPage extends StatelessWidget {
         title: Container()
       ),
       BottomNavigationBarItem(
-        icon: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+        title: Column(
           children: <Widget>[
-            Icon(Icons.place, color: Colors.black),
-            Text('地图', style: TextStyle(color: Colors.black))
+            ImageIcon(
+              AssetImage('assets/image_icon/icon_receiving_address.png'),
+              color: Colors.blue,
+            ),
+            Text(
+              '导航',
+              style: TextStyle(
+                fontSize: ScreenUtil().setSp(28)
+              )
+            )
           ],
         ),
-        title: Container()
+        icon: Container()
       ),
       BottomNavigationBarItem(
-        icon: Stack(
+        title: Stack(
           children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Icon(Icons.shopping_cart, color: Colors.black),
-                Text('购物车', style: TextStyle(color: Colors.black))
-              ],
+            Container(
+              width: ScreenUtil().setWidth(375),
+              child: Column(
+                children: <Widget>[
+                  ImageIcon(
+                    AssetImage('assets/image_icon/icon_shopping_car.png'),
+                    color: Colors.blue,
+                  ),
+                  Text(
+                    '购物车',
+                    style: TextStyle(
+                      fontSize: ScreenUtil().setSp(28)
+                    ),
+                  )
+                ],
+              ),
             ),
             StreamBuilder(
               initialData: 0,
@@ -146,20 +165,12 @@ class ShopPagesShopPage extends StatelessWidget {
               builder: (context, sanpshop) {
                 return Positioned(
                   top: 0,
-                  right: 10,
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 6, vertical: 3),
-                    decoration: BoxDecoration(
-                      color: Colors.blue,
-                      border: Border.all(width: 2, color: Colors.white),
-                      borderRadius: BorderRadius.circular(12.0)
-                    ),
-                    child: Text(
-                      '${sanpshop.data}',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: ScreenUtil().setSp(22)
-                      ),
+                  right: 35,
+                  child: Text(
+                    '${sanpshop.data}',
+                    style: TextStyle(
+                      color: Colors.red,
+                      fontSize: ScreenUtil().setSp(34)
                     ),
                   ),
                 );
@@ -167,7 +178,7 @@ class ShopPagesShopPage extends StatelessWidget {
             )
           ],
         ),
-        title: Container()
+        icon: Container()
       )
     ];
 

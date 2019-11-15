@@ -21,116 +21,109 @@ class ShopPagesShopPageShopingcarBottom extends StatelessWidget {
   );
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(5.0),
-      color: Colors.white,
-      child: Row(
-        children: <Widget>[
-          _selectAllBtn(shopPagesBloc),
-          _allPriceArea(shopPagesBloc),
-          _goButtom(shopPagesBloc)
-        ],
-      ),
-    );
-  }
-
-  Widget _selectAllBtn(ShopPagesBloc bloc) {
-    return StreamBuilder(
-      initialData: true,
-      stream: bloc.isAllCheckStream,
-      builder: (context, sanpshop) {
-        return Container(
-          width: ScreenUtil().setWidth(180),
-          child: Row(
-            children: <Widget>[
-              Checkbox(
-                value: sanpshop.data,
-                activeColor: Colors.blue,
-                onChanged: (val) {
-                  bloc.allCheckStateChange(val);
-                },
-              ),
-              Text('全选')
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _allPriceArea(ShopPagesBloc bloc) {
-    return Container(
-      padding: EdgeInsets.only(left: 10),
-      width: ScreenUtil().setWidth(370),
-      child: Row(
-        children: <Widget>[
-          Container(
-            alignment: Alignment.centerLeft,
-            width: ScreenUtil().setWidth(110),
-            child: Text(
-              '合计:',
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(36)
-              ),
-            ),
-          ),
-          StreamBuilder(
-            initialData: 0,
-            stream: bloc.allPriceStream,
-            builder: (context, sanpshop) {
-              return Container(
-                alignment: Alignment.centerLeft,
-                width: ScreenUtil().setWidth(230),
-                child: Text(
-                  '￥${sanpshop.data}',
-                  softWrap: false,
-                  overflow: TextOverflow.clip,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(36),
-                    color: Colors.red
+    return BottomAppBar(
+      child: Container(
+        width: ScreenUtil().setWidth(750),
+        height: ScreenUtil().setHeight(90),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Container(
+              width: ScreenUtil().setWidth(200),
+              child: Row(
+                children: <Widget>[
+                  StreamBuilder(
+                    stream: shopPagesBloc.isAllCheckStream,
+                    initialData: true,
+                    builder: (context, sanpshop) {
+                      return Checkbox(
+                        value: sanpshop.data,
+                        onChanged: (val) {
+                          shopPagesBloc.allCheckStateChange(val);
+                        },
+                      );
+                    },
                   ),
-                ),
-              );
-            },
-          )
-        ],
-      ),
-    );
-  }
-
-  Widget _goButtom(ShopPagesBloc bloc) {
-    return StreamBuilder(
-      initialData: 0,
-      stream: bloc.allCommodityCountStream,
-      builder: (context, sanpshop) {
-        return Container(
-          width: ScreenUtil().setWidth(180),
-          padding: EdgeInsets.only(left: 10.0),
-          child: InkWell(
-            onTap: () async {
-              if (sanpshop.data == 0) {
-                showToast('暂无可结算商品');
-              } else {
-                Navigator.push(context, CupertinoPageRoute(builder: (context) => BlocProvider(child: ShopPagesShopPageShopingcarSettlement(id: id, shopName: shopName, shopPagesBloc: bloc), bloc: PersonInfoReceivingAddressBloc())));
-              }
-            },
-            child: Container(
-              padding: EdgeInsets.all(10.0),
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: Colors.red,
-                borderRadius: BorderRadius.circular(3.0)
-              ),
-              child: Text(
-                '结算(${sanpshop.data})',
-                style: TextStyle(
-                  color: Colors.white
-                ),
+                  Text(
+                    '全选',
+                    style: TextStyle(
+                      fontSize: ScreenUtil().setSp(36),
+                      color: Colors.blue
+                    ),
+                  )
+                ],
               ),
             ),
-          ),
-        );
-      },
+            Container(
+              width: ScreenUtil().setWidth(340),
+              alignment: Alignment.centerLeft,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    '合计：',
+                    style: TextStyle(
+                      fontSize: ScreenUtil().setSp(36),
+                      color: Colors.blue
+                    ),
+                  ),
+                  StreamBuilder(
+                    initialData: 0.0,
+                    stream: shopPagesBloc.allPriceStream,
+                    builder: (context, sanpshop) {
+                      return Text(
+                        '￥${sanpshop.data}', 
+                        style: TextStyle(
+                          color: Colors.red,
+                          fontSize: ScreenUtil().setSp(36),
+                        ),
+                      );
+                    },
+                  )
+                ],
+              ),
+            ),
+            StreamBuilder(
+              initialData: 0,
+              stream: shopPagesBloc.allCommodityCountStream,
+              builder: (context, sanpshop) {
+                return Container(
+                  width: ScreenUtil().setWidth(210),
+                  padding: EdgeInsets.only(left: 10.0),
+                  child: InkWell(
+                    onTap: () async {
+                      if (sanpshop.data == 0) {
+                        showToast('请条挑选商品后再结算哦~~');
+                      } else {
+                        Navigator.push(context, CupertinoPageRoute(builder: (context) => BlocProvider(child: ShopPagesShopPageShopingcarSettlement(id: id, shopName: shopName, shopPagesBloc: shopPagesBloc), bloc: PersonInfoReceivingAddressBloc())));
+                      }
+                    },
+                    child: Container(
+                      alignment: Alignment.center,
+                      margin: EdgeInsets.only(right: 10),
+                      width: ScreenUtil().setWidth(210),
+                      height: ScreenUtil().setHeight(70),
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Colors.red
+                        ),
+                        color: Colors.red,
+                        borderRadius: BorderRadius.circular(3.0)
+                      ),
+                      child: Text(
+                        '结算:(${sanpshop.data})',
+                        style: TextStyle(
+                          color: Colors.white
+                        ),
+                      )
+                    ),
+                  ),
+                );
+              },
+            )
+          ],
+        ),
+      ),
     );
   }
 }

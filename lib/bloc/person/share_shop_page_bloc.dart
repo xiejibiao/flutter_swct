@@ -36,12 +36,12 @@ class ShareShopPageBloc extends BlocBase {
   Stream<Location> get locationStream => _locationController.stream;
 
   // 我的共享店列表
-  getMyStorePage(BuildContext context) async {
+  getMyStorePage(BuildContext context, {int pageSize}) async {
     await getToken().then((token) async {
       _pageNumber = 0;
       var formData = {
         'pageNumber': _pageNumber,
-        'pageSize': _pageSize
+        'pageSize': pageSize == null ? _pageSize : pageSize
       };
       await requestPost('getMyStorePage', formData: formData, context: context, token: token).then((val) {
         MyStorePageVo temp = MyStorePageVo.fromJson(val);

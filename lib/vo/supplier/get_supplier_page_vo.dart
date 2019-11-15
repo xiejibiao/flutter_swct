@@ -102,6 +102,7 @@ class SupplierInfoVo {
   String phone;
   int status;
   String logo;
+  String description;
 
   SupplierInfoVo(
       {this.id,
@@ -115,7 +116,8 @@ class SupplierInfoVo {
       this.areaName,
       this.phone,
       this.status,
-      this.logo});
+      this.logo,
+      this.description});
 
   SupplierInfoVo.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -130,6 +132,7 @@ class SupplierInfoVo {
     phone = json['phone'];
     status = json['status'];
     logo = json['logo'];
+    description = json['description'];
   }
 
   Map<String, dynamic> toJson() {
@@ -146,6 +149,7 @@ class SupplierInfoVo {
     data['phone'] = this.phone;
     data['status'] = this.status;
     data['logo'] = this.logo;
+    data['description'] = this.description;
     return data;
   }
 }

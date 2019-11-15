@@ -150,28 +150,28 @@ class PersonInfoReceivingAddressPage extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
-          InkWell(
-            onTap: () {
-              Navigator.push(context, CupertinoPageRoute(builder: (context) => BlocProvider(bloc: PersonInfoReceivingAddressBloc(), child: PersonInfoReceivingAddress(receivingAddress)))).then((val) {
-                bloc.getReceivingAddressListByUId(context);
-              });
-            },
-            child: Row(
-              children: <Widget>[
-                Image.asset(
-                  'assets/image_icon/icon_edit.png',
-                  width: ScreenUtil().setWidth(58),
-                  color: Colors.black38,
-                ),
-                Text(
-                  '修改',
-                  style: TextStyle(
-                    color: Colors.black38
-                  ),
-                )
-              ],
-            ),
-          ),
+          // InkWell(
+          //   onTap: () {
+          //     Navigator.push(context, CupertinoPageRoute(builder: (context) => BlocProvider(bloc: PersonInfoReceivingAddressBloc(), child: PersonInfoReceivingAddress(receivingAddress)))).then((val) {
+          //       bloc.getReceivingAddressListByUId(context);
+          //     });
+          //   },
+          //   child: Row(
+          //     children: <Widget>[
+          //       Image.asset(
+          //         'assets/image_icon/icon_edit.png',
+          //         width: ScreenUtil().setWidth(58),
+          //         color: Colors.black38,
+          //       ),
+          //       Text(
+          //         '修改',
+          //         style: TextStyle(
+          //           color: Colors.black38
+          //         ),
+          //       )
+          //     ],
+          //   ),
+          // ),
           SizedBox(
             width: ScreenUtil().setWidth(20),
           ),

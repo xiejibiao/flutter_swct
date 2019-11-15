@@ -30,54 +30,111 @@ class ShopPagesShopPageShopingcarSettlement extends StatelessWidget {
     _bloc.getReceivingAddressListByUId(context);
     shopPagesBloc.getShopingCarCommoditysByIsCheckFormTrue();
     ReceivingAddress receivingAddress;
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('结算'),
-      ),
-      body: StreamBuilder(
-        stream: _bloc.receivingAddressVoStream,
-        builder: (context, sanpshop) {
-          if (sanpshop.hasData) {
-            ReceivingAddressVo receivingAddressVo = sanpshop.data;
-            if (receivingAddressVo.data.length > 0) {
-              receivingAddress = receivingAddressVo.data[0];
-            }
-            return StreamBuilder(
-              stream: shopPagesBloc.settlementCommodityInfoVoListStream,
-              builder: (context, sanpshop) {
-                if (sanpshop.hasData) {
-                  Map<String, dynamic> map = sanpshop.data;
-                  double price = map['price'];
-                  return Stack(
+    return StreamBuilder(
+      stream: _bloc.receivingAddressVoStream,
+      builder: (context, sanpshop) {
+        if (!sanpshop.hasData) {
+          return Scaffold(
+            appBar: AppBar(
+              title: Text('结算'),
+            ),
+            body: showLoading(),
+          );
+        } else {
+          ReceivingAddressVo receivingAddressVo = sanpshop.data;
+          if (receivingAddressVo.data.length > 0) {
+            receivingAddress = receivingAddressVo.data[0];
+          }
+          return StreamBuilder(
+            stream: shopPagesBloc.settlementCommodityInfoVoListStream,
+            builder: (context, sanpshop) {
+              if (!sanpshop.hasData) {
+                return Scaffold(
+                  appBar: AppBar(
+                    title: Text('结算'),
+                  ),
+                  body: showLoading(),
+                );
+              } else {
+                Map<String, dynamic> map = sanpshop.data;
+                double price = map['price'];
+                return Scaffold(
+                  appBar: AppBar(
+                    title: Text('结算'),
+                  ),
+                  body: ListView(
                     children: <Widget>[
-                      ListView(
+                      receivingAddressVo.data.length > 0 ? 
+                        StreamBuilder(
+                          initialData: 0,
+                          stream: _bloc.receivingAddressIndexStream,
+                          builder: (context, sanpshop) {
+                            receivingAddress = receivingAddressVo.data[sanpshop.data];
+                            return _buildAddressCard(receivingAddressVo.data[sanpshop.data], context, _bloc);
+                          },
+                        ) : _buildAddAddressCard(context, _bloc),
+                      _buildShopAndCommodityInfoVoList(map['list']),
+                      _buildPayType(),
+                    ],
+                  ),
+                  bottomNavigationBar: BottomAppBar(
+                    child: Container(
+                      width: ScreenUtil().setWidth(750),
+                      height: ScreenUtil().setHeight(90),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
-                          receivingAddressVo.data.length > 0 ? 
-                            StreamBuilder(
-                              initialData: 0,
-                              stream: _bloc.receivingAddressIndexStream,
-                              builder: (context, sanpshop) {
-                                receivingAddress = receivingAddressVo.data[sanpshop.data];
-                                return _buildAddressCard(receivingAddressVo.data[sanpshop.data], context, _bloc);
-                              },
-                            ) : _buildAddAddressCard(context, _bloc),
-                          _buildShopAndCommodityInfoVoList(map['list']),
-                          _buildPayType(),
+                          Container(
+                            margin: EdgeInsets.only(left: 10.0),
+                            child: Text(
+                              '￥$price', 
+                              style: TextStyle(
+                                color: Colors.red,
+                                fontSize: ScreenUtil().setSp(36),
+                              ),
+                            ),
+                          ),
+                          InkWell(
+                            onTap: () {
+                              if (receivingAddress == null) {
+                                showToast('请添加收货地址');
+                                return;
+                              }
+                              // _bloc.supplierWxPayListen(context);
+                              // _bloc.supplierUnifiedOrderWxPay(context, receivingAddress.id);
+                              shopPagesBloc.wxPayListen(context);
+                              shopPagesBloc.wxPay(context, receivingAddress.id, id, map['list']);
+                            },
+                            child: Container(
+                              alignment: Alignment.center,
+                              margin: EdgeInsets.only(right: 10.0),
+                              width: ScreenUtil().setWidth(180),
+                              height: ScreenUtil().setHeight(70),
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Colors.red
+                                ),
+                                color: Colors.red,
+                                borderRadius: BorderRadius.circular(3.0)
+                              ),
+                              child: Text(
+                                '提交订单',
+                                style: TextStyle(
+                                  color: Colors.white
+                                ),
+                              )
+                            ),
+                          )
                         ],
                       ),
-                      _buildPriceAndPayButtom(price, shopPagesBloc, context, receivingAddress, id, map['list'])
-                    ],
-                  );
-                } else {
-                  return showLoading();
-                }
-              },
-            );
-          } else {
-            return showLoading();
-          }
-        },
-      )
+                    ),
+                  )
+                );
+              }
+            },
+          ); 
+        }
+      },
     );
   }
 
@@ -117,8 +174,10 @@ class ShopPagesShopPageShopingcarSettlement extends StatelessWidget {
         ),
         onTap: () {
           Navigator.push(context, CupertinoPageRoute(builder: (context) => BlocProvider(bloc: PersonInfoReceivingAddressBloc(), child: PersonInfoReceivingAddress(null)))).then((val) {
-            SaveReceivingAddressData saveReceivingAddressData = val;
-            personInfoReceivingAddressBloc.updateReceivingAddressList(saveReceivingAddressData);
+            if (val != null) {
+              SaveReceivingAddressData saveReceivingAddressData = val;
+              personInfoReceivingAddressBloc.updateReceivingAddressList(saveReceivingAddressData);
+            }
           });
         },
       ),
@@ -165,11 +224,14 @@ class ShopPagesShopPageShopingcarSettlement extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      Image.network(
-                        commodityInfoVos[index].cover,
-                        width: ScreenUtil().setWidth(100),
-                        height: ScreenUtil().setWidth(100),
-                        fit: BoxFit.fill,
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(8.0),
+                        child: Image.network(
+                          commodityInfoVos[index].cover,
+                          width: ScreenUtil().setWidth(100),
+                          height: ScreenUtil().setWidth(100),
+                          fit: BoxFit.cover,
+                        ),
                       ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -226,63 +288,6 @@ class ShopPagesShopPageShopingcarSettlement extends StatelessWidget {
             ),
           )
         ],
-      ),
-    );
-  }
-
-  // 支付金额，提交订单
-  Widget _buildPriceAndPayButtom(double price, ShopPagesBloc shopPagesBloc, BuildContext context, ReceivingAddress receivingAddress, int storeId, List map) {
-    return Positioned(
-      bottom: 0,
-      left: 0,
-      child: Container(
-        padding: EdgeInsets.symmetric(vertical: 10),
-        width: ScreenUtil().setWidth(750),
-        decoration: BoxDecoration(
-          color: Colors.white
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Padding(
-              padding: EdgeInsets.only(left: 20),
-              child: Text(
-                '￥$price',
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(32),
-                  color: Colors.red
-                )
-              ),
-            ),
-            InkWell(
-              onTap: () {
-                if (receivingAddress != null) {
-                  shopPagesBloc.wxPayListen(context);
-                  shopPagesBloc.wxPay(context, receivingAddress.id, storeId, map);
-                } else {
-                  showToast('请选择收货地址');
-                }
-              },
-              child: Container(
-                alignment: Alignment.center,
-                height: ScreenUtil().setHeight(90),
-                width: ScreenUtil().setWidth(250),
-                margin: EdgeInsets.only(right: 10),
-                decoration: BoxDecoration(
-                  color: Colors.red,
-                  borderRadius: BorderRadius.circular(6)
-                ),
-                child: Text(
-                  '提交订单',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: ScreenUtil().setSp(28)
-                  ),
-                ),
-              ),
-            )
-          ],
-        ),
       ),
     );
   }
