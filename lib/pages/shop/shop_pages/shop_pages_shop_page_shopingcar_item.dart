@@ -65,13 +65,14 @@ class ShopPagesShopPageShopingcarItem extends StatelessWidget {
 
   // 商品图片
   Widget _commodityCover() {
-    return Container(
-      width: ScreenUtil().setWidth(150),
-      padding: EdgeInsets.all(3.0),
-      decoration: BoxDecoration(
-        border: Border.all(width: 1, color: Colors.black26)
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(8.0),
+      child: Image.network(
+        commodityInfoVo.cover,
+        width: ScreenUtil().setWidth(150),
+        height: ScreenUtil().setWidth(150),
+        fit: BoxFit.cover,
       ),
-      child: Image.network(commodityInfoVo.cover),
     );
   }
 

@@ -33,7 +33,7 @@ class ShopPagesShopPageShopingcarCount extends StatelessWidget {
   Widget _reduceBtn(ShopPagesBloc bloc) {
     return InkWell(
       onTap: () {
-        if (commodityInfoVo.delFlag != 1) {
+        if (commodityInfoVo.count > 1) {
           bloc.increaseOrReduceOperation(id: commodityInfoVo.id, isIncrease: false);
         }
       },
