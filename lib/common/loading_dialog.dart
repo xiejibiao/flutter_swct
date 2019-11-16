@@ -4,11 +4,6 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 /// 加载中loading
 class LoadingDialog extends Dialog {
-  /// 提示文字
-  final String message;
-  LoadingDialog({
-    @required this.message
-  });
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -31,21 +26,8 @@ class LoadingDialog extends Dialog {
                   ),
                 ),
               ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  SpinKitCircle(color: Colors.blue),
-                  Padding(
-                    padding: const EdgeInsets.only(
-                      top: 20.0,
-                    ),
-                    child: Text(
-                      message,
-                      style: TextStyle(fontSize: ScreenUtil().setSp(28)),
-                    ),
-                  ),
-                ],
+              child: Center(
+                child: SpinKitCircle(color: Colors.blue),
               ),
             ),
           ),

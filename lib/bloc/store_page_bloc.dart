@@ -7,7 +7,7 @@ import 'package:rxdart/rxdart.dart';
 
 class StorePageBloc extends BlocBase {
 
-  bool _getLocationIsFirst = true;
+  bool getLocationIsFirst = true;
   // 定位
   BehaviorSubject<Location> _locationController = BehaviorSubject<Location>();
   Sink<Location> get _locationSink => _locationController.sink;
@@ -26,7 +26,7 @@ class StorePageBloc extends BlocBase {
 
   //  获取定位
   getLocation() async {
-    if (_getLocationIsFirst) {
+    if (getLocationIsFirst) {
       final options = LocationClientOptions(
                       isOnceLocation: true,
                       locatingWithReGeocode: true
@@ -34,7 +34,7 @@ class StorePageBloc extends BlocBase {
       if (await Permissions().requestPermission()) {
         var location = _amapLocation.getLocation(options);
         location.then((val) {
-          _getLocationIsFirst = false;
+          getLocationIsFirst = false;
           _locationSink.add(val);
           _newsGetPageStore(val.latitude.toString(), val.longitude.toString());
         });

@@ -17,7 +17,7 @@ import 'package:rxdart/rxdart.dart';
 
 class PersonPageBloc extends BlocBase {
 
-  bool _isFirst = true;
+  bool isFirst = true;
 
   // 我的
   BehaviorSubject<PersonVo> _personVoController = BehaviorSubject<PersonVo>();
@@ -75,13 +75,13 @@ class PersonPageBloc extends BlocBase {
 
   // 获取我的
   getPersonAndAdList(BuildContext context) {
-    if (_isFirst) {
+    if (isFirst) {
       return getToken().then((token) async {
-        print(token);
+        BlocProvider.of<PersonInfoPageBloc>(context).getPerson(context, token);
         return await requestPost('getPersonAndAdList', token: token, context: context).then((val) {
           PersonVo personVo = PersonVo.fromJson(val);
           _personVoSink.add(personVo);
-          this._isFirst = false;
+          this.isFirst = false;
           return personVo;
         });
       });

@@ -83,7 +83,7 @@ class LoginPageBloc extends BlocBase{
   initFluwxAuthListen(BuildContext context, PersonPagePhoneAuthenticationBloc pagePhoneAuthenticationBloc, PersonInfoPageBloc pageBloc) {
     fluwx.responseFromAuth.listen((data) {
       if (data.errCode == 0) {
-        Navigator.of(context).push(DialogRouter(LoadingDialog(message: '登录中')));
+        Navigator.of(context).push(DialogRouter(LoadingDialog()));
         login(context, data.code, pagePhoneAuthenticationBloc, pageBloc);
       }
     });

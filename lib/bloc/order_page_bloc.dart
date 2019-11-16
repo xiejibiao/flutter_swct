@@ -8,7 +8,7 @@ import 'package:oktoast/oktoast.dart';
 import 'package:rxdart/rxdart.dart';
 
 class OrderPageBloc extends BlocBase {
-  bool _isFirst = true;
+  bool isFirst = true;
   
   BehaviorSubject<OrderPageVo> _orderPageController = BehaviorSubject<OrderPageVo>();
   Sink<OrderPageVo> get _orderPageSink => _orderPageController.sink;
@@ -25,9 +25,9 @@ class OrderPageBloc extends BlocBase {
   
   getOrderPage(BuildContext context, bool isOnRefresh) async {
     if (isOnRefresh) {
-      _isFirst = isOnRefresh;
+      isFirst = isOnRefresh;
     }
-    if (_isFirst) {
+    if (isFirst) {
       return await getToken().then((token) async {
         this.pageNumber = 0;
         var formData = {
@@ -39,7 +39,7 @@ class OrderPageBloc extends BlocBase {
         _orderPageSink.add(orderPageVo);
         setIsEnd(orderPageVo.data.totalPage);
         this.orderPageVo = orderPageVo;
-        this._isFirst = false;
+        this.isFirst = false;
         return orderPageVo;
       });
     }

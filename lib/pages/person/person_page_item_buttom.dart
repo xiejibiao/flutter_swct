@@ -29,44 +29,46 @@ class PersonPageItemButtom extends StatelessWidget {
     return Wrap(
       spacing: 10.0,
       runSpacing: 10.0,
-      children: <Widget>[
-        _item(context, 'assets/image_icon/icon_shop.png', '我的共享店', BlocProvider(bloc: ShareShopPageBloc(), child: BlocProvider(bloc: ShopPagesBloc(), child: BlocProvider(bloc: ShareShopPageCommodityAdminBloc(), child: ShareShopPage()))), false),
-        _item(context, 'assets/image_icon/icon_supplier.png', '供应商', BlocProvider(bloc: SupplierPageBloc(), child: SupplierPage(),), notBusiness),
-        _item(context, 'assets/image_icon/icon_money1.png', '我的资产', PersonAssetsPage(), false),
-        _item(context, 'assets/image_icon/icon_team.png', '我的团队', PersonTeamPage(), false),
-        _item(context, 'assets/image_icon/icon_follow.png', '关注', BlocProvider(bloc: PersonFollowPageBloc(), child: PersonFollowPage()), false),
-        // _item(context, Icons.star, '地图测试', TestMyMap()),
-        _item(context, 'assets/image_icon/icon_achievement.png', '我的业绩', PersonAchievementPage(), false),
-        _item(context, 'assets/image_icon/icon_message.png', '消息', PersonSmsPage(), false),
-        _item(context, 'assets/image_icon/icon_opinion.png', '意见与建议', PersonComplaintsPage(), false),
-        _item(context, 'assets/image_icon/icon_about.png', '关于', PersonAboutPage(), false),
-      ],
+      children: _getItems(context),
     );
   }
 
-  Widget _item (BuildContext context, String iconPath, String title, Widget path, bool isShow) {
-    return Offstage(
-            offstage: isShow,
-            child: Container(
-              width: ScreenUtil().setWidth(200),
-              height: ScreenUtil().setWidth(200),
-              child: InkWell(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    ImageIcon(AssetImage(iconPath), color: Colors.blue, size: 40),
-                    Text(title, style: TextStyle( fontSize: ScreenUtil().setSp(26), color: Colors.black54))
-                  ],
-                ),
-                onTap: () {
-                  if (path == null) {
-                    showToast('请等待完善~~~~');
-                  } else {
-                    Navigator.push(context, CupertinoPageRoute(builder: (context) => path));
-                  }
-                },
-              ),
-            ),
-          );
+  List<Widget> _getItems(BuildContext context) {
+    List<Widget> _widgets = [];
+    _widgets.add(_item(context, 'assets/image_icon/icon_shop.png', '我的共享店', BlocProvider(bloc: ShareShopPageBloc(), child: BlocProvider(bloc: ShopPagesBloc(), child: BlocProvider(bloc: ShareShopPageCommodityAdminBloc(), child: ShareShopPage())))));
+    if (!notBusiness) {
+      _widgets.add(_item(context, 'assets/image_icon/icon_supplier.png', '供应商', BlocProvider(bloc: SupplierPageBloc(), child: SupplierPage(),)));
+    }
+    _widgets.add(_item(context, 'assets/image_icon/icon_money1.png', '我的资产', PersonAssetsPage()));
+    _widgets.add(_item(context, 'assets/image_icon/icon_team.png', '我的团队', PersonTeamPage()));
+    _widgets.add(_item(context, 'assets/image_icon/icon_follow.png', '关注', BlocProvider(bloc: PersonFollowPageBloc(), child: PersonFollowPage())));
+    _widgets.add(_item(context, 'assets/image_icon/icon_achievement.png', '我的业绩', PersonAchievementPage()));
+    _widgets.add(_item(context, 'assets/image_icon/icon_message.png', '消息', PersonSmsPage()));
+    _widgets.add(_item(context, 'assets/image_icon/icon_opinion.png', '意见与建议', PersonComplaintsPage()));
+    _widgets.add(_item(context, 'assets/image_icon/icon_about.png', '关于', PersonAboutPage()));
+    return _widgets;
+  }
+
+  Widget _item (BuildContext context, String iconPath, String title, Widget path) {
+    return Container(
+      width: ScreenUtil().setWidth(200),
+      height: ScreenUtil().setWidth(200),
+      child: InkWell(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            ImageIcon(AssetImage(iconPath), color: Colors.blue, size: 40),
+            Text(title, style: TextStyle( fontSize: ScreenUtil().setSp(26), color: Colors.black54))
+          ],
+        ),
+        onTap: () {
+          if (path == null) {
+            showToast('请等待完善~~~~');
+          } else {
+            Navigator.push(context, CupertinoPageRoute(builder: (context) => path));
+          }
+        },
+      ),
+    );
   }
 }
