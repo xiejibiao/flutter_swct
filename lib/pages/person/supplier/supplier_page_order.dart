@@ -8,8 +8,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_swcy/bloc/bloc_provider.dart';
 import 'package:flutter_swcy/bloc/supplier_page_order_bloc.dart';
 import 'package:flutter_swcy/common/loading.dart';
+import 'package:flutter_swcy/common/order_default_image.dart';
 import 'package:flutter_swcy/common/the_end_baseline.dart';
 import 'package:flutter_swcy/pages/person/supplier/supplier_page_order_detail.dart';
+import 'package:flutter_swcy/pages/shop/shop_page_search_default_page.dart';
 import 'package:flutter_swcy/vo/supplier/supplier_order_page_vo.dart';
 
 class SupplierPageOrder extends StatefulWidget {
@@ -37,31 +39,48 @@ class _SupplierPageOrderState extends State<SupplierPageOrder> {
             return showLoading();
           } else {
             SupplierOrderPageVo supplierOrderPageVo = sanpshop.data;
-            return EasyRefresh.custom(
-              header: BallPulseHeader(),
-              footer: BallPulseFooter(
-                enableHapticFeedback: true,
-                enableInfiniteLoad: false
-              ),
-              slivers: <Widget>[
-                SliverList(
-                  delegate: SliverChildBuilderDelegate((context, index) {
-                      return _buildItem(supplierOrderPageVo.data.list[index], _bloc, context);
-                    },
-                    childCount: supplierOrderPageVo.data.list.length,
+            if (supplierOrderPageVo.data.list.length == 0) {
+              return InkWell(
+                onTap: () {
+                  _bloc.getSupplierOrderPage(context);
+                },
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      OrderDefaultImage(),
+                      Text('点击刷新', style: TextStyle(color: Colors.grey))
+                    ],
                   ),
                 ),
-                SliverToBoxAdapter(
-                  child: (supplierOrderPageVo.data.pageNumber + 1) == supplierOrderPageVo.data.totalPage ? TheEndBaseline() : Container(),
-                )
-              ],
-              onLoad: () async {
-                await _bloc.loadMoreSupplierOrderPage(context);
-              },
-              onRefresh: () async {
-                await _bloc.getSupplierOrderPage(context);
-              },
-            );
+              );
+            } else {
+              return EasyRefresh.custom(
+                header: BallPulseHeader(),
+                footer: BallPulseFooter(
+                  enableHapticFeedback: true,
+                  enableInfiniteLoad: false
+                ),
+                slivers: <Widget>[
+                  SliverList(
+                    delegate: SliverChildBuilderDelegate((context, index) {
+                        return _buildItem(supplierOrderPageVo.data.list[index], _bloc, context);
+                      },
+                      childCount: supplierOrderPageVo.data.list.length,
+                    ),
+                  ),
+                  SliverToBoxAdapter(
+                    child: (supplierOrderPageVo.data.pageNumber + 1) == supplierOrderPageVo.data.totalPage ? TheEndBaseline() : Container(),
+                  )
+                ],
+                onLoad: () async {
+                  await _bloc.loadMoreSupplierOrderPage(context);
+                },
+                onRefresh: () async {
+                  await _bloc.getSupplierOrderPage(context);
+                },
+              );
+            }
           }
         },
       ),
