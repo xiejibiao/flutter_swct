@@ -69,6 +69,7 @@ class MyStorePageItem {
   int provinceId;
   int cityId;
   int areaId;
+
   int likeVolume;
   int createTime;
   String photo;
@@ -83,6 +84,8 @@ class MyStorePageItem {
   int isChecked;
   String reason;
   double area;
+  String phone;
+  int starCode;
 
   MyStorePageItem(
       {this.id,
@@ -109,7 +112,9 @@ class MyStorePageItem {
       this.legalPerson,
       this.isChecked,
       this.reason,
-      this.area});
+      this.area,
+      this.phone,
+      this.starCode});
 
   MyStorePageItem.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -137,6 +142,8 @@ class MyStorePageItem {
     isChecked = json['isChecked'];
     reason = json['reason'];
     area = json['area'];
+    phone = json['phone'];
+    starCode = json['starCode'];
   }
 
   Map<String, dynamic> toJson() {
@@ -166,6 +173,8 @@ class MyStorePageItem {
     data['isChecked'] = this.isChecked;
     data['reason'] = this.reason;
     data['area'] = this.area;
+    data['phone'] = this.phone;
+    data['starCode'] = this.starCode;
     return data;
   }
 }

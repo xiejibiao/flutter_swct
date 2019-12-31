@@ -33,7 +33,7 @@ class ShareShopPage extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.add, size: 32),
             onPressed: () {
-              Navigator.push(context, CupertinoPageRoute(builder: (context) => BlocProvider(child: ShareShopPageAdd(_bloc), bloc: ShareShopPageBloc())));
+              Navigator.push(context, CupertinoPageRoute(builder: (context) => BlocProvider(child: ShareShopPageAdd(_bloc, null), bloc: ShareShopPageBloc())));
             },
           )
         ],
@@ -85,6 +85,11 @@ class ShareShopPage extends StatelessWidget {
       onTap: () {
         shareShopPageCommodityAdminBloc.getItems(myStorePageItem.description);
         Navigator.push(context, CupertinoPageRoute(builder: (context) => ShareShopPageCommodityDetail(myStorePageItem.description, myStorePageItem.id, shareShopPageCommodityAdminBloc, shopPagesBloc, true, bloc)));
+      },
+      onLongPress: () {
+        Navigator.push(context, CupertinoPageRoute(builder: (context) => BlocProvider(child: ShareShopPageAdd(bloc, myStorePageItem), bloc: ShareShopPageBloc()))).then((data) {
+          bloc.resetStoreItem(data.data);
+        });
       },
       child: Container(
         width: ScreenUtil().setWidth(750),

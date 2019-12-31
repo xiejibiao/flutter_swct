@@ -29,7 +29,6 @@ class SupplierPageBloc extends BlocBase {
       'pageNumber': (pageNumber + 1),
       'pageSize': 10
     };
-    print(formData);
     requestPost('loadMoreSupplierPage', formData: formData).then((val) {
       InfoVoLgmnPage infoVoLgmnPage = InfoVoLgmnPage.fromJson(val['data']);
       _listSupplierPageVo.forEach((item) {

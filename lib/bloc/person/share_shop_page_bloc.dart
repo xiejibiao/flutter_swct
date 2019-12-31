@@ -207,7 +207,8 @@ class ShareShopPageBloc extends BlocBase {
       @required String lat,
       @required String lng,
       @required String phone,
-      @required int starCode
+      @required int starCode,
+      @required int id
     }) {
     bool validateFormData = _validateEssentialMsg(
       photo: photo, 
@@ -239,7 +240,8 @@ class ShareShopPageBloc extends BlocBase {
         lat: lat,
         lng: lng,
         phone: phone,
-        starCode: starCode
+        starCode: starCode,
+        id: id
       );
     }
   }
@@ -273,10 +275,12 @@ class ShareShopPageBloc extends BlocBase {
     @required String lat,
     @required String lng,
     @required String phone,
-    @required int starCode
+    @required int starCode,
+    @required int id,
   }) async {
     await getToken().then((token) async {
       var formData = {
+        'id': id,
         'address': address,
         'area': area,
         'areaName': areaName,
@@ -296,7 +300,7 @@ class ShareShopPageBloc extends BlocBase {
         AddStoreForunlicensedVo addStoreForunlicensedVo = AddStoreForunlicensedVo.fromJson(val);
         if (addStoreForunlicensedVo.code == '200') {
           showToast('上传成功');
-          Navigator.pop(context);
+          Navigator.pop(context, addStoreForunlicensedVo);
         } else {
           showToast('上传失败:${addStoreForunlicensedVo.message}');
         }
@@ -450,6 +454,10 @@ class ShareShopPageBloc extends BlocBase {
     });
   }
 
+  Future getSettingStars() {
+    return requestPost('getSettingStars');
+  }
+
   // 修改分享店详情后，重新修改分享店详情字段
   resetStoreDescription(String description, int id) {
     int editIndex = 0;
@@ -460,6 +468,48 @@ class ShareShopPageBloc extends BlocBase {
       }
     }
     _myStorePageVo.data.list[editIndex].description= description;
+    _myStorePageVoSink.add(_myStorePageVo);
+  }
+
+  /// 修改分享店后，重新修改分享店Item
+  resetStoreItem(AddStoreForunlicensed addStoreForunlicensed) {
+    int editIndex = 0;
+    for(int i = 0; i < _myStorePageVo.data.list.length; i++) {
+      if (_myStorePageVo.data.list[i].id == addStoreForunlicensed.id) {
+        editIndex = i;
+        break;
+      }
+    }
+    MyStorePageItem myStorePageItem = MyStorePageItem(
+      id: addStoreForunlicensed.id,
+      uid: addStoreForunlicensed.uid,
+      brandId: addStoreForunlicensed.brandId,
+      storeName: addStoreForunlicensed.storeName,
+      address: addStoreForunlicensed.address,
+      lat: addStoreForunlicensed.lat,
+      lng: addStoreForunlicensed.lng,
+      industryId: addStoreForunlicensed.industryId,
+      provinceId: addStoreForunlicensed.provinceId,
+      cityId: addStoreForunlicensed.cityId,
+      areaId: addStoreForunlicensed.areaId,
+      likeVolume: addStoreForunlicensed.likeVolume,
+      createTime: addStoreForunlicensed.createTime,
+      photo: addStoreForunlicensed.photo,
+      description: addStoreForunlicensed.description,
+      industryName: addStoreForunlicensed.industryName,
+      provinceName: addStoreForunlicensed.provinceName,
+      cityName: addStoreForunlicensed.cityName,
+      areaName: addStoreForunlicensed.areaName,
+      licenseCode: addStoreForunlicensed.licenseCode,
+      licensePhoto: addStoreForunlicensed.licensePhoto,
+      legalPerson: addStoreForunlicensed.legalPerson,
+      isChecked: addStoreForunlicensed.isChecked,
+      reason: addStoreForunlicensed.reason,
+      area: double.parse(addStoreForunlicensed.area.toString()),
+      phone: addStoreForunlicensed.phone,
+      starCode: addStoreForunlicensed.starCode
+    );
+    _myStorePageVo.data.list[editIndex]= myStorePageItem;
     _myStorePageVoSink.add(_myStorePageVo);
   }
 

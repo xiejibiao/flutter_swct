@@ -44,7 +44,6 @@ class SupplierCommodityPageBloc extends BlocBase {
         'pageNumber': pageNumber,
         'pageSize': 10
       }; 
-      print(formData);
       requestPost('loadMoreSupplierCommodityPage', formData: formData).then((val) {
         if (val['code'] == '200') {
           SupplierCommodityInfoVoLgmnPage supplierCommodityInfoVoLgmnPage = SupplierCommodityInfoVoLgmnPage.fromJson(val['data']);

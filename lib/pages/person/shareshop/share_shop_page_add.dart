@@ -9,13 +9,17 @@ import 'package:flutter_swcy/bloc/bloc_provider.dart';
 import 'package:flutter_swcy/bloc/person/share_shop_page_bloc.dart';
 import 'package:flutter_swcy/bloc/shop_page_bloc.dart';
 import 'package:flutter_swcy/pages/person/shareshop/selected_address.dart';
+import 'package:flutter_swcy/vo/shop/my_store_page_vo.dart';
+import 'package:flutter_swcy/vo/shop/star_setting_vo.dart';
 import 'package:flutter_swcy/vo/shop/store_industry_list_from_cache_vo.dart';
 import 'package:oktoast/oktoast.dart';
 
 class ShareShopPageAdd extends StatefulWidget {
   final ShareShopPageBloc bloc;
+  final MyStorePageItem myStorePageItem;
   ShareShopPageAdd(
-    this.bloc
+    this.bloc,
+    this.myStorePageItem
   );
   _ShareShopPageAddState createState() => _ShareShopPageAddState();
 }
@@ -25,6 +29,8 @@ class _ShareShopPageAddState extends State<ShareShopPageAdd> {
   List<StoreIndustryListFromCacheVo> _industryList = [];
   /// 省市区控制器
   final TextEditingController _provinceAndCityController = TextEditingController();
+  /// 详细地址控制器
+  final TextEditingController _addressController = TextEditingController();
   /// 行业控制器
   final TextEditingController _industryConroller = TextEditingController();
   /// 行业临时控制器
@@ -36,58 +42,58 @@ class _ShareShopPageAddState extends State<ShareShopPageAdd> {
   String _photo, _address, _provinceName, _cityName, _areaName, _industryName, _legalPerson, _name, _area, _lat, _lng, _phone;
   int _industryId, _industryIndex = 0, _starCode, _starCodeIndex = 0;
 
-  final _starCodeList = [
-    {
-      'id': 1,
-      'title': '1星共享'
-    },
-    {
-      'id': 2,
-      'title': '2星共享'
-    },
-    {
-      'id': 3,
-      'title': '3星共享'
-    },
-    {
-      'id': 4,
-      'title': '4星共享'
-    },
-    {
-      'id': 5,
-      'title': '5星共享'
-    },
-    {
-      'id': 6,
-      'title': '6星共享'
-    },
-    {
-      'id': 7,
-      'title': '7星共享'
-    },
-    {
-      'id': 8,
-      'title': '8星共享'
-    },
-    {
-      'id': 9,
-      'title': '9星共享'
-    },
-    {
-      'id': 10,
-      'title': '10星共享'
-    }
-  ];
+  StarSettingVo _starCodeList;
 
   @override
   void initState() { 
     super.initState();
     _initStoreIndustryListData();
+    _initStarSettingData();
+
+    if (widget.myStorePageItem != null) {
+      _photo = widget.myStorePageItem.photo;
+      _address = widget.myStorePageItem.address;
+      _provinceName = widget.myStorePageItem.provinceName;
+      _cityName = widget.myStorePageItem.cityName;
+      _areaName = widget.myStorePageItem.areaName;
+      _industryName = widget.myStorePageItem.industryName;
+      _legalPerson = widget.myStorePageItem.legalPerson;
+      _name = widget.myStorePageItem.storeName;
+      _area = widget.myStorePageItem.area.toString();
+      _lat = widget.myStorePageItem.lat;
+      _lng = widget.myStorePageItem.lng;
+      _phone = widget.myStorePageItem.phone;
+      _industryId = widget.myStorePageItem.industryId;
+      _starCode = widget.myStorePageItem.starCode;
+
+      _industryConroller.text = _industryName;
+      _provinceAndCityController.text = '$_provinceName$_cityName$_areaName';
+      _addressController.text = _address;
+      _industryTempConroller.text = '{"id": $_industryId, "name": "$_industryName"}';
+      _starCodeTempConroller.text = _starCode.toString();
+    }
   }
 
   _initStoreIndustryListData() async {
     await ShopPageBloc().getStoreIndustryListFromCache().then((data) {
       _industryList = data;
+      for (int i = 0; i < _industryList.length; i++) {
+        if (_industryList[i].id == _industryId) {
+          _industryIndex = i;
+        }
+      }
+    });
+  }
+
+  _initStarSettingData() async {
+    await widget.bloc.getSettingStars().then((data) {
+      _starCodeList = StarSettingVo.fromJson(data);
+      for (int i = 0; i < _starCodeList.data.length; i++) {
+        if (_starCodeList.data[i].starCode == _starCode) {
+          _starCodeIndex = i;
+          _starCodeConroller.text = _starCodeList.data[i].name;
+        }
+      }
     });
   }
 
@@ -110,6 +116,7 @@ class _ShareShopPageAddState extends State<ShareShopPageAdd> {
                   children: <Widget>[
                     _buildPhoto(_newBloc),
                     TextFormField(
+                      initialValue: _name,
                       decoration: InputDecoration(
                         labelText: '仓店名称'
                       ),
@@ -118,6 +125,7 @@ class _ShareShopPageAddState extends State<ShareShopPageAdd> {
                       },
                     ),
                     TextFormField(
+                      initialValue: _legalPerson,
                       decoration: InputDecoration(
                         labelText: '仓店法人'
                       ),
@@ -128,36 +136,42 @@ class _ShareShopPageAddState extends State<ShareShopPageAdd> {
                     InkWell(
                       onTap: () {
                         Navigator.push(context, CupertinoPageRoute(builder: (context) => BlocProvider(bloc: ShareShopPageBloc(), child: SelectedAddress()))).then((addressMsg) {
+                         if (addressMsg != null) {
                           _provinceName = addressMsg['provinceName'];
                           _cityName = addressMsg['cityName'];
                           _areaName = addressMsg['adName'];
                           _address = addressMsg['snippet'];
                           _lat = addressMsg['lat'].toString();
                           _lng = addressMsg['lng'].toString();
-                          _provinceAndCityController.text = '$_provinceName$_cityName$_areaName$_address';
+                          _provinceAndCityController.text = '$_provinceName$_cityName$_areaName';
+                          _addressController.text = _address;
+                         }
                         });
                       },
                       child: TextFormField(
                         controller: _provinceAndCityController,
                         enabled: false,
                         decoration: InputDecoration(
-                          labelText: '仓店地址'
+                          labelText: '省/市/区'
                         ),
                       ),
                     ),
                     TextFormField(
+                      controller: _addressController,
+                      enabled: false,
                       decoration: InputDecoration(
-                        labelText: '门牌号'
+                        labelText: '详细地址'
                       ),
                       onSaved: (String value) {
                         if (TextUtil.isEmpty(value)) {
-                          showToast('请输入门牌号');
+                          showToast('请输详细地址');
                         } else {
-                          _address = '$_address$value';
+                          _address = '$value';
                         }
                       },
                     ),
                     TextFormField(
+                      initialValue: _area,
                       decoration: InputDecoration(
                         labelText: '仓店面积',
                         suffixIcon: Container(
@@ -175,6 +189,7 @@ class _ShareShopPageAddState extends State<ShareShopPageAdd> {
                       ],
                     ),
                     TextFormField(
+                      initialValue: _phone,
                       decoration: InputDecoration(
                         labelText: '联系电话'
                       ),
@@ -210,8 +225,8 @@ class _ShareShopPageAddState extends State<ShareShopPageAdd> {
                         ),
                       ),
                       onTap: () async {
-                        _starCodeConroller.text = _starCodeList[_starCodeIndex]['title'];
-                        _starCodeTempConroller.text = _starCodeList[_starCodeIndex]['id'].toString();
+                        _starCodeConroller.text = _starCodeList.data[_starCodeIndex].name;
+                        _starCodeTempConroller.text = _starCodeList.data[_starCodeIndex].starCode.toString();
                         showModalBottomSheet(
                           context: context,
                           builder: (BuildContext context){
@@ -234,32 +249,48 @@ class _ShareShopPageAddState extends State<ShareShopPageAdd> {
 
   // 门头照
   Widget _buildPhoto(ShareShopPageBloc bloc) {
-    return InkWell(
-      child: StreamBuilder(
-        stream: bloc.shorePhotoStream,
-        builder: (context, sanpshop) {
-          if (sanpshop.hasData) {
-            _photo = sanpshop.data;
-            return Image.network(
-              sanpshop.data, 
-              fit: BoxFit.fill,
-              width: ScreenUtil().setWidth(200),
-              height: ScreenUtil().setWidth(200),
-            );
-          } else {
-            return ImageIcon(
-              AssetImage(
-                'assets/image_icon/icon_camera.png',
-              ),
-              color: Colors.blue,
-              size: 113,
-            );
-          }
+    if (widget.myStorePageItem != null) {
+      return InkWell(
+        child: _buildImage(_photo),
+        onTap: () async {
+          await bloc.addCommodityGetShorePhoto();
         },
+      );
+    } else {
+      return InkWell(
+        child: StreamBuilder(
+          stream: bloc.shorePhotoStream,
+          builder: (context, sanpshop) {
+            if (sanpshop.hasData) {
+              _photo = sanpshop.data;
+              return _buildImage(sanpshop.data);
+            } else {
+              return ImageIcon(
+                AssetImage(
+                  'assets/image_icon/icon_camera.png',
+                ),
+                color: Colors.blue,
+                size: 113,
+              );
+            }
+          },
+        ),
+        onTap: () async {
+          await bloc.addCommodityGetShorePhoto();
+        },
+      );
+    }
+  }
+
+  _buildImage(String photo) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(8),
+        child: Image.network(
+        photo, 
+        fit: BoxFit.fill,
+        width: ScreenUtil().setWidth(200),
+        height: ScreenUtil().setWidth(200),
       ),
-      onTap: () async {
-        await bloc.addCommodityGetShorePhoto();
-      },
     );
   }
 
@@ -299,13 +330,13 @@ class _ShareShopPageAddState extends State<ShareShopPageAdd> {
           direction: SelectDirection.vertical,
           space: EdgeInsets.all(10),
           selectColor: Colors.blue,
-          items: _starCodeList.map((item) {
-            return SelectItem(label: item['title'], value: int.parse(item['id'].toString()));
+          items: _starCodeList.data.map((item) {
+            return SelectItem(label: item.name, value: int.parse(item.id.toString()));
           }).toList(),
           onSingleSelect: (int index){
             _starCodeIndex = index;
-            _starCodeConroller.text = _starCodeList[_starCodeIndex]['title'];
-            _starCodeTempConroller.text = _starCodeList[_starCodeIndex]['id'].toString();
+            _starCodeConroller.text = _starCodeList.data[_starCodeIndex].name;
+            _starCodeTempConroller.text = _starCodeList.data[_starCodeIndex].starCode.toString();
             Navigator.pop(context);
           },
         ),
@@ -349,7 +380,8 @@ class _ShareShopPageAddState extends State<ShareShopPageAdd> {
               _industryName = storeIndustryListFromCacheVo.name;
               _starCode = int.parse(_starCodeTempConroller.text);
               _formKey.currentState.save();
-              bloc.submitEssentialMsg(
+              if (widget.myStorePageItem == null) {
+                bloc.submitEssentialMsg(
                           context: context,
                           photo: _photo, 
                           address: _address, 
@@ -364,7 +396,27 @@ class _ShareShopPageAddState extends State<ShareShopPageAdd> {
                           lat: _lat,
                           lng: _lng,
                           starCode: _starCode,
-                          phone: _phone);
+                          phone: _phone,
+                          id: null);
+              } else {
+                bloc.submitEssentialMsg(
+                          context: context,
+                          photo: _photo, 
+                          address: _address, 
+                          provinceName: _provinceName, 
+                          cityName: _cityName, 
+                          areaName: _areaName, 
+                          industryName: _industryName, 
+                          legalPerson: _legalPerson,
+                          name: _name, 
+                          area: _area, 
+                          industryId: _industryId,
+                          lat: _lat,
+                          lng: _lng,
+                          starCode: _starCode,
+                          phone: _phone,
+                          id: widget.myStorePageItem.id);
+              }
             }
           },
         ),

@@ -276,7 +276,6 @@ class SupplierPageShoppingCarBloc extends BlocBase {
         'storeId': _myStorePageItem.id,
         'supplierId': _supplierId
       };
-      print(formData);
       requestPost('supplierUnifiedOrderWxPay', context: context, formData: formData, token: token).then((val){
         UnifiedOrderVo unifiedOrderVo = UnifiedOrderVo.fromJson(val);
         if (unifiedOrderVo.code == '200') {

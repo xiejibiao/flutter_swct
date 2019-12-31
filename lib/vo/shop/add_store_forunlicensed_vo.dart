@@ -1,14 +1,14 @@
 class AddStoreForunlicensedVo {
   String code;
   String message;
-  Data data;
+  AddStoreForunlicensed data;
 
   AddStoreForunlicensedVo({this.code, this.message, this.data});
 
   AddStoreForunlicensedVo.fromJson(Map<String, dynamic> json) {
     code = json['code'];
     message = json['message'];
-    data = json['data'] != null ? new Data.fromJson(json['data']) : null;
+    data = json['data'] != null ? new AddStoreForunlicensed.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -22,34 +22,36 @@ class AddStoreForunlicensedVo {
   }
 }
 
-class Data {
+class AddStoreForunlicensed {
   int id;
   String uid;
-  Null brandId;
+  int brandId;
   String storeName;
   String address;
   String lat;
   String lng;
   int industryId;
-  Null provinceId;
-  Null cityId;
-  Null areaId;
-  Null likeVolume;
+  int provinceId;
+  int cityId;
+  int areaId;
+  int likeVolume;
   int createTime;
   String photo;
-  Null description;
+  String description;
   String industryName;
   String provinceName;
   String cityName;
   String areaName;
-  Null licenseCode;
-  Null licensePhoto;
+  String licenseCode;
+  String licensePhoto;
   String legalPerson;
-  Null isChecked;
-  Null reason;
-  int area;
+  int isChecked;
+  String reason;
+  dynamic area;
+  String phone;
+  int starCode;
 
-  Data(
+  AddStoreForunlicensed(
       {this.id,
       this.uid,
       this.brandId,
@@ -74,9 +76,11 @@ class Data {
       this.legalPerson,
       this.isChecked,
       this.reason,
-      this.area});
+      this.area,
+      this.phone,
+      this.starCode});
 
-  Data.fromJson(Map<String, dynamic> json) {
+  AddStoreForunlicensed.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     uid = json['uid'];
     brandId = json['brandId'];
@@ -102,6 +106,8 @@ class Data {
     isChecked = json['isChecked'];
     reason = json['reason'];
     area = json['area'];
+    phone = json['phone'];
+    starCode = json['starCode'];
   }
 
   Map<String, dynamic> toJson() {
@@ -131,6 +137,8 @@ class Data {
     data['isChecked'] = this.isChecked;
     data['reason'] = this.reason;
     data['area'] = this.area;
+    data['phone'] = this.phone;
+    data['starCode'] = this.starCode;
     return data;
   }
 }

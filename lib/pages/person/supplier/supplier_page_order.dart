@@ -11,7 +11,6 @@ import 'package:flutter_swcy/common/loading.dart';
 import 'package:flutter_swcy/common/order_default_image.dart';
 import 'package:flutter_swcy/common/the_end_baseline.dart';
 import 'package:flutter_swcy/pages/person/supplier/supplier_page_order_detail.dart';
-import 'package:flutter_swcy/pages/shop/shop_page_search_default_page.dart';
 import 'package:flutter_swcy/vo/supplier/supplier_order_page_vo.dart';
 
 class SupplierPageOrder extends StatefulWidget {

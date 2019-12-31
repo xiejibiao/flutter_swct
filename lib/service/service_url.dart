@@ -1,5 +1,5 @@
 // const serviceBaseUrl = 'http://192.168.1.127:8086';
-const serviceBaseUrl = 'http://192.168.2.110:8086';
+const serviceBaseUrl = 'http://192.168.192.110:8086';
 // const serviceBaseUrl = 'http://192.168.1.107:8086';
 const servicePath = {
   'login': serviceBaseUrl + '/account/login',                                                         // 登录
@@ -31,6 +31,7 @@ const servicePath = {
   'editStoreDescription': serviceBaseUrl + '/store/editStoreDescription',                             // 编辑门店详情
   'getMyFollowPage': serviceBaseUrl + '/store/getMyFollowPage',                                       // 获取我的关注门店列表
   'newsGetPageStore': serviceBaseUrl + '/store/newsGetPageStore',                                     // 获取门店类型 + 门店列表
+  'getShareStoreMsg': serviceBaseUrl + '/store/getShareStoreMsg',                                     // 获取共享店信息
   'getPersonAndAdList': serviceBaseUrl + '/person/getPersonAndAdList',                                // 获取基本信息与广告
   'upDateAvatar': serviceBaseUrl + '/person/upDateAvatar',                                            // 修改头像
   'getPersonInfo': serviceBaseUrl + '/person/getPersonInfo',                                          // 获取用户基本信息
@@ -67,4 +68,5 @@ const servicePath = {
   'supplierOrderConfirmReceipt': serviceBaseUrl + '/supplier/supplierOrderConfirmReceipt',            // 加载更多供应商列表
   'applyForReturn': serviceBaseUrl + '/supplier/applyForReturn',                                      // 申请退货
   'supplierUnifiedOrderWxPay': serviceBaseUrl + '/wxApi/supplierUnifiedOrderWxPay',                   // 供应商统一下单
+  'getSettingStars': serviceBaseUrl + '/setting/getSettingStars',                                     // 获取共享星级
 };
