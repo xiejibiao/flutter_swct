@@ -1,5 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_swcy/pages/swiper_page_detail.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 
 class SwiperPage extends StatelessWidget {
@@ -14,7 +16,7 @@ class SwiperPage extends StatelessWidget {
       child: Swiper(
         autoplay: true,
         onTap: (index) {
-          print('轮播点击：${list[index].id}');
+          Navigator.push(context, CupertinoPageRoute(builder: (context) => SwiperPageDetail(list[index].content)));
         },
         pagination: new SwiperPagination(
             builder: DotSwiperPaginationBuilder(

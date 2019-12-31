@@ -30,7 +30,7 @@ class HomeVo {
   int personPower;
   int score;
   List<HomeAdType0Vos> homeAdType0Vos;
-  List<HomeAdType1Vos> homeAdType1Vos;
+  List<HomeAdType0Vos> homeAdType1Vos;
 
   HomeVo(
       {this.id,
@@ -56,9 +56,9 @@ class HomeVo {
       });
     }
     if (json['homeAdType1Vos'] != null) {
-      homeAdType1Vos = new List<HomeAdType1Vos>();
+      homeAdType1Vos = new List<HomeAdType0Vos>();
       json['homeAdType1Vos'].forEach((v) {
-        homeAdType1Vos.add(new HomeAdType1Vos.fromJson(v));
+        homeAdType1Vos.add(new HomeAdType0Vos.fromJson(v));
       });
     }
   }
@@ -88,6 +88,7 @@ class HomeAdType0Vos {
   String title;
   String cover;
   int type;
+  String content;
 
   HomeAdType0Vos({this.id, this.title, this.cover, this.type});
 
@@ -96,6 +97,7 @@ class HomeAdType0Vos {
     title = json['title'];
     cover = json['cover'];
     type = json['type'];
+    content = json['content'];
   }
 
   Map<String, dynamic> toJson() {
@@ -103,32 +105,8 @@ class HomeAdType0Vos {
     data['id'] = this.id;
     data['title'] = this.title;
     data['cover'] = this.cover;
-    data['type'] = this.type;
-    return data;
-  }
-}
-
-class HomeAdType1Vos {
-  int id;
-  String title;
-  String cover;
-  int type;
-
-  HomeAdType1Vos({this.id, this.title, this.cover, this.type});
-
-  HomeAdType1Vos.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    title = json['title'];
-    cover = json['cover'];
-    type = json['type'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['title'] = this.title;
-    data['cover'] = this.cover;
-    data['type'] = this.type;
+    data['content'] = this.type;
+    data['type'] = this.content;
     return data;
   }
 }

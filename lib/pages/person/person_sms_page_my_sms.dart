@@ -7,6 +7,7 @@ import 'package:flutter_swcy/bloc/bloc_provider.dart';
 import 'package:flutter_swcy/bloc/person_page_bloc.dart';
 import 'package:flutter_swcy/common/loading.dart';
 import 'package:flutter_swcy/common/the_end_baseline.dart';
+import 'package:flutter_swcy/pages/person/person_sms_page_detail.dart';
 
 class PersonSmsPageMySms extends StatefulWidget {
   _PersonSmsPageMySmsState createState() => _PersonSmsPageMySmsState();
@@ -37,7 +38,7 @@ class _PersonSmsPageMySmsState extends State<PersonSmsPageMySms> {
                       return Card(
                         child: ListTile(
                           onTap: () {
-                            print('个人消息，点击了：${_bloc.mySmsVo.data.list[index].id}');
+                            Navigator.push(context, CupertinoPageRoute(builder: (context) => PersonSmsPageDetail(_bloc.mySmsVo.data.list[index].content)));
                           },
                           title: Text(_bloc.mySmsVo.data.list[index].title),
                           subtitle: Text(DateUtil.getDateStrByMs(_bloc.mySmsVo.data.list[index].createTime)),
