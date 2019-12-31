@@ -10,6 +10,7 @@ class OrderDetailsMsg extends StatelessWidget {
   );
   @override
   Widget build(BuildContext context) {
+    print(orderPageVo.payTime == null);
     return SizedBox(
       height: ScreenUtil().setHeight(300),
       width: ScreenUtil().setWidth(750),
@@ -21,7 +22,7 @@ class OrderDetailsMsg extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               _getStatusStr(orderPageVo.status),
-              Text('支付时间  ' + DateUtil.getDateStrByMs(orderPageVo.payTime)),
+              orderPageVo.payTime == null ? Text('支付时间  ') : Text('支付时间  ' + '${orderPageVo.payTime}' == null ? '' : DateUtil.getDateStrByMs(orderPageVo.payTime)),
               Text('支付方式  ${orderPageVo.payChannel}'),
               Text('交易单号  ${orderPageVo.payNum}'),
               Text('订单编号  ${orderPageVo.id}'),
