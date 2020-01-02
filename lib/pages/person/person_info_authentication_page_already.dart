@@ -30,7 +30,7 @@ class PersonInfoAuthenticationPageAlready extends StatelessWidget {
     return Column(
       children: <Widget>[
         _buildCard('assets/image_icon/icon_name.png', '姓名', authenticationMsg.name),
-        _buildCard('assets/image_icon/icon_phone.png', '手机号', authenticationMsg.phone),
+        // _buildCard('assets/image_icon/icon_phone.png', '手机号', authenticationMsg.phone),
         _buildCard('assets/image_icon/icon_id.png', '身份证号', authenticationMsg.idNum),
       ],
     );

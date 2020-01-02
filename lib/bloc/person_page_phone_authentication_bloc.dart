@@ -24,11 +24,11 @@ class PersonPagePhoneAuthenticationBloc extends BlocBase {
 
   TimerUtil mCountDownTimerUtil;
   initCountDown() {
-    mCountDownTimerUtil = TimerUtil(mInterval: 1000, mTotalTime: 5 * 1000);
+    mCountDownTimerUtil = TimerUtil(mInterval: 1000, mTotalTime: 60 * 1000);
     mCountDownTimerUtil.setOnTimerTickCallback((int tick) {
       double _tick = tick / 1000;
       if (_tick.toInt() == 0) {
-        mCountDownTimerUtil.setTotalTime(5 * 1000);
+        mCountDownTimerUtil.setTotalTime(60 * 1000);
         _timeStrSink.add('获取验证码');
         _isCountDownSink.add(false);
       } else {

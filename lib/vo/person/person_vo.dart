@@ -95,6 +95,7 @@ class HomeAdVo {
   String title;
   String cover;
   int type;
+  String content;
 
   HomeAdVo({this.id, this.title, this.cover, this.type});
 
@@ -103,6 +104,7 @@ class HomeAdVo {
     title = json['title'];
     cover = json['cover'];
     type = json['type'];
+    content = json['content'];
   }
 
   Map<String, dynamic> toJson() {
@@ -111,6 +113,7 @@ class HomeAdVo {
     data['title'] = this.title;
     data['cover'] = this.cover;
     data['type'] = this.type;
+    data['content'] = this.content;
     return data;
   }
 }

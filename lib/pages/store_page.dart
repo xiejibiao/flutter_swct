@@ -60,10 +60,13 @@ class _StorePageState extends State<StorePage> with TickerProviderStateMixin {
                     elevation: 0,
                   ),
                   body: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: <Widget>[
                       Container(
                         color: Colors.blue,
                         height: ScreenUtil().setHeight(76),
+                        width: ScreenUtil().setWidth(750),
+                        alignment: Alignment.center,
                         child: TabBar(
                           isScrollable: true,
                           indicatorColor: Colors.amber[100],

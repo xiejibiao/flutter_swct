@@ -41,7 +41,7 @@ class PersonInfoAuthenticationPageNot extends StatelessWidget {
         if (!RegexUtil.isZh(value) || value.length < 2 || value.length > 4) {
           return '姓名错误';
         } else {
-          return '';
+          return null;
         }
       },
       decoration: InputDecoration(
@@ -62,7 +62,7 @@ class PersonInfoAuthenticationPageNot extends StatelessWidget {
         if (!RegexUtil.isIDCard18(value)) {
           return '身份证号码错误';
         } else {
-          return '';
+          return null;
         }
       },
       decoration: InputDecoration(
@@ -78,13 +78,17 @@ class PersonInfoAuthenticationPageNot extends StatelessWidget {
       stream: bloc.authenticationLoadingStream,
       initialData: false,
       builder: (context, sanpshop) {
-        return FlatButton(
-          splashColor: Colors.white54,
-          highlightColor: Colors.blue,
-          color: Colors.blue,
-          padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
-          disabledColor: Colors.blue[300],
-          child: !sanpshop.data ? 
+        return InkWell(
+          onTap: sanpshop.data ? null : () => bloc.authentication(context, formKey),
+          child: Container(
+            width: ScreenUtil().setWidth(700),
+            height: ScreenUtil().setHeight(65),
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(100),
+              color: !sanpshop.data ? Colors.blue : Colors.blue[300],
+            ),
+            child: !sanpshop.data ? 
                   Text('确认提交', style: TextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(32)))
                   : Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -96,7 +100,7 @@ class PersonInfoAuthenticationPageNot extends StatelessWidget {
                         Text('提交中', style: TextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(32)))
                       ],
                     ),
-          onPressed: sanpshop.data ? null : () => bloc.authentication(context, formKey),
+          ),
         );
       },
     );

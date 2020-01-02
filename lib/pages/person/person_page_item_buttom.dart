@@ -42,7 +42,7 @@ class PersonPageItemButtom extends StatelessWidget {
     _widgets.add(_item(context, 'assets/image_icon/icon_money1.png', '我的资产', PersonAssetsPage()));
     _widgets.add(_item(context, 'assets/image_icon/icon_team.png', '我的团队', PersonTeamPage()));
     _widgets.add(_item(context, 'assets/image_icon/icon_follow.png', '关注', BlocProvider(bloc: PersonFollowPageBloc(), child: PersonFollowPage())));
-    _widgets.add(_item(context, 'assets/image_icon/icon_achievement.png', '我的业绩', PersonAchievementPage()));
+    // _widgets.add(_item(context, 'assets/image_icon/icon_achievement.png', '我的业绩', PersonAchievementPage()));
     _widgets.add(_item(context, 'assets/image_icon/icon_message.png', '消息', PersonSmsPage()));
     _widgets.add(_item(context, 'assets/image_icon/icon_opinion.png', '意见与建议', PersonComplaintsPage()));
     _widgets.add(_item(context, 'assets/image_icon/icon_about.png', '关于', PersonAboutPage()));
