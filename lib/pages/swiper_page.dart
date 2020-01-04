@@ -14,7 +14,8 @@ class SwiperPage extends StatelessWidget {
     return Container(
       height: ScreenUtil().setHeight(400),
       child: Swiper(
-        autoplay: true,
+        autoplay: list.length >= 2 ? true : false,
+        loop: list.length >= 2 ? true : false,
         onTap: (index) {
           Navigator.push(context, CupertinoPageRoute(builder: (context) => SwiperPageDetail(list[index].content)));
         },

@@ -42,7 +42,9 @@ class PersonAssetsPage extends StatelessWidget {
   Widget _myCard (String title, double money, String iconPath, Widget widget, BuildContext context) {
     return  InkWell(
       onTap: () {
-        Navigator.push(context, CupertinoPageRoute(builder: (context) => widget));
+        if (widget != null) {
+          Navigator.push(context, CupertinoPageRoute(builder: (context) => widget));
+        }
       },
       child: Card(
         child: Padding(

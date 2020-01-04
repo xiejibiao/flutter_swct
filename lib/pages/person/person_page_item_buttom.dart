@@ -8,7 +8,7 @@ import 'package:flutter_swcy/bloc/person/share_shop_page_commodity_admin_bloc.da
 import 'package:flutter_swcy/bloc/shop/shop_pages_bloc.dart';
 import 'package:flutter_swcy/bloc/supplier_page_bloc.dart';
 import 'package:flutter_swcy/pages/person/person_about_page.dart';
-import 'package:flutter_swcy/pages/person/person_achievement_page.dart';
+// import 'package:flutter_swcy/pages/person/person_achievement_page.dart';
 import 'package:flutter_swcy/pages/person/person_assets_page.dart';
 import 'package:flutter_swcy/pages/person/person_complaints_page.dart';
 import 'package:flutter_swcy/pages/person/person_follow_page.dart';

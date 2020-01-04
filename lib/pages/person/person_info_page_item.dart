@@ -5,7 +5,7 @@ import 'package:flutter_swcy/bloc/bloc_provider.dart';
 import 'package:flutter_swcy/bloc/person/person_info_receiving_address_bloc.dart';
 import 'package:flutter_swcy/pages/person/person_info_authentication_page.dart';
 import 'package:flutter_swcy/pages/person/person_info_edit_mailbox_page.dart';
-import 'package:flutter_swcy/pages/person/person_info_edit_password_page.dart';
+// import 'package:flutter_swcy/pages/person/person_info_edit_password_page.dart';
 import 'package:flutter_swcy/pages/person/person_info_receiving_address_page.dart';
 import 'package:flutter_swcy/pages/person/person_share_page.dart';
 import 'package:flutter_swcy/vo/person/person_info_vo.dart';

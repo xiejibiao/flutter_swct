@@ -34,7 +34,8 @@ class PersonSharePage extends StatelessWidget {
                         borderRadius: BorderRadius.circular(6),
                         child: Image.network(
                         personInfoVo.data.avatar,
-                        width: ScreenUtil().setHeight(160),
+                        width: ScreenUtil().setHeight(100),
+                        height: ScreenUtil().setHeight(100),
                       ),
                     ),
                   )
