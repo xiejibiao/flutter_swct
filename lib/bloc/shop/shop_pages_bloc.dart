@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:common_utils/common_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swcy/bloc/bloc_provider.dart';
+import 'package:flutter_swcy/common/dialog_router.dart';
+import 'package:flutter_swcy/common/loading_dialog.dart';
 import 'package:flutter_swcy/common/preference_utils.dart';
 import 'package:flutter_swcy/common/shared_preferences.dart';
 import 'package:flutter_swcy/service/service_method.dart';
@@ -462,8 +464,8 @@ class ShopPagesBloc extends BlocBase {
   List<int> _ids = [];
   /// 微信支付
   wxPay(BuildContext context, int addressId, int storeId, List list) {
+    Navigator.of(context).push(DialogRouter(LoadingDialog()));
     var map = {};
-    // LinkedHashMap map = new LinkedHashMap();
     for(int i = 0; i < list.length; i++) {
       map['${list[i].id}'] = list[i].count;
       _ids.add(list[i].id);
@@ -475,6 +477,7 @@ class ShopPagesBloc extends BlocBase {
         "storeId": storeId
       };
       requestPost('wxPay', formData: formData, context: context, token: token).then((val) {
+        Navigator.pop(context);
         UnifiedOrderVo unifiedOrderVo = UnifiedOrderVo.fromJson(val);
         if (unifiedOrderVo.code == '200') {
           double _timeStamp = (DateUtil.getNowDateMs()) / 1000;

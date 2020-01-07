@@ -1,7 +1,11 @@
 import 'package:common_utils/common_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_swcy/bloc/bloc_provider.dart';
+import 'package:flutter_swcy/bloc/home_page_bloc.dart';
 import 'package:flutter_swcy/bloc/index_page_bloc.dart';
+import 'package:flutter_swcy/bloc/order_page_bloc.dart';
+import 'package:flutter_swcy/bloc/person_page_bloc.dart';
+import 'package:flutter_swcy/bloc/store_page_bloc.dart';
 import 'package:flutter_swcy/common/shared_preferences.dart';
 import 'package:flutter_swcy/pages/index_page.dart';
 import 'package:flutter_swcy/service/service_method.dart';
@@ -81,6 +85,10 @@ class PersonPagePhoneAuthenticationBloc extends BlocBase {
         CommenVo commenVo = CommenVo.fromJson(val);
         if (commenVo.code == '200') {
           showToast('认证成功');
+          BlocProvider.of<HomePageBloc>(context).isFirst = true;
+          BlocProvider.of<StorePageBloc>(context).getLocationIsFirst = true;
+          BlocProvider.of<OrderPageBloc>(context).isFirst = true;
+          BlocProvider.of<PersonPageBloc>(context).isFirst = true;
           Navigator.pushAndRemoveUntil(context, CupertinoPageRoute(builder: (context) => BlocProvider(bloc: IndexPageBloc(), child: IndexPage())), (route) => route == null);
         } else {
           showToast(commenVo.message);

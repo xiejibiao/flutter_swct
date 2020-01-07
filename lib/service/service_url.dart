@@ -69,4 +69,5 @@ const servicePath = {
   'applyForReturn': serviceBaseUrl + '/supplier/applyForReturn',                                      // 申请退货
   'supplierUnifiedOrderWxPay': serviceBaseUrl + '/wxApi/supplierUnifiedOrderWxPay',                   // 供应商统一下单
   'getSettingStars': serviceBaseUrl + '/setting/getSettingStars',                                     // 获取共享星级
+  'commendQrcode': serviceBaseUrl + '/mp/commendQrcode',                                              // 获取分享码
 };

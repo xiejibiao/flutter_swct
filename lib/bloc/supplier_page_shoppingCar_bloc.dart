@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:common_utils/common_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swcy/bloc/bloc_provider.dart';
+import 'package:flutter_swcy/common/dialog_router.dart';
+import 'package:flutter_swcy/common/loading_dialog.dart';
 import 'package:flutter_swcy/common/preference_utils.dart';
 import 'package:flutter_swcy/common/shared_preferences.dart';
 import 'package:flutter_swcy/service/service_method.dart';
@@ -265,6 +267,7 @@ class SupplierPageShoppingCarBloc extends BlocBase {
 
   /// 供应商统一下单
   supplierUnifiedOrderWxPay(BuildContext context, int addressId) {
+    Navigator.of(context).push(DialogRouter(LoadingDialog()));
     getToken().then((token) {
       var tempIdAndCount = {};
       _tempCommodityInfoVos.forEach((item) {
@@ -277,6 +280,7 @@ class SupplierPageShoppingCarBloc extends BlocBase {
         'supplierId': _supplierId
       };
       requestPost('supplierUnifiedOrderWxPay', context: context, formData: formData, token: token).then((val){
+        Navigator.pop(context);
         UnifiedOrderVo unifiedOrderVo = UnifiedOrderVo.fromJson(val);
         if (unifiedOrderVo.code == '200') {
           double _timeStamp = (DateUtil.getNowDateMs()) / 1000;

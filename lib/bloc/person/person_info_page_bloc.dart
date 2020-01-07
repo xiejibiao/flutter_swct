@@ -44,6 +44,11 @@ class PersonInfoPageBloc extends BlocBase {
   Sink<String> get _newPasswordSink => _newPasswordController.sink;
   Stream<String> get newPasswordStream => _newPasswordController.stream;
 
+  /// 分享码
+  BehaviorSubject<String> _commendQrcodeStrController = BehaviorSubject<String>();
+  Sink<String> get _commendQrcodeStrSink => _commendQrcodeStrController.sink;
+  Stream<String> get commendQrcodeStrStream => _commendQrcodeStrController.stream;
+
   // 认证信息
   String name, idNo;
   bool authenticationLoading = false;
@@ -273,6 +278,15 @@ class PersonInfoPageBloc extends BlocBase {
     }
   }
 
+  commendQrcode(String uid) {
+    var formData = {
+      'uid': uid
+    };
+    requestPost('commendQrcode', formData: formData).then((val) {
+      _commendQrcodeStrSink.add(val);
+    });
+  }
+
   @override
   void dispose() {
     _personInfoVoController.close();
@@ -280,5 +294,6 @@ class PersonInfoPageBloc extends BlocBase {
     _newPasswordController.close();
     _authenticationMsgVoController.close();
     _authenticationLoadingController.close();
+    _commendQrcodeStrController.close();
   }
 }
