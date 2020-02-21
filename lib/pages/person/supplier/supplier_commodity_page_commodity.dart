@@ -5,9 +5,11 @@ import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_swcy/bloc/supplier_commodity_page_bloc.dart';
 import 'package:flutter_swcy/bloc/supplier_page_shoppingCar_bloc.dart';
+import 'package:flutter_swcy/common/message_dialog.dart';
 import 'package:flutter_swcy/common/the_end_baseline.dart';
 import 'package:flutter_swcy/pages/person/supplier/supplier_commodity_page_commodity_detail.dart';
 import 'package:flutter_swcy/pages/shop/shop_page_search_default_page.dart';
+import 'package:flutter_swcy/vo/shop/commodity_info_vo.dart';
 import 'package:flutter_swcy/vo/supplier/supplier_commodity_page_vo.dart';
 
 class SupplierCommodityPageCommodity extends StatelessWidget {
@@ -165,30 +167,27 @@ class SupplierCommodityPageCommodity extends StatelessWidget {
                                                       ),
                                                     ),
                                                   ),
-                                                  InkWell(
-                                                    onTap: () {
-                                                      _supplierPageShoppingCarBloc.saveCommodityToShoppingCar(
-                                                        id: _listSupplierCommodityPageVoData[sanpshop.data].lgmnPage.list[index].id,
-                                                        name: _listSupplierCommodityPageVoData[sanpshop.data].lgmnPage.list[index].name,
-                                                        count: 1,
-                                                        price: _listSupplierCommodityPageVoData[sanpshop.data].lgmnPage.list[index].retailPrice,
-                                                        cover: _listSupplierCommodityPageVoData[sanpshop.data].lgmnPage.list[index].cover
-                                                      );
-                                                    },
-                                                    child: Container(
-                                                      alignment: Alignment.center,
-                                                      padding: EdgeInsets.all(5.0),
-                                                      width: ScreenUtil().setWidth(160),
-                                                      decoration: BoxDecoration(
-                                                        color: Color.fromRGBO(255,218,68, 1.0),
-                                                        border: Border.all(
-                                                          color: Color.fromRGBO(255,218,68, 1.0)
-                                                        ),
-                                                        borderRadius: BorderRadius.circular(20.0)
-                                                      ),
-                                                      child: Text('加入购物车'),
-                                                    ),
-                                                  ),
+                                                  StreamBuilder(
+                                                    stream: _supplierPageShoppingCarBloc.commodityInfoVoListStream,
+                                                    builder: (context, cleanOrAddSanpshop) {
+                                                      if (cleanOrAddSanpshop.hasData && cleanOrAddSanpshop.data.length > 0) {
+                                                        return _buildCleanOrAddSupingCarItem(
+                                                                                              context, 
+                                                                                              _supplierPageShoppingCarBloc, 
+                                                                                              cleanOrAddSanpshop.data, 
+                                                                                              _listSupplierCommodityPageVoData[sanpshop.data].lgmnPage.list[index].id, 
+                                                                                              _listSupplierCommodityPageVoData[sanpshop.data].lgmnPage.list[index]);
+                                                      } else {
+                                                        return _buildAddSuppingCarItem(
+                                                          id: _listSupplierCommodityPageVoData[sanpshop.data].lgmnPage.list[index].id,
+                                                          name: _listSupplierCommodityPageVoData[sanpshop.data].lgmnPage.list[index].name,
+                                                          count: 1,
+                                                          price: _listSupplierCommodityPageVoData[sanpshop.data].lgmnPage.list[index].retailPrice,
+                                                          cover: _listSupplierCommodityPageVoData[sanpshop.data].lgmnPage.list[index].cover
+                                                        );
+                                                      }
+                                                    }
+                                                  )
                                                 ],
                                               ),
                                             )
@@ -214,6 +213,98 @@ class SupplierCommodityPageCommodity extends StatelessWidget {
                   ),
                 );
       },
+    );
+  }
+
+  /// 取消购买或加入购物车按钮
+  Widget _buildCleanOrAddSupingCarItem(BuildContext context, SupplierPageShoppingCarBloc bloc, List<CommodityInfoVo> commodityInfoVos, int id, SupplierCommodityInfoVo commodityList) {
+    Widget _widget;
+    for (int i = 0; i < commodityInfoVos.length; i++) {
+      if (commodityInfoVos[i].id == id) {
+        _widget = InkWell(
+          onTap: () {
+            showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (BuildContext context) {
+                return MessageDialog(
+                  widget: Text('确定要删除这1种商品吗？', style: TextStyle(fontSize: ScreenUtil().setSp(32))),
+                  onCloseEvent: () {
+                    Navigator.pop(context);
+                  },
+                  onPositivePressEvent: () {
+                    Navigator.pop(context);
+                    bloc.removeCarts(id: id);
+                  },
+                  negativeText: '取消',
+                  positiveText: '确认',
+                );
+              }
+            );
+          },
+          child: Container(
+            width: ScreenUtil().setWidth(160),
+            height: ScreenUtil().setHeight(45),
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: Color.fromRGBO(25, 190, 104, 1.0),
+              border: Border.all(
+                color: Color.fromRGBO(25, 190, 104, 1.0),
+              ),
+              borderRadius: BorderRadius.circular(20.0)
+            ),
+            child: Text(
+              '取消',
+              style: TextStyle(
+                color: Colors.white
+              ),
+            ),
+          )
+        );
+        break;
+      } else {
+        _widget = _buildAddSuppingCarItem(
+          id: commodityList.id,
+          name: commodityList.name,
+          price: commodityList.retailPrice,
+          cover: commodityList.cover,
+          count: 1
+        );
+      }
+    }
+    return _widget;
+  }
+
+  Widget _buildAddSuppingCarItem({
+      @required id, 
+      @required name, 
+      @required count, 
+      @required price, 
+      @required cover}
+  ) {
+    return InkWell(
+      onTap: () {
+        _supplierPageShoppingCarBloc.saveCommodityToShoppingCar(
+          id: id,
+          name: name,
+          count: 1,
+          price: price,
+          cover: cover
+        );
+      },
+      child: Container(
+        alignment: Alignment.center,
+        height: ScreenUtil().setHeight(45),
+        width: ScreenUtil().setWidth(160),
+        decoration: BoxDecoration(
+          color: Color.fromRGBO(255,218,68, 1.0),
+          border: Border.all(
+            color: Color.fromRGBO(255,218,68, 1.0)
+          ),
+          borderRadius: BorderRadius.circular(20.0)
+        ),
+        child: Text('加入购物车'),
+      ),
     );
   }
 }

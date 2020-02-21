@@ -14,6 +14,7 @@ import 'package:flutter_swcy/pages/person/shareshop/share_shop_page_commodity_ad
 import 'package:flutter_swcy/pages/person/shareshop/share_shop_page_commodity_detail.dart';
 import 'package:flutter_swcy/pages/shop/shop_page_search_default_page.dart';
 import 'package:flutter_swcy/pages/shop/shop_pages/shop_pages_shop_page_evaluate_details.dart';
+import 'package:flutter_swcy/vo/shop/commodity_info_vo.dart';
 import 'package:flutter_swcy/vo/shop/commodity_page_by_commodity_type_vo.dart';
 
 class ShopPagesShopPageEvaluateRightList extends StatelessWidget {
@@ -182,21 +183,15 @@ class ShopPagesShopPageEvaluateRightList extends StatelessWidget {
         ),
       );
     } else {
-      return InkWell(
-        onTap: () async {
-          await bloc.saveCommodityToShoppingCar(id: commodityList.id, name: commodityList.name, count: 1, price: commodityList.price, cover: commodityList.cover);
+      return StreamBuilder(
+        stream: bloc.commodityInfoVoListStream,
+        builder: (context, sanpshop) {
+          if (sanpshop.hasData && sanpshop.data.length > 0) {
+            return _buildCleanOrAddSupingCarItem(context, bloc, sanpshop.data, commodityList.id, commodityList);
+          } else {
+            return _addSupingCarItem(commodityList);
+          }
         },
-        child: Container(
-          padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
-          decoration: BoxDecoration(
-            color: Color.fromRGBO(255,218,68, 1.0),
-            border: Border.all(
-              color: Color.fromRGBO(255,218,68, 1.0)
-            ),
-            borderRadius: BorderRadius.circular(20.0)
-          ),
-          child: Text('加入购物车'),
-        ),
       );
     }
   }
@@ -292,6 +287,81 @@ class ShopPagesShopPageEvaluateRightList extends StatelessWidget {
           positiveText: '确认',
         );
       }
+    );
+  }
+
+  /// 取消购买或加入购物车按钮
+  Widget _buildCleanOrAddSupingCarItem(BuildContext context, ShopPagesBloc bloc, List<CommodityInfoVo> commodityInfoVos, int id, CommodityList commodityList) {
+    Widget _widget;
+    for (int i = 0; i < commodityInfoVos.length; i++) {
+      if (commodityInfoVos[i].id == id) {
+        _widget = InkWell(
+          onTap: () {
+            showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (BuildContext context) {
+                return MessageDialog(
+                  widget: Text('确定要删除这1种商品吗？', style: TextStyle(fontSize: ScreenUtil().setSp(32))),
+                  onCloseEvent: () {
+                    Navigator.pop(context);
+                  },
+                  onPositivePressEvent: () {
+                    Navigator.pop(context);
+                    bloc.removeCarts(id: id);
+                  },
+                  negativeText: '取消',
+                  positiveText: '确认',
+                );
+              }
+            );
+          },
+          child: Container(
+            width: ScreenUtil().setWidth(160),
+            height: ScreenUtil().setHeight(45),
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: Color.fromRGBO(25, 190, 104, 1.0),
+              border: Border.all(
+                color: Color.fromRGBO(25, 190, 104, 1.0),
+              ),
+              borderRadius: BorderRadius.circular(20.0)
+            ),
+            child: Text(
+              '取消',
+              style: TextStyle(
+                color: Colors.white
+              ),
+            ),
+          )
+        );
+        break;
+      } else {
+        _widget = _addSupingCarItem(commodityList);
+      }
+    }
+    return _widget;
+  }
+
+  /// 加入购物车
+  Widget _addSupingCarItem(CommodityList commodityList) {
+    return InkWell(
+      onTap: () async {
+        await bloc.saveCommodityToShoppingCar(id: commodityList.id, name: commodityList.name, count: 1, price: commodityList.price, cover: commodityList.cover);
+      },
+      child: Container(
+        width: ScreenUtil().setWidth(160),
+        height: ScreenUtil().setHeight(45),
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: Color.fromRGBO(255,218,68, 1.0),
+          border: Border.all(
+            color: Color.fromRGBO(255,218,68, 1.0)
+          ),
+          borderRadius: BorderRadius.circular(20.0)
+        ),
+        child: Text('加入购物车'),
+      )
     );
   }
 }

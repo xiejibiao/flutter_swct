@@ -9,7 +9,7 @@ import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:oktoast/oktoast.dart';
 
 class ImageUpload {
-  static const String QI_NIU_URI = 'http://qncdn.gdsdec.com/';
+  static const String QI_NIU_URI = 'http://qncdn.swcy.top/';
 
   /// 上传多个图片
   Future<List<String>> uploadImages({@required int maxImages, @required String selectionLimitReachedText}) async {

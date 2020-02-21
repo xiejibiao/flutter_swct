@@ -251,7 +251,18 @@ class _ShareShopPageAddState extends State<ShareShopPageAdd> {
   Widget _buildPhoto(ShareShopPageBloc bloc) {
     if (widget.myStorePageItem != null) {
       return InkWell(
-        child: _buildImage(_photo),
+        // child: _buildImage(_photo),
+        child: StreamBuilder(
+          stream: bloc.shorePhotoStream,
+          builder: (context, sanpshop) {
+            if (sanpshop.hasData) {
+              _photo = sanpshop.data;
+              return _buildImage(sanpshop.data);
+            } else {
+              return _buildImage(_photo);
+            }
+          },
+        ),
         onTap: () async {
           await bloc.addCommodityGetShorePhoto();
         },

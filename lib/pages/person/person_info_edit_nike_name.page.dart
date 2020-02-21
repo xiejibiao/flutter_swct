@@ -5,6 +5,7 @@ import 'package:flutter_swcy/common/loading.dart';
 import 'package:flutter_swcy/vo/person/person_info_vo.dart';
 
 class PersonInfoEditNikeNamePage extends StatelessWidget {
+  final TextEditingController _textEditingController = TextEditingController();
   final bool isInitNikeName;
   PersonInfoEditNikeNamePage(
     this.isInitNikeName
@@ -15,6 +16,19 @@ class PersonInfoEditNikeNamePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('修改昵称'),
+        actions: <Widget>[
+          FlatButton(
+            onPressed: () {
+              _bloc.upDateNikeName(context, _textEditingController.text, isInitNikeName);
+            }, 
+            child: Text(
+              '保存',
+              style: TextStyle(
+                color: Colors.white
+              ),
+            )
+          )
+        ],
       ),
       body: StreamBuilder(
         stream: _bloc.personInfoVoStream,
@@ -32,13 +46,15 @@ class PersonInfoEditNikeNamePage extends StatelessWidget {
 
   // 输入框
   Widget _bodyCard (BuildContext context, String nikeName, PersonInfoPageBloc bloc) {
+    _textEditingController.text = nikeName;
     return Padding(
       padding: EdgeInsets.all(10.0),
       child: TextFormField(
+        controller: _textEditingController,
         style: TextStyle(
           height: 1.2
         ),
-        initialValue: nikeName,
+        // initialValue: nikeName,
         autofocus: true,
         maxLength: 6,
         decoration: InputDecoration(

@@ -67,12 +67,16 @@ class HomeHeadTop extends StatelessWidget {
               SizedBox(
                 width: ScreenUtil().setWidth(10),
               ),
-              Text(
-                personInfoVo.data.nikeName,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(32)
+              Container(
+                width: ScreenUtil().setWidth(420),
+                child: Text(
+                  personInfoVo.data.nikeName,
+                  style: TextStyle(
+                    fontSize: ScreenUtil().setSp(32)
+                  ),
+                  overflow: TextOverflow.ellipsis,
                 ),
-              ),
+              )
             ],
           );
         } else {
