@@ -45,6 +45,17 @@ class PersonSharePage extends StatelessWidget {
                               height: ScreenUtil().setHeight(100),
                             ),
                           ),
+                        ),
+                        Positioned(
+                          child: Text(
+                            '扫一扫或长按二维码 ~ 关注公众号下载三维创业',
+                            style: TextStyle(
+                              color: Colors.red,
+                              fontSize: ScreenUtil().setSp(32)
+                            ),
+                          ),
+                          bottom: 160,
+                          left: 23,
                         )
                       ],
                     ),
