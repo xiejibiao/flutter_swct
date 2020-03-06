@@ -39,7 +39,8 @@ class PersonFollowPageBloc extends BlocBase {
               storeName: item.storeName,
               photo: item.photo,
               id: item.id,
-              lat: item.lat
+              lat: item.lat,
+              starCode: item.starCode
             );
             tempShopDataList.add(tempShopData);
           });
@@ -69,7 +70,8 @@ class PersonFollowPageBloc extends BlocBase {
                 storeName: item.storeName,
                 photo: item.photo,
                 id: item.id,
-                lat: item.lat
+                lat: item.lat,
+                starCode: item.starCode
               );
               tempShopDataList.add(tempShopData);
             });

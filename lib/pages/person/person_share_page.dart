@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_swcy/bloc/bloc_provider.dart';
@@ -27,38 +26,39 @@ class PersonSharePage extends StatelessWidget {
               stream: _bloc.commendQrcodeStrStream,
               builder: (context, commendQrcodeStrSanpshop) {
                 if (commendQrcodeStrSanpshop.hasData) {
-                  return Center(
-                    child: Stack(
-                      children: <Widget>[
-                        Center(
-                          child: FadeInImage.memoryNetwork(
-                            placeholder: kTransparentImage,
-                            image: commendQrcodeStrSanpshop.data,
-                          ),
-                        ),
-                        Center(
-                          child: ClipRRect(
-                              borderRadius: BorderRadius.circular(6),
-                              child: Image.network(
-                              personInfoVo.data.avatar,
-                              width: ScreenUtil().setHeight(100),
-                              height: ScreenUtil().setHeight(100),
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Container(
+                        child: Stack(
+                          children: <Widget>[
+                            FadeInImage.memoryNetwork(
+                              placeholder: kTransparentImage,
+                              image: commendQrcodeStrSanpshop.data,
                             ),
-                          ),
+                            Center(
+                              child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(6),
+                                  child: Image.network(
+                                  personInfoVo.data.avatar,
+                                  width: ScreenUtil().setHeight(100),
+                                  height: ScreenUtil().setHeight(100),
+                                ),
+                              ),
+                            )
+                          ],
                         ),
-                        Positioned(
-                          child: Text(
-                            '扫一扫或长按二维码 ~ 关注公众号下载三维创业',
-                            style: TextStyle(
-                              color: Colors.red,
-                              fontSize: ScreenUtil().setSp(32)
-                            ),
-                          ),
-                          bottom: 160,
-                          left: 23,
-                        )
-                      ],
-                    ),
+                        width: ScreenUtil().setWidth(750),
+                        height: ScreenUtil().setWidth(750),
+                      ),
+                      Text(
+                        '扫一扫或长按二维码 ~ 关注公众号下载三维创业',
+                        style: TextStyle(
+                          color: Colors.red,
+                          fontSize: ScreenUtil().setSp(32)
+                        ),
+                      )
+                    ],
                   );
                 } else {
                   return showLoading();

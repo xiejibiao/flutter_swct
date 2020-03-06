@@ -89,9 +89,9 @@ class StorePageListItem extends StatelessWidget {
 // }
 
 class SliverListItem extends StatelessWidget {
-  final List<StoreItem> _list;
+  final List<StoreItem> list;
   SliverListItem(
-    this._list
+    this.list
   );
   @override
   Widget build(BuildContext context) {
@@ -110,7 +110,7 @@ class SliverListItem extends StatelessWidget {
                       ClipRRect(
                         borderRadius: BorderRadius.circular(8.0),
                         child: Image.network(
-                          _list[index].photo,
+                          list[index].photo,
                           fit: BoxFit.fill,
                           height: ScreenUtil().setWidth(200),
                           width: ScreenUtil().setWidth(200),
@@ -120,7 +120,7 @@ class SliverListItem extends StatelessWidget {
                       Container(
                         width: ScreenUtil().setWidth(300),
                         child: Text(
-                          _list[index].storeName,
+                          list[index].storeName,
                           style: TextStyle(
                             fontSize: ScreenUtil().setSp(34),
                           ),
@@ -128,26 +128,58 @@ class SliverListItem extends StatelessWidget {
                         )
                       ),
                       SizedBox(width: ScreenUtil().setWidth(10)),
-                      _list[index].juli == null
-                              ? Text('')
-                              : Text(
-                                  '${_list[index].juli / 1000} 公里',
-                                  style: TextStyle(
-                                      fontSize: ScreenUtil().setSp(26),
-                                      color: Colors.grey,
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          list[index].juli == null
+                                  ? Text('')
+                                  : Text(
+                                      '${list[index].juli / 1000} 公里',
+                                      style: TextStyle(
+                                          fontSize: ScreenUtil().setSp(26),
+                                          color: Colors.grey,
+                                        ),
                                     ),
+                          Stack(
+                            children: <Widget> [
+                              Positioned(
+                                child: Text(
+                                  '${list[index].starCode}',
+                                  style: TextStyle(
+                                    color: Colors.blue,
+                                    fontSize: ScreenUtil().setSp(32)
+                                  )
                                 ),
+                                top: 10,
+                                right: 10,
+                              ),
+                              Container(
+                                alignment: Alignment.center,
+                                height: ScreenUtil().setHeight(100),
+                                width: ScreenUtil().setHeight(100),
+                                child: ImageIcon(
+                                  AssetImage(
+                                    'assets/image_icon/icon_store_share.png',
+                                  ),
+                                  size: 28,
+                                  color: Colors.blue,
+                                ),
+                              )
+                            ]
+                          )
+                        ],
+                      )
                     ]
                   ),
                 )
               ),
             ),
             onTap: () {
-              Navigator.push(context, CupertinoPageRoute(builder: (context) => BlocProvider(bloc: ShopPagesBloc(), child: ShopPagesShopPage(_list[index].storeName, _list[index].id))));
+              Navigator.push(context, CupertinoPageRoute(builder: (context) => BlocProvider(bloc: ShopPagesBloc(), child: ShopPagesShopPage(list[index].storeName, list[index].id))));
             },
           );
         },
-        childCount: _list.length,
+        childCount: list.length,
       ),
     );
   }

@@ -69,7 +69,7 @@ class PersonAboutPage extends StatelessWidget {
         Container(
           child: ListTile(
             title: Text('当前版本'),
-            trailing: Text('V_1.2.3'),
+            trailing: Text('V_1.2.4'),
           ),
           decoration: BoxDecoration (
             border: Border(
