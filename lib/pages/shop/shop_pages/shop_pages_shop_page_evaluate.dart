@@ -29,19 +29,21 @@ class _ShopPagesShopPageEvaluateState extends State<ShopPagesShopPageEvaluate> {
     return !widget.isAdmin ? 
             widget.commodityTypeList.length == 0 ? 
               ShopPageSearchDefaultPage() : 
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              Column(
                 children: <Widget>[
                   ShopPagesShopPageEvaluateLeftNavi(widget.commodityTypeList, widget.id, widget.bloc, widget.isAdmin),
-                  BlocProvider(bloc: ShareShopPageBloc(), child: BlocProvider(bloc: ShareShopPageCommodityAdminBloc(), child: ShopPagesShopPageEvaluateRightList(widget.bloc, widget.isAdmin, widget.commodityTypeList.length)))
+                  Expanded(
+                    child: BlocProvider(bloc: ShareShopPageBloc(), child: BlocProvider(bloc: ShareShopPageCommodityAdminBloc(), child: ShopPagesShopPageEvaluateRightList(widget.bloc, widget.isAdmin, widget.commodityTypeList.length)))
+                  )
                 ],
               ) : 
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                ShopPagesShopPageEvaluateLeftNavi(widget.commodityTypeList, widget.id, widget.bloc, widget.isAdmin),
-                BlocProvider(bloc: ShareShopPageBloc(), child: BlocProvider(bloc: ShareShopPageCommodityAdminBloc(), child: ShopPagesShopPageEvaluateRightList(widget.bloc, widget.isAdmin, widget.commodityTypeList.length)))
-              ],
-            );
+              Column(
+                children: <Widget>[
+                  ShopPagesShopPageEvaluateLeftNavi(widget.commodityTypeList, widget.id, widget.bloc, widget.isAdmin),
+                  Expanded(
+                    child: BlocProvider(bloc: ShareShopPageBloc(), child: BlocProvider(bloc: ShareShopPageCommodityAdminBloc(), child: ShopPagesShopPageEvaluateRightList(widget.bloc, widget.isAdmin, widget.commodityTypeList.length)))
+                  )
+                ],
+              );
   }
 }

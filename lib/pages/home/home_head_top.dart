@@ -37,8 +37,8 @@ class HomeHeadTop extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
             _buildGradeCard('个力', 'assets/image_icon/icon_person.png', homePageVo.data.personPower),
-            _buildGradeCard('团积分', 'assets/image_icon/icon_integral.png', homePageVo.data.groupPower),
-            _buildGradeCard('团力', 'assets/image_icon/icon_team.png', homePageVo.data.score),
+            _buildGradeCard('信用分', 'assets/image_icon/icon_credit.png', 0),
+            _buildGradeCard('团力', 'assets/image_icon/icon_team.png', homePageVo.data.groupPower),
           ],
         )
       ],

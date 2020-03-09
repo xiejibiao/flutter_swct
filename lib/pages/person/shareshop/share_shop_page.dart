@@ -88,7 +88,9 @@ class ShareShopPage extends StatelessWidget {
       },
       onLongPress: () {
         Navigator.push(context, CupertinoPageRoute(builder: (context) => BlocProvider(child: ShareShopPageAdd(bloc, myStorePageItem), bloc: ShareShopPageBloc()))).then((data) {
-          bloc.resetStoreItem(data.data);
+          if (data != null) {
+            bloc.resetStoreItem(data.data);
+          }
         });
       },
       child: Container(

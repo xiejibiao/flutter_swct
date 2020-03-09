@@ -64,6 +64,7 @@ class CommodityList {
   String cover;
   String detail;
   String specs;
+  int stock;
   double price;
   int status;
   int createTime;
@@ -76,6 +77,7 @@ class CommodityList {
       this.cover,
       this.detail,
       this.specs,
+      this.stock,
       this.price,
       this.status,
       this.createTime,
@@ -88,6 +90,7 @@ class CommodityList {
     cover = json['cover'];
     detail = json['detail'];
     specs = json['specs'];
+    stock = json['stock'];
     price = json['price'];
     status = json['status'];
     createTime = json['createTime'];
@@ -102,6 +105,7 @@ class CommodityList {
     data['cover'] = this.cover;
     data['detail'] = this.detail;
     data['specs'] = this.specs;
+    data['stock'] = this.stock;
     data['price'] = this.price;
     data['status'] = this.status;
     data['createTime'] = this.createTime;

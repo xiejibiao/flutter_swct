@@ -31,14 +31,14 @@ class ShopPagesShopPageEvaluateRightList extends StatelessWidget {
     final ShareShopPageBloc _shareShopPageBloc = BlocProvider.of<ShareShopPageBloc>(context);
     final ShareShopPageCommodityAdminBloc _shareShopPageCommodityAdminBloc = BlocProvider.of<ShareShopPageCommodityAdminBloc>(context);
     return Container(
-      width: ScreenUtil().setWidth(570),
+      width: ScreenUtil().setWidth(750),
       child: StreamBuilder(
         stream: bloc.commodityPageByCommodityTypeVoStream,
         builder: (context, sanpshop) {
           if (!sanpshop.hasData) {
             return commodityTypeListLength > 0 ?
             Container(
-              width: ScreenUtil().setWidth(570),
+              width: ScreenUtil().setWidth(750),
               child: showLoading(),
             ) :
             ShopPageSearchDefaultPage();
@@ -48,7 +48,7 @@ class ShopPagesShopPageEvaluateRightList extends StatelessWidget {
               return isAdmin ? 
                 _buildAddCommodity(bloc, context) : 
                 Container(
-                  width: ScreenUtil().setWidth(570),
+                  width: ScreenUtil().setWidth(750),
                   child: ShopPageSearchDefaultPage(),
                 );
             } else {
@@ -107,7 +107,7 @@ class ShopPagesShopPageEvaluateRightList extends StatelessWidget {
       },
       onLongPress: isAdmin ? () => _onLongPressShowDeleteAndEditDialog(context, shareShopPageBloc, commodityList, bloc) : null,
       child: Container(
-        height: ScreenUtil().setHeight(190),
+        height: ScreenUtil().setHeight(200),
         child: Card(
           color: commodityList.status == 0 ? Colors.grey[200] : Colors.white,
           child: Padding(
@@ -133,7 +133,7 @@ class ShopPagesShopPageEvaluateRightList extends StatelessWidget {
         ),
         SizedBox(width: ScreenUtil().setWidth(20.0)),
         Container(
-          width: ScreenUtil().setWidth(327),
+          width: ScreenUtil().setWidth(500),
           child: _buildGoodsItemGoodsMessage(commodityList, bloc, shareShopPageBloc),
         )
       ],
@@ -145,8 +145,35 @@ class ShopPagesShopPageEvaluateRightList extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Text(commodityList.name),
-        Text('规格: ${commodityList.specs}'),
+        Text(
+          commodityList.name,
+          style: TextStyle(
+            fontSize: ScreenUtil().setSp(32)
+          ),
+        ),
+        Text(
+          '规格: ${commodityList.specs}',
+          style: TextStyle(
+            color: Colors.grey
+          ),
+        ),
+        commodityList.stock == null ? 
+          Text('库存: 0',
+            style: TextStyle(
+              color: Colors.grey
+            )
+          ) :
+          commodityList.stock <= 0 ? 
+            Text('库存: 缺货',
+              style: TextStyle(
+                color: Colors.grey
+              )
+            ) :
+            Text('库存: ${commodityList.stock}',
+              style: TextStyle(
+                color: Colors.grey
+              )
+            ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
@@ -346,7 +373,7 @@ class ShopPagesShopPageEvaluateRightList extends StatelessWidget {
   /// 加入购物车
   Widget _addSupingCarItem(CommodityList commodityList) {
     return InkWell(
-      onTap: () async {
+      onTap: commodityList.stock == null || commodityList.stock < 1 ? null : () async {
         await bloc.saveCommodityToShoppingCar(id: commodityList.id, name: commodityList.name, count: 1, price: commodityList.price, cover: commodityList.cover);
       },
       child: Container(
@@ -354,13 +381,18 @@ class ShopPagesShopPageEvaluateRightList extends StatelessWidget {
         height: ScreenUtil().setHeight(45),
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: Color.fromRGBO(255,218,68, 1.0),
+          color: commodityList.stock == null || commodityList.stock < 1 ? Colors.grey : Color.fromRGBO(255,218,68, 1.0),
           border: Border.all(
-            color: Color.fromRGBO(255,218,68, 1.0)
+            color: commodityList.stock == null || commodityList.stock < 1 ? Colors.grey : Color.fromRGBO(255,218,68, 1.0)
           ),
           borderRadius: BorderRadius.circular(20.0)
         ),
-        child: Text('加入购物车'),
+        child: Text(
+          '加入购物车',
+          style: TextStyle(
+            color: commodityList.stock == null || commodityList.stock < 1 ? Colors.white : Colors.black
+          ),
+        ),
       )
     );
   }

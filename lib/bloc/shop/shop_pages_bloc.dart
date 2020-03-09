@@ -84,6 +84,9 @@ class ShopPagesBloc extends BlocBase {
         if (shopTypeAndEssentialMessageVo.data.commodityTypeList.length > 0) {
           commodityTypeId = shopTypeAndEssentialMessageVo.data.commodityTypeList[leftIndex].id;
           await getCommodityPageByCommodityTypeId(isAdmin);
+        } else {
+          setIsTheEnd(1);
+          _commodityPageByCommodityTypeVoSink.add(null);
         }
         _shopTypeAndEssentialMessageVoSink.add(shopTypeAndEssentialMessageVo);
       });
@@ -203,6 +206,9 @@ class ShopPagesBloc extends BlocBase {
 
   /// 添加商品成功后，添加对象到列表
   addCommodityToList(CommodityList commodityList) {
+    if (commodityPageByCommodityTypeVo.data.list.length < 10) {
+      _isTheEndController.add(true);
+    }
     commodityPageByCommodityTypeVo.data.list.add(commodityList);
     _commodityPageByCommodityTypeVoSink.add(commodityPageByCommodityTypeVo);
   }
@@ -461,14 +467,18 @@ class ShopPagesBloc extends BlocBase {
     _settlementCommodityInfoVoListSink.add(map);    
   }
   // ----------------------------------------------------------------------------------------------------------------------------
-  List<int> _ids = [];
+  List<int> _ids;
+  var tempMap;
   /// 微信支付
   wxPay(BuildContext context, int addressId, int storeId, List list) {
     Navigator.of(context).push(DialogRouter(LoadingDialog()));
     var map = {};
+    tempMap = {};
+    _ids = [];
     for(int i = 0; i < list.length; i++) {
       map['${list[i].id}'] = list[i].count;
       _ids.add(list[i].id);
+      tempMap['${list[i].id}'] = list[i].count;
     }
     getToken().then((token) {
       Map<String, dynamic> formData = {
@@ -508,7 +518,15 @@ class ShopPagesBloc extends BlocBase {
         showToast('支付成功');
         _ids.forEach((id) {
           removeCarts(id: id);
+          print(tempMap['$id']);
+          commodityPageByCommodityTypeVo.data.list.forEach((item) {
+            if (item.id == id) {
+              item.stock = item.stock - tempMap['$id'];
+            }
+          });
         });
+        _commodityPageByCommodityTypeVoSink.add(commodityPageByCommodityTypeVo);
+        _ids = [];
         Navigator.pop(context);
       } else if (data.errCode == -2) {
         showToast('取消支付');

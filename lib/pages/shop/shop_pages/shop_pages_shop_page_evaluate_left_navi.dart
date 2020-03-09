@@ -24,13 +24,16 @@ class ShopPagesShopPageEvaluateLeftNavi extends StatelessWidget {
       stream: bloc.leftIndexStream,
       builder: (context, sanpshop) {
         return Container(
-          width: ScreenUtil().setWidth(180),
+          alignment: Alignment.centerRight,
+          width: ScreenUtil().setWidth(750),
+          height: ScreenUtil().setHeight(80),
           decoration: BoxDecoration(
             border: Border(
               right: BorderSide(width: 1, color: Colors.black12)
             )
           ),
           child: ListView.builder(
+            scrollDirection: Axis.horizontal,
             itemCount: commodityTypeList.length + 1,
             itemBuilder: (context, index) {
               return _leftInkWellItem(index, commodityTypeList, bloc, commodityTypeList.length, context);
@@ -42,6 +45,12 @@ class ShopPagesShopPageEvaluateLeftNavi extends StatelessWidget {
   }
 
   Widget _leftInkWellItem (int index, List<CommodityTypeList> commodityTypeList, ShopPagesBloc bloc, int commodityTypeListLength, BuildContext context) {
+    double width;
+    if (commodityTypeList.length == 0) {
+      width = 750;
+    } else {
+      width = commodityTypeList.length >= 4 ? 200 : isAdmin ? 750 / (commodityTypeList.length + 1) : 750 / commodityTypeList.length;
+    }
     if (index == commodityTypeListLength) {
       return isAdmin ?
         InkWell(
@@ -51,12 +60,13 @@ class ShopPagesShopPageEvaluateLeftNavi extends StatelessWidget {
           },
           child: Container(
             alignment: Alignment.center,
-            height: ScreenUtil().setHeight(100),
+            width: ScreenUtil().setWidth(width),
             padding: EdgeInsets.only(left: 10),
             decoration: BoxDecoration(
               color: Colors.white,
               border: Border(
-                bottom: BorderSide(width: 1, color: Colors.black12)
+                bottom: BorderSide(width: 1, color: Colors.black12),
+                left: BorderSide(width: 1, color: Colors.black12),
               )
             ),
             child: Text(
@@ -78,13 +88,14 @@ class ShopPagesShopPageEvaluateLeftNavi extends StatelessWidget {
         },
         onLongPress: isAdmin ? () => _onLongPressShowDialog(context, bloc, commodityTypeList[index]) : null,
         child: Container(
-          alignment: Alignment.centerLeft,
-          height: ScreenUtil().setHeight(100),
+          alignment: Alignment.center,
+          width: ScreenUtil().setWidth(width),
           padding: EdgeInsets.only(left: 10),
           decoration: BoxDecoration(
             color: isSelected ? Colors.blue : Colors.white,
             border: Border(
-              bottom: BorderSide(width: 1, color: Colors.black12)
+              bottom: BorderSide(width: 1, color: Colors.black12),
+              left: BorderSide(width: 1, color: Colors.black12),
             )
           ),
           child: Text(

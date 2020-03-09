@@ -26,6 +26,7 @@ class ShareShopPageCommodityAdminAddEdit extends StatefulWidget {
 class _ShareShopPageCommodityAdminAddEditState extends State<ShareShopPageCommodityAdminAddEdit> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   String _cover, _name, _specs;
+  int _stock;
   double _price;
   @override
   Widget build(BuildContext context) {
@@ -73,6 +74,18 @@ class _ShareShopPageCommodityAdminAddEditState extends State<ShareShopPageCommod
                       },
                     ),
                     TextFormField(
+                      initialValue: widget.item == null ? '' : widget.item.stock == null ? '0' : '${widget.item.stock}',
+                      decoration: InputDecoration(
+                        labelText: '库存',
+                      ),
+                      onSaved: (value) {
+                        if (!TextUtil.isEmpty(value)) {
+                          _stock = int.parse('$value');
+                        }
+                      },
+                      keyboardType: TextInputType.number,
+                    ),
+                    TextFormField(
                       initialValue: widget.item == null ? '' : '${widget.item.price}',
                       decoration: InputDecoration(
                         labelText: '单价',
@@ -109,10 +122,10 @@ class _ShareShopPageCommodityAdminAddEditState extends State<ShareShopPageCommod
                         _formKey.currentState.save();
                         switch (widget.isAdd) {
                           case true:
-                            _shareShopPageBloc.addCommodity(context, _cover, _name, _price, _specs, widget.commodityTypeId, widget.bloc);
+                            _shareShopPageBloc.addCommodity(context, _cover, _name, _price, _specs, _stock, widget.commodityTypeId, widget.bloc);
                             break;
                           default:
-                            _shareShopPageBloc.editCommodity(context, _cover, widget.item.id, _name, _price, _specs, widget.commodityTypeId, widget.bloc);
+                            _shareShopPageBloc.editCommodity(context, _cover, widget.item.id, _name, _price, _specs, _stock, widget.commodityTypeId, widget.bloc);
                         }
                       },
                     )
@@ -134,11 +147,14 @@ class _ShareShopPageCommodityAdminAddEditState extends State<ShareShopPageCommod
         builder: (context, sanpshop) {
           if (sanpshop.hasData) {
             _cover = sanpshop.data;
-            return Image.network(
-              _cover, 
-              fit: BoxFit.fill,
-              width: ScreenUtil().setWidth(200),
-              height: ScreenUtil().setWidth(200),
+            return ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: Image.network(
+                _cover, 
+                fit: BoxFit.fill,
+                width: ScreenUtil().setWidth(200),
+                height: ScreenUtil().setWidth(200),
+              )
             );
           } else {
             return widget.item == null ?
@@ -154,11 +170,14 @@ class _ShareShopPageCommodityAdminAddEditState extends State<ShareShopPageCommod
                   Text('请上传封面图')
                 ],
               ) :
-              Image.network(
-                _cover, 
-                fit: BoxFit.fill,
-                width: ScreenUtil().setWidth(200),
-                height: ScreenUtil().setWidth(200),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: Image.network(
+                  _cover, 
+                  fit: BoxFit.fill,
+                  width: ScreenUtil().setWidth(200),
+                  height: ScreenUtil().setWidth(200),
+                ),
               );
           }
         },

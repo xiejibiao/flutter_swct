@@ -31,6 +31,7 @@ class CommodityData {
   double price;
   String specs;
   int status;
+  int stock;
   int createTime;
   int delFlag;
 
@@ -43,6 +44,7 @@ class CommodityData {
       this.price,
       this.specs,
       this.status,
+      this.stock,
       this.createTime,
       this.delFlag});
 
@@ -55,6 +57,7 @@ class CommodityData {
     price = json['price'];
     specs = json['specs'];
     status = json['status'];
+    stock = json['stock'];
     createTime = json['createTime'];
     delFlag = json['delFlag'];
   }
@@ -69,6 +72,7 @@ class CommodityData {
     data['price'] = this.price;
     data['specs'] = this.specs;
     data['status'] = this.status;
+    data['stock'] = this.stock;
     data['createTime'] = this.createTime;
     data['delFlag'] = this.delFlag;
     return data;

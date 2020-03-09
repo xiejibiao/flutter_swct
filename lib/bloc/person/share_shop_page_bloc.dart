@@ -129,6 +129,7 @@ class ShareShopPageBloc extends BlocBase {
       @required String industryName, 
       @required String legalPerson, 
       @required String name, 
+      @required String brief, 
       @required String area, 
       @required int industryId,
       @required String phone,
@@ -140,6 +141,10 @@ class ShareShopPageBloc extends BlocBase {
     }
     if (TextUtil.isEmpty(name)) {
       showToast('请输入仓店名称');
+      return false;
+    }
+    if (TextUtil.isEmpty(brief)) {
+      showToast('请输入仓店简介');
       return false;
     }
     if (TextUtil.isEmpty(legalPerson)) {
@@ -202,6 +207,7 @@ class ShareShopPageBloc extends BlocBase {
       @required String industryName, 
       @required String legalPerson, 
       @required String name, 
+      @required String brief, 
       @required String area, 
       @required int industryId,
       @required String lat,
@@ -219,6 +225,7 @@ class ShareShopPageBloc extends BlocBase {
       industryName: industryName, 
       legalPerson: legalPerson,
       name: name, 
+      brief: brief, 
       area: area, 
       industryId: industryId,
       phone: phone,
@@ -235,6 +242,7 @@ class ShareShopPageBloc extends BlocBase {
         industryName: industryName, 
         legalPerson: legalPerson,
         name: name, 
+        brief: brief,
         area: area, 
         industryId: industryId,
         lat: lat,
@@ -270,6 +278,7 @@ class ShareShopPageBloc extends BlocBase {
     @required String industryName, 
     @required String legalPerson, 
     @required String name, 
+    @required String brief, 
     @required String area, 
     @required int industryId,
     @required String lat,
@@ -295,6 +304,7 @@ class ShareShopPageBloc extends BlocBase {
         'provinceName': provinceName,
         'starCode': starCode,
         'storeName': name,
+        'brief': brief,
       };
       await requestPost('addStoreForUnlicensed', context: context, token: token, formData: formData).then((val) {
         AddStoreForunlicensedVo addStoreForunlicensedVo = AddStoreForunlicensedVo.fromJson(val);
@@ -356,14 +366,15 @@ class ShareShopPageBloc extends BlocBase {
   }
 
   /// 添加商品
-  addCommodity(BuildContext context, String cover, String name, double price, String specs, int typeId, ShopPagesBloc bloc) {
+  addCommodity(BuildContext context, String cover, String name, double price, String specs, int stock, int typeId, ShopPagesBloc bloc) {
     if (_checkAddCommodityParameter(cover, name, price, specs)) {
       var formData = {
         'cover': cover,
         'name': name,
         'price': price,
         'specs': specs,
-        'typeId': typeId
+        'typeId': typeId,
+        'stock': stock
       };
       requestPost('addCommodity', formData: formData).then((val) {
         CommodityVo commodityVo = CommodityVo.fromJson(val);
@@ -396,7 +407,7 @@ class ShareShopPageBloc extends BlocBase {
   }
 
   /// 修改商品
-  editCommodity(BuildContext context, String cover, int id, String name, double price, String specs, int typeId, ShopPagesBloc bloc) {
+  editCommodity(BuildContext context, String cover, int id, String name, double price, String specs, int stock, int typeId, ShopPagesBloc bloc) {
     if (_checkAddCommodityParameter(cover, name, price, specs)) {
       var formData = {
         'cover': cover,
@@ -404,7 +415,8 @@ class ShareShopPageBloc extends BlocBase {
         'name': name,
         'price': price,
         'specs': specs,
-        'typeId': typeId
+        'typeId': typeId,
+        'stock': stock
       };
       requestPost('editCommodity', formData: formData).then((val) {
         CommodityVo commodityVo = CommodityVo.fromJson(val);
@@ -429,6 +441,7 @@ class ShareShopPageBloc extends BlocBase {
       cover: commodityVo.data.cover,
       detail: commodityVo.data.detail,
       specs: commodityVo.data.specs,
+      stock: commodityVo.data.stock,
       price: commodityVo.data.price,
       status: commodityVo.data.status,
       createTime: commodityVo.data.createTime,
@@ -485,6 +498,7 @@ class ShareShopPageBloc extends BlocBase {
       uid: addStoreForunlicensed.uid,
       brandId: addStoreForunlicensed.brandId,
       storeName: addStoreForunlicensed.storeName,
+      brief: addStoreForunlicensed.brief,
       address: addStoreForunlicensed.address,
       lat: addStoreForunlicensed.lat,
       lng: addStoreForunlicensed.lng,

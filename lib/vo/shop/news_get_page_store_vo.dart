@@ -154,6 +154,7 @@ class StoreItem {
   int starCode;
   double juli;
   String storeName;
+  String brief;
   int id;
   String lat;
 
@@ -164,6 +165,7 @@ class StoreItem {
       this.photo,
       this.juli,
       this.storeName,
+      this.brief,
       this.id,
       this.lat,
       this.starCode});
@@ -175,6 +177,7 @@ class StoreItem {
     photo = json['photo'];
     juli = json['juli'];
     storeName = json['storeName'];
+    brief = json['brief'];
     id = json['id'];
     lat = json['lat'];
     starCode = json['starCode'];
@@ -188,6 +191,7 @@ class StoreItem {
     data['photo'] = this.photo;
     data['juli'] = this.juli;
     data['storeName'] = this.storeName;
+    data['brief'] = this.brief;
     data['id'] = this.id;
     data['lat'] = this.lat;
     data['starCode'] = this.starCode;
@@ -204,6 +208,7 @@ class StoreItem {
         photo: item.photo,
         juli: item.juli,
         storeName: item.storeName,
+        brief: item.brief,
         id: item.id,
         lat: item.lat,
         starCode: item.starCode

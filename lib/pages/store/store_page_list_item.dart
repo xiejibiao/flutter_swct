@@ -99,7 +99,7 @@ class SliverListItem extends StatelessWidget {
       delegate: SliverChildBuilderDelegate((context, index) {
           return InkWell(
             child: Container(
-              height: ScreenUtil().setHeight(200),
+              height: ScreenUtil().setHeight(220),
               child: Card(
                 child: Padding(
                   padding: EdgeInsets.all(8.0),
@@ -111,7 +111,7 @@ class SliverListItem extends StatelessWidget {
                         borderRadius: BorderRadius.circular(8.0),
                         child: Image.network(
                           list[index].photo,
-                          fit: BoxFit.fill,
+                          fit: BoxFit.cover,
                           height: ScreenUtil().setWidth(200),
                           width: ScreenUtil().setWidth(200),
                         ),
@@ -119,12 +119,54 @@ class SliverListItem extends StatelessWidget {
                       SizedBox(width: ScreenUtil().setWidth(10)),
                       Container(
                         width: ScreenUtil().setWidth(300),
-                        child: Text(
-                          list[index].storeName,
-                          style: TextStyle(
-                            fontSize: ScreenUtil().setSp(34),
-                          ),
-                          overflow: TextOverflow.fade,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              list[index].storeName,
+                              style: TextStyle(
+                                fontSize: ScreenUtil().setSp(34),
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            list[index].brief == null ? 
+                              Text('') : 
+                              Text(
+                                list[index].brief,
+                                style: TextStyle(
+                                  fontSize: ScreenUtil().setSp(26),
+                                  color: Colors.grey
+                                ),
+                                overflow: TextOverflow.fade,
+                              ),
+                            Stack(
+                              children: <Widget> [
+                                Positioned(
+                                  child: Text(
+                                    '${list[index].starCode}',
+                                    style: TextStyle(
+                                      color: Colors.blue,
+                                      fontSize: ScreenUtil().setSp(32)
+                                    )
+                                  ),
+                                  top: 0,
+                                  right: 15,
+                                ),
+                                Container(
+                                  alignment: Alignment.centerLeft,
+                                  width: ScreenUtil().setWidth(100),
+                                  child: ImageIcon(
+                                    AssetImage(
+                                      'assets/image_icon/icon_store_share.png',
+                                    ),
+                                    size: 25,
+                                    color: Colors.blue,
+                                  ),
+                                )
+                              ]
+                            ),
+                          ]
                         )
                       ),
                       SizedBox(width: ScreenUtil().setWidth(10)),
@@ -139,34 +181,7 @@ class SliverListItem extends StatelessWidget {
                                           fontSize: ScreenUtil().setSp(26),
                                           color: Colors.grey,
                                         ),
-                                    ),
-                          Stack(
-                            children: <Widget> [
-                              Positioned(
-                                child: Text(
-                                  '${list[index].starCode}',
-                                  style: TextStyle(
-                                    color: Colors.blue,
-                                    fontSize: ScreenUtil().setSp(32)
-                                  )
-                                ),
-                                top: 10,
-                                right: 10,
-                              ),
-                              Container(
-                                alignment: Alignment.center,
-                                height: ScreenUtil().setHeight(100),
-                                width: ScreenUtil().setHeight(100),
-                                child: ImageIcon(
-                                  AssetImage(
-                                    'assets/image_icon/icon_store_share.png',
-                                  ),
-                                  size: 28,
-                                  color: Colors.blue,
-                                ),
-                              )
-                            ]
-                          )
+                                    )
                         ],
                       )
                     ]

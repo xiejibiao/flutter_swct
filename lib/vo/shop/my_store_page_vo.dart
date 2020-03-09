@@ -62,6 +62,7 @@ class MyStorePageItem {
   String uid;
   int brandId;
   String storeName;
+  String brief;
   String address;
   String lat;
   String lng;
@@ -92,6 +93,7 @@ class MyStorePageItem {
       this.uid,
       this.brandId,
       this.storeName,
+      this.brief,
       this.address,
       this.lat,
       this.lng,
@@ -121,6 +123,7 @@ class MyStorePageItem {
     uid = json['uid'];
     brandId = json['brandId'];
     storeName = json['storeName'];
+    brief = json['brief'];
     address = json['address'];
     lat = json['lat'];
     lng = json['lng'];
@@ -152,6 +155,7 @@ class MyStorePageItem {
     data['uid'] = this.uid;
     data['brandId'] = this.brandId;
     data['storeName'] = this.storeName;
+    data['brief'] = this.brief;
     data['address'] = this.address;
     data['lat'] = this.lat;
     data['lng'] = this.lng;

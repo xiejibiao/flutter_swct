@@ -39,7 +39,7 @@ class _ShareShopPageAddState extends State<ShareShopPageAdd> {
   final TextEditingController _starCodeConroller = TextEditingController();
   /// 共享星级临时控制器
   final TextEditingController _starCodeTempConroller = TextEditingController();
-  String _photo, _address, _provinceName, _cityName, _areaName, _industryName, _legalPerson, _name, _area, _lat, _lng, _phone;
+  String _photo, _address, _provinceName, _cityName, _areaName, _industryName, _legalPerson, _name, _brief, _area, _lat, _lng, _phone;
   int _industryId, _industryIndex = 0, _starCode, _starCodeIndex = 0;
 
   StarSettingVo _starCodeList;
@@ -59,6 +59,7 @@ class _ShareShopPageAddState extends State<ShareShopPageAdd> {
       _industryName = widget.myStorePageItem.industryName;
       _legalPerson = widget.myStorePageItem.legalPerson;
       _name = widget.myStorePageItem.storeName;
+      _brief = widget.myStorePageItem.brief;
       _area = widget.myStorePageItem.area.toString();
       _lat = widget.myStorePageItem.lat;
       _lng = widget.myStorePageItem.lng;
@@ -122,6 +123,17 @@ class _ShareShopPageAddState extends State<ShareShopPageAdd> {
                       ),
                       onSaved: (String value) {
                         _name = value;
+                      },
+                    ),
+                    TextFormField(
+                      initialValue: _brief,
+                      decoration: InputDecoration(
+                        labelText: '简介',
+                        counterText: ''
+                      ),
+                      maxLength: 20,
+                      onSaved: (String value) {
+                        _brief = value;
                       },
                     ),
                     TextFormField(
@@ -401,7 +413,8 @@ class _ShareShopPageAddState extends State<ShareShopPageAdd> {
                           areaName: _areaName, 
                           industryName: _industryName, 
                           legalPerson: _legalPerson,
-                          name: _name, 
+                          name: _name,
+                          brief: _brief,
                           area: _area, 
                           industryId: _industryId,
                           lat: _lat,
@@ -420,6 +433,7 @@ class _ShareShopPageAddState extends State<ShareShopPageAdd> {
                           industryName: _industryName, 
                           legalPerson: _legalPerson,
                           name: _name, 
+                          brief: _brief,
                           area: _area, 
                           industryId: _industryId,
                           lat: _lat,

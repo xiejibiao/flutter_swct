@@ -62,6 +62,7 @@ class ShopData {
   String address;
   String lng;
   String storeName;
+  String brief;
   double juli;
   String photo;
   int starCode;
@@ -73,6 +74,7 @@ class ShopData {
       this.address,
       this.lng,
       this.storeName,
+      this.brief,
       this.juli,
       this.photo,
       this.id,
@@ -84,6 +86,7 @@ class ShopData {
     address = json['address'];
     lng = json['lng'];
     storeName = json['storeName'];
+    brief = json['brief'];
     juli = json['juli'];
     photo = json['photo'];
     id = json['id'];
@@ -97,6 +100,7 @@ class ShopData {
     data['address'] = this.address;
     data['lng'] = this.lng;
     data['storeName'] = this.storeName;
+    data['brief'] = this.brief;
     data['juli'] = this.juli;
     data['photo'] = this.photo;
     data['id'] = this.id;
