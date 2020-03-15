@@ -9,6 +9,7 @@ import 'package:flutter_swcy/pages/shop/shop_pages/shop_pages_shop_page_details.
 import 'package:flutter_swcy/pages/shop/shop_pages/shop_pages_shop_page_evaluate.dart';
 import 'package:flutter_swcy/pages/shop/shop_pages/shop_pages_shop_page_shopingcar.dart';
 import 'package:flutter_swcy/vo/shop/shop_type_and_essential_message_vo.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ShopPagesShopPage extends StatelessWidget {
   final String shopName;
@@ -82,6 +83,9 @@ class ShopPagesShopPage extends StatelessWidget {
                       double lng = double.parse(shopTypeAndEssentialMessageVo.data.swcyStoreEntity.lng);
                       AMapNavi().startNavi(lat: lat, lon: lng, naviType: AMapNavi.drive);
                       break;
+                    case 2:
+                      _dial(shopTypeAndEssentialMessageVo.data.swcyStoreEntity.phone);
+                      break;
                     default:
                       // Navigator.push(context, CupertinoPageRoute(builder: (context) => BlocProvider(child: ShopPagesShopPageShopingcar(id: id, shopName: shopName), bloc: ShopPagesBloc()))).then((val) {
                       //   _bloc.getCommodityInfoVos();
@@ -140,6 +144,22 @@ class ShopPagesShopPage extends StatelessWidget {
         icon: Container()
       ),
       BottomNavigationBarItem(
+        icon: StreamBuilder(
+          stream: bloc.isFollowStream,
+          initialData: false,
+          builder: (context, sanpshop) {
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Icon(Icons.phone, color: Colors.blue),
+                Text('联系商家', style: TextStyle(color: Colors.blue, fontSize: ScreenUtil().setSp(28)))
+              ],
+            );
+          },
+        ),
+        title: Container()
+      ),
+      BottomNavigationBarItem(
         title: Stack(
           children: <Widget>[
             Container(
@@ -183,5 +203,15 @@ class ShopPagesShopPage extends StatelessWidget {
     ];
 
     return _bottomNavigationBarItems;
+  }
+
+  /// 拨打电话
+  _dial(String phone) async {
+    var url = 'tel:$phone';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw '商家填写电话错误 $url';
+    }
   }
 }

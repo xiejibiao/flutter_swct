@@ -6,6 +6,7 @@ class CommodityInfoVo {
   String cover;
   bool isCheck;
   int delFlag;
+  String specs;
 
   CommodityInfoVo({this.id, this.name, this.count, this.price, this.cover, this.isCheck});
 
@@ -17,6 +18,7 @@ class CommodityInfoVo {
     cover = json['cover'];
     isCheck = json['isCheck'];
     delFlag = json['delFlag'];
+    specs = json['specs'];
   }
 
   Map<String, dynamic> toJson() {
@@ -28,6 +30,7 @@ class CommodityInfoVo {
     data['cover'] = this.cover;
     data['isCheck'] = this.isCheck;
     data['delFlag'] = this.delFlag;
+    data['specs'] = this.specs;
     return data;
   }
 

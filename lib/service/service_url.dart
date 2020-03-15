@@ -1,5 +1,5 @@
-// const serviceBaseUrl = 'http://192.168.192.110:8086';
-const serviceBaseUrl = 'http://api.swcy.top';
+const serviceBaseUrl = 'http://192.168.192.110:8086';
+// const serviceBaseUrl = 'http://api.swcy.top';
 const servicePath = {
   'login': serviceBaseUrl + '/account/login',                                                         // 登录
   'getSmsCode': serviceBaseUrl + '/account/getSmsCode',                                               // 获取验证码

@@ -5,6 +5,7 @@ import 'package:flutter_swcy/bloc/bloc_provider.dart';
 import 'package:flutter_swcy/bloc/shop/shop_pages_bloc.dart';
 import 'package:flutter_swcy/pages/shop/shop_pages/shop_pages_shop_page.dart';
 import 'package:flutter_swcy/vo/shop/news_get_page_store_vo.dart';
+import 'package:oktoast/oktoast.dart';
 
 class StorePageListItem extends StatelessWidget {
   final StoreMap storeMap;
@@ -140,32 +141,34 @@ class SliverListItem extends StatelessWidget {
                                 ),
                                 overflow: TextOverflow.fade,
                               ),
-                            Stack(
-                              children: <Widget> [
-                                Positioned(
-                                  child: Text(
-                                    '${list[index].starCode}',
-                                    style: TextStyle(
-                                      color: Colors.blue,
-                                      fontSize: ScreenUtil().setSp(32)
-                                    )
-                                  ),
-                                  top: 0,
-                                  right: 15,
-                                ),
-                                Container(
-                                  alignment: Alignment.centerLeft,
-                                  width: ScreenUtil().setWidth(100),
-                                  child: ImageIcon(
-                                    AssetImage(
-                                      'assets/image_icon/icon_store_share.png',
+                            list[index].status == 1 ? 
+                              Stack(
+                                children: <Widget> [
+                                  Positioned(
+                                    child: Text(
+                                      '${list[index].starCode}',
+                                      style: TextStyle(
+                                        color: Colors.blue,
+                                        fontSize: ScreenUtil().setSp(32)
+                                      )
                                     ),
-                                    size: 25,
-                                    color: Colors.blue,
+                                    top: 0,
+                                    right: 15,
                                   ),
-                                )
-                              ]
-                            ),
+                                  Container(
+                                    alignment: Alignment.centerLeft,
+                                    width: ScreenUtil().setWidth(100),
+                                    child: ImageIcon(
+                                      AssetImage(
+                                        'assets/image_icon/icon_store_share.png',
+                                      ),
+                                      size: 25,
+                                      color: Colors.blue,
+                                    ),
+                                  )
+                                ]
+                              ) :
+                              Container()
                           ]
                         )
                       ),
@@ -189,9 +192,13 @@ class SliverListItem extends StatelessWidget {
                 )
               ),
             ),
-            onTap: () {
-              Navigator.push(context, CupertinoPageRoute(builder: (context) => BlocProvider(bloc: ShopPagesBloc(), child: ShopPagesShopPage(list[index].storeName, list[index].id))));
-            },
+            onTap: list[index].status == 1 ? 
+              () {
+                Navigator.push(context, CupertinoPageRoute(builder: (context) => BlocProvider(bloc: ShopPagesBloc(), child: ShopPagesShopPage(list[index].storeName, list[index].id))));
+              } : 
+              () {
+                showToast('共享店未审核或已被暂停营业');
+              },
           );
         },
         childCount: list.length,

@@ -71,6 +71,7 @@ class SwcyStoreEntity {
   int likeVolume;
   int createTime;
   String photo;
+  String phone;
   String description;
 
   SwcyStoreEntity(
@@ -88,6 +89,7 @@ class SwcyStoreEntity {
       this.likeVolume,
       this.createTime,
       this.photo,
+      this.phone,
       this.description});
 
   SwcyStoreEntity.fromJson(Map<String, dynamic> json) {
@@ -105,6 +107,7 @@ class SwcyStoreEntity {
     likeVolume = json['likeVolume'];
     createTime = json['createTime'];
     photo = json['photo'];
+    phone = json['phone'];
     description = json['description'];
   }
 
@@ -124,6 +127,7 @@ class SwcyStoreEntity {
     data['likeVolume'] = this.likeVolume;
     data['createTime'] = this.createTime;
     data['photo'] = this.photo;
+    data['phone'] = this.phone;
     data['description'] = this.description;
     return data;
   }

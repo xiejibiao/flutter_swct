@@ -83,8 +83,10 @@ class ShopPagesShopPageShopingcarItem extends StatelessWidget {
       padding: EdgeInsets.all(10.0),
       alignment: Alignment.topLeft,
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(commodityInfoVo.name),
+          Text('规格:${commodityInfoVo.specs}', style: TextStyle(color: Colors.grey)),
           ShopPagesShopPageShopingcarCount(commodityInfoVo: commodityInfoVo, shopPagesBloc: shopPagesBloc)
         ],
       ),

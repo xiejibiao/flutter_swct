@@ -319,7 +319,7 @@ class ShopPagesBloc extends BlocBase {
   }
 
   /// 保存物品到购物车
-  saveCommodityToShoppingCar({@required id, @required name, @required count, @required price, @required cover}) {
+  saveCommodityToShoppingCar({@required id, @required name, @required count, @required price, @required cover, @required specs}) {
     List<dynamic> carts = _shoppingCarStringList == '[]' ? [] : json.decode(_shoppingCarStringList);
     var included = false;
     if (carts.isNotEmpty) {
@@ -340,6 +340,7 @@ class ShopPagesBloc extends BlocBase {
         'count': count,
         'price': price,
         'cover': cover,
+        'specs': specs,
         'isCheck': true,
         'delFlag': 0
       });

@@ -374,7 +374,7 @@ class ShopPagesShopPageEvaluateRightList extends StatelessWidget {
   Widget _addSupingCarItem(CommodityList commodityList) {
     return InkWell(
       onTap: commodityList.stock == null || commodityList.stock < 1 ? null : () async {
-        await bloc.saveCommodityToShoppingCar(id: commodityList.id, name: commodityList.name, count: 1, price: commodityList.price, cover: commodityList.cover);
+        await bloc.saveCommodityToShoppingCar(id: commodityList.id, name: commodityList.name, count: 1, price: commodityList.price, cover: commodityList.cover, specs: commodityList.specs);
       },
       child: Container(
         width: ScreenUtil().setWidth(160),

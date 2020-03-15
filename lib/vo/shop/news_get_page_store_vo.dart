@@ -155,6 +155,8 @@ class StoreItem {
   double juli;
   String storeName;
   String brief;
+  String phone;
+  int status;
   int id;
   String lat;
 
@@ -166,6 +168,8 @@ class StoreItem {
       this.juli,
       this.storeName,
       this.brief,
+      this.phone,
+      this.status,
       this.id,
       this.lat,
       this.starCode});
@@ -180,6 +184,8 @@ class StoreItem {
     brief = json['brief'];
     id = json['id'];
     lat = json['lat'];
+    phone = json['phone'];
+    status = json['status'];
     starCode = json['starCode'];
   }
 
@@ -192,6 +198,8 @@ class StoreItem {
     data['juli'] = this.juli;
     data['storeName'] = this.storeName;
     data['brief'] = this.brief;
+    data['status'] = this.status;
+    data['phone'] = this.phone;
     data['id'] = this.id;
     data['lat'] = this.lat;
     data['starCode'] = this.starCode;
