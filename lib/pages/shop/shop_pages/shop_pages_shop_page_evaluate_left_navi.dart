@@ -12,11 +12,13 @@ class ShopPagesShopPageEvaluateLeftNavi extends StatelessWidget {
   final int id;
   final ShopPagesBloc bloc;
   final bool isAdmin;
+  final int type;
   ShopPagesShopPageEvaluateLeftNavi(
     this.commodityTypeList,
     this.id,
     this.bloc,
     this.isAdmin,
+    this.type
   );
   @override
   Widget build(BuildContext context) {
@@ -49,44 +51,55 @@ class ShopPagesShopPageEvaluateLeftNavi extends StatelessWidget {
     if (commodityTypeList.length == 0) {
       width = 750;
     } else {
-      width = commodityTypeList.length >= 4 ? 200 : isAdmin ? 750 / (commodityTypeList.length + 1) : 750 / commodityTypeList.length;
+      if (type != 1) {
+        width = commodityTypeList.length >= 4 ? 200 : isAdmin ? 750 / (commodityTypeList.length + 1) : 750 / commodityTypeList.length;
+      } else {
+        width = commodityTypeList.length >= 4 ? 200 : 750 / commodityTypeList.length;
+      }
     }
     if (index == commodityTypeListLength) {
-      return isAdmin ?
-        InkWell(
-          onTap: () {
-            _textEditingController.text = '';
-            _showAddDialog(context, bloc);
-          },
-          child: Container(
-            alignment: Alignment.center,
-            width: ScreenUtil().setWidth(width),
-            padding: EdgeInsets.only(left: 10),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              border: Border(
-                bottom: BorderSide(width: 1, color: Colors.black12),
-                left: BorderSide(width: 1, color: Colors.black12),
-              )
-            ),
-            child: Text(
-              '+',
-              softWrap: false,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(58)
+      return 
+        type != 1 ?
+          isAdmin ?
+            InkWell(
+              onTap: () {
+                _textEditingController.text = '';
+                _showAddDialog(context, bloc);
+              },
+              child: Container(
+                alignment: Alignment.center,
+                width: ScreenUtil().setWidth(width),
+                padding: EdgeInsets.only(left: 10),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  border: Border(
+                    bottom: BorderSide(width: 1, color: Colors.black12),
+                    left: BorderSide(width: 1, color: Colors.black12),
+                  )
+                ),
+                child: Text(
+                  '+',
+                  softWrap: false,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: ScreenUtil().setSp(58)
+                  ),
+                ),
               ),
-            ),
-          ),
-        ) : 
-        Container();
+            ) : 
+            Container() :
+            Container();
     } else {
       bool isSelected = bloc.thisIndexIsSelected(index);
       return InkWell(
         onTap: () {
           bloc.setLeftIndex(index, isAdmin);
         },
-        onLongPress: isAdmin ? () => _onLongPressShowDialog(context, bloc, commodityTypeList[index]) : null,
+        onLongPress: () {
+          if (isAdmin && type != 1) {
+            _onLongPressShowDialog(context, bloc, commodityTypeList[index]);
+          }
+        },
         child: Container(
           alignment: Alignment.center,
           width: ScreenUtil().setWidth(width),

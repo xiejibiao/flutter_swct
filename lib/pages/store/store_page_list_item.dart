@@ -141,34 +141,34 @@ class SliverListItem extends StatelessWidget {
                                 ),
                                 overflow: TextOverflow.fade,
                               ),
-                            list[index].status == 1 ? 
-                              Stack(
-                                children: <Widget> [
-                                  Positioned(
-                                    child: Text(
-                                      '${list[index].starCode}',
-                                      style: TextStyle(
-                                        color: Colors.blue,
-                                        fontSize: ScreenUtil().setSp(32)
-                                      )
-                                    ),
-                                    top: 0,
-                                    right: 15,
-                                  ),
-                                  Container(
-                                    alignment: Alignment.centerLeft,
-                                    width: ScreenUtil().setWidth(100),
-                                    child: ImageIcon(
-                                      AssetImage(
-                                        'assets/image_icon/icon_store_share.png',
+                              list[index].status == 1 ? 
+                                Stack(
+                                  children: <Widget> [
+                                    Positioned(
+                                      child: Text(
+                                        '${list[index].starCode}',
+                                        style: TextStyle(
+                                          color: Colors.blue,
+                                          fontSize: ScreenUtil().setSp(32)
+                                        )
                                       ),
-                                      size: 25,
-                                      color: Colors.blue,
+                                      top: 0,
+                                      right: 15,
                                     ),
-                                  )
-                                ]
-                              ) :
-                              Container()
+                                    Container(
+                                      alignment: Alignment.centerLeft,
+                                      width: ScreenUtil().setWidth(100),
+                                      child: ImageIcon(
+                                        AssetImage(
+                                          'assets/image_icon/icon_store_share.png',
+                                        ),
+                                        size: 25,
+                                        color: Colors.blue,
+                                      ),
+                                    )
+                                  ]
+                                ) :
+                                Container()
                           ]
                         )
                       ),
@@ -184,7 +184,10 @@ class SliverListItem extends StatelessWidget {
                                           fontSize: ScreenUtil().setSp(26),
                                           color: Colors.grey,
                                         ),
-                                    )
+                                    ),
+                          list[index].type == 1 ? 
+                            ImageIcon(AssetImage('assets/image_icon/icon_league_store.png'), color: Colors.blue) :
+                            ImageIcon(AssetImage('assets/image_icon/icon_shop.png'), color: Colors.blue) 
                         ],
                       )
                     ]
@@ -194,7 +197,7 @@ class SliverListItem extends StatelessWidget {
             ),
             onTap: list[index].status == 1 ? 
               () {
-                Navigator.push(context, CupertinoPageRoute(builder: (context) => BlocProvider(bloc: ShopPagesBloc(), child: ShopPagesShopPage(list[index].storeName, list[index].id))));
+                Navigator.push(context, CupertinoPageRoute(builder: (context) => BlocProvider(bloc: ShopPagesBloc(), child: ShopPagesShopPage(list[index]))));
               } : 
               () {
                 showToast('共享店未审核或已被暂停营业');

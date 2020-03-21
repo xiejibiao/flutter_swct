@@ -38,7 +38,7 @@ class OrderItem extends StatelessWidget {
                   children: <Widget>[
                     Row(
                       children: <Widget>[
-                        ImageIcon(AssetImage('assets/image_icon/icon_shop.png'), color: Colors.blue),
+                        ImageIcon(AssetImage(orderVo.storeType != 1 ? 'assets/image_icon/icon_shop.png' : 'assets/image_icon/icon_league_store.png'), color: Colors.blue),
                         Text(orderVo.storeName, style: TextStyle(fontSize: ScreenUtil().setSp(32), fontWeight: FontWeight.w400))
                       ],
                     ),

@@ -1,13 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_swcy/bloc/bloc_provider.dart';
-import 'package:flutter_swcy/bloc/person/person_info_receiving_address_bloc.dart';
-import 'package:flutter_swcy/bloc/person/share_shop_page_bloc.dart';
+// import 'package:flutter_swcy/bloc/bloc_provider.dart';
+// import 'package:flutter_swcy/bloc/person/person_info_receiving_address_bloc.dart';
+// import 'package:flutter_swcy/bloc/person/share_shop_page_bloc.dart';
 import 'package:flutter_swcy/bloc/supplier_page_shoppingCar_bloc.dart';
 import 'package:flutter_swcy/common/loading.dart';
 import 'package:flutter_swcy/common/message_dialog.dart';
-import 'package:flutter_swcy/pages/person/supplier/supplier_commodity_settlement.dart';
+// import 'package:flutter_swcy/pages/person/supplier/supplier_commodity_settlement.dart';
 import 'package:flutter_swcy/pages/shop/shop_page_search_default_page.dart';
 import 'package:flutter_swcy/vo/shop/commodity_info_vo.dart';
 import 'package:oktoast/oktoast.dart';
@@ -15,9 +15,13 @@ import 'package:oktoast/oktoast.dart';
 class SupplierPageShoppingCar extends StatelessWidget {
   final SupplierPageShoppingCarBloc _bloc;
   final String supplierName;
+  final int supplierId;
+  final int storeId;
   SupplierPageShoppingCar(
     this._bloc,
-    this.supplierName
+    this.supplierName,
+    this.storeId,
+    this.supplierId
   );
   @override
   Widget build(BuildContext context) {
@@ -242,7 +246,7 @@ class SupplierPageShoppingCar extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             Container(
-              width: ScreenUtil().setWidth(200),
+              width: ScreenUtil().setWidth(180),
               child: Row(
                 children: <Widget>[
                   StreamBuilder(
@@ -301,32 +305,52 @@ class SupplierPageShoppingCar extends StatelessWidget {
               stream: _bloc.allCommodityCountStream,
               builder: (context, sanpshop) {
                 return StreamBuilder(
-                  stream: _bloc.commodityInfoVoListStream,
+                  stream: _bloc.allCommodityCountStream,
                   builder: (context, commodityInfoVoListStreamSanpshop) {
                     if (commodityInfoVoListStreamSanpshop.hasData) {
                       return InkWell(
                         onTap: () {
-                          if (commodityInfoVoListStreamSanpshop.data.length == 0) {
-                            showToast('请条挑选商品后再结算哦~~');
+                          if (commodityInfoVoListStreamSanpshop.data == 0) {
+                            showToast('请条挑选商品后再同步哦~~');
                             return;
                           }
-                          Navigator.push(
-                            context, 
-                            CupertinoPageRoute(
-                              builder: (context) => BlocProvider(
-                                child: BlocProvider(
-                                  child: SupplierCommoditySettlement(_bloc, supplierName),
-                                  bloc: ShareShopPageBloc(),
-                                ), 
-                                bloc: PersonInfoReceivingAddressBloc()
-                              )
-                            )
-                          );
+                          // Navigator.push(
+                          //   context, 
+                          //   CupertinoPageRoute(
+                          //     builder: (context) => BlocProvider(
+                          //       child: BlocProvider(
+                          //         child: SupplierCommoditySettlement(_bloc, supplierName),
+                          //         bloc: ShareShopPageBloc(),
+                          //       ), 
+                          //       bloc: PersonInfoReceivingAddressBloc()
+                          //     )
+                          //   )
+                          // );
+                          _bloc.leagueStoreAddCommodity(storeId, supplierId, context);
                         },
+                        // child: Container(
+                        //   alignment: Alignment.center,
+                        //   margin: EdgeInsets.only(right: 10),
+                        //   width: ScreenUtil().setWidth(180),
+                        //   height: ScreenUtil().setHeight(70),
+                        //   decoration: BoxDecoration(
+                        //     border: Border.all(
+                        //       color: Colors.red
+                        //     ),
+                        //     color: Colors.red,
+                        //     borderRadius: BorderRadius.circular(3.0)
+                        //   ),
+                        //   child: Text(
+                        //     '结算:(${sanpshop.data})',
+                        //     style: TextStyle(
+                        //       color: Colors.white
+                        //     ),
+                        //   )
+                        // ),
                         child: Container(
                           alignment: Alignment.center,
                           margin: EdgeInsets.only(right: 10),
-                          width: ScreenUtil().setWidth(180),
+                          width: ScreenUtil().setWidth(200),
                           height: ScreenUtil().setHeight(70),
                           decoration: BoxDecoration(
                             border: Border.all(
@@ -336,7 +360,7 @@ class SupplierPageShoppingCar extends StatelessWidget {
                             borderRadius: BorderRadius.circular(3.0)
                           ),
                           child: Text(
-                            '结算:(${sanpshop.data})',
+                            '申购到盟店:(${sanpshop.data})',
                             style: TextStyle(
                               color: Colors.white
                             ),

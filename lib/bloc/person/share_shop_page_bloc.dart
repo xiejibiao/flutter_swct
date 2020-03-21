@@ -521,7 +521,8 @@ class ShareShopPageBloc extends BlocBase {
       reason: addStoreForunlicensed.reason,
       area: double.parse(addStoreForunlicensed.area.toString()),
       phone: addStoreForunlicensed.phone,
-      starCode: addStoreForunlicensed.starCode
+      starCode: addStoreForunlicensed.starCode,
+      type: addStoreForunlicensed.type
     );
     _myStorePageVo.data.list[editIndex]= myStorePageItem;
     _myStorePageVoSink.add(_myStorePageVo);

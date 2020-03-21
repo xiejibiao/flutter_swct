@@ -8,15 +8,14 @@ import 'package:flutter_swcy/common/loading.dart';
 import 'package:flutter_swcy/pages/shop/shop_pages/shop_pages_shop_page_details.dart';
 import 'package:flutter_swcy/pages/shop/shop_pages/shop_pages_shop_page_evaluate.dart';
 import 'package:flutter_swcy/pages/shop/shop_pages/shop_pages_shop_page_shopingcar.dart';
+import 'package:flutter_swcy/vo/shop/news_get_page_store_vo.dart';
 import 'package:flutter_swcy/vo/shop/shop_type_and_essential_message_vo.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ShopPagesShopPage extends StatelessWidget {
-  final String shopName;
-  final int id;
+  final StoreItem storeItem;
   ShopPagesShopPage(
-    this.shopName,
-    this.id
+    this.storeItem
   );
 
   final List<Tab> _tabs = [
@@ -43,8 +42,8 @@ class ShopPagesShopPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ShopPagesBloc _bloc = BlocProvider.of<ShopPagesBloc>(context);
-    _bloc.setCommodityKey(id);
-    _bloc.getShopTypeAndEssentialMessage(context, id, false);
+    _bloc.setCommodityKey(storeItem.id);
+    _bloc.getShopTypeAndEssentialMessage(context, storeItem.id, false);
     return DefaultTabController(
       length: 2,
       child: StreamBuilder(
@@ -54,7 +53,7 @@ class ShopPagesShopPage extends StatelessWidget {
             ShopTypeAndEssentialMessageVo shopTypeAndEssentialMessageVo = sanpshop.data;
             return Scaffold(
               appBar: AppBar(
-                title: Text(shopName),
+                title: Text(storeItem.storeName),
                 bottom: TabBar(
                   tabs: _tabs,
                   unselectedLabelColor: Colors.black38,
@@ -64,7 +63,7 @@ class ShopPagesShopPage extends StatelessWidget {
               ),
               body: TabBarView(
                 children: [
-                  ShopPagesShopPageEvaluate(shopTypeAndEssentialMessageVo.data.commodityTypeList, id, _bloc, false),
+                  ShopPagesShopPageEvaluate(shopTypeAndEssentialMessageVo.data.commodityTypeList, null, _bloc, false, storeItem),
                   ShopPagesShopPageDetails(),
                 ],
               ),
@@ -76,7 +75,7 @@ class ShopPagesShopPage extends StatelessWidget {
                 onTap: (index) {
                   switch (index) {
                     case 0:
-                      _bloc.followAndCleanFollow(id, context);
+                      _bloc.followAndCleanFollow(storeItem.id, context);
                       break;
                     case 1:
                       double lat = double.parse(shopTypeAndEssentialMessageVo.data.swcyStoreEntity.lat);
@@ -90,7 +89,7 @@ class ShopPagesShopPage extends StatelessWidget {
                       // Navigator.push(context, CupertinoPageRoute(builder: (context) => BlocProvider(child: ShopPagesShopPageShopingcar(id: id, shopName: shopName), bloc: ShopPagesBloc()))).then((val) {
                       //   _bloc.getCommodityInfoVos();
                       // });
-                      Navigator.push(context, CupertinoPageRoute(builder: (context) => ShopPagesShopPageShopingcar(id: id, shopName: shopName, shopPagesBloc: _bloc)));
+                      Navigator.push(context, CupertinoPageRoute(builder: (context) => ShopPagesShopPageShopingcar(id: storeItem.id, shopName: storeItem.storeName, shopPagesBloc: _bloc)));
                   }
                 },
               ),

@@ -8,6 +8,7 @@ import 'package:flutter_swcy/common/loading_dialog.dart';
 import 'package:flutter_swcy/common/preference_utils.dart';
 import 'package:flutter_swcy/common/shared_preferences.dart';
 import 'package:flutter_swcy/service/service_method.dart';
+import 'package:flutter_swcy/vo/commen_vo.dart';
 import 'package:flutter_swcy/vo/shop/commodity_info_vo.dart';
 import 'package:flutter_swcy/vo/shop/my_store_page_vo.dart';
 import 'package:flutter_swcy/vo/supplier/supplier_commodity_latest_price_vo.dart';
@@ -70,8 +71,8 @@ class SupplierPageShoppingCarBloc extends BlocBase {
   Stream<bool> get isAllCheckStream => _isAllCheckController.stream;
   
   /// 初始化供应商缓存Key
-  initSupplierKEY (String supplierKey) {
-    _supplierKEY = '${_supplierKEY}_$supplierKey';
+  initSupplierKEY (String supplierKey, String storeId) {
+    _supplierKEY = '${_supplierKEY}_${supplierKey}_$storeId';
     _supplierId = supplierKey;
     getSupplierCommodityStr();
   }
@@ -298,6 +299,33 @@ class SupplierPageShoppingCarBloc extends BlocBase {
           );
         } else {
           showToast('下单异常');
+        }
+      });
+    });
+  }
+
+  /// 盟店添加商品
+  leagueStoreAddCommodity(int storeId, int supplierId, BuildContext context) {
+    getCheckTrueSupplierCommoditys();
+    getToken().then((token) {
+      var tempIdAndCount = {};
+        _tempCommodityInfoVos.forEach((item) {
+        tempIdAndCount['${item.id}'] = item.count;
+      });
+      var formData = {
+            "map": tempIdAndCount,
+            "storeId": storeId,
+            "supplierId": supplierId
+          };
+      requestPost('leagueStoreAddCommodity', formData: formData, context: context, token: token).then((val) {
+        CommenVo commenVo = CommenVo.fromJson(val);
+        if (commenVo.code == '200') {
+          showToast('申购成功，确认收货后自动同步到盟店');
+          _tempCommodityInfoVos.forEach((item) {
+            removeCarts(id: item.id);
+          });
+        } else {
+          showToast('申购失败');
         }
       });
     });

@@ -193,7 +193,7 @@ class SupplierPageListItem extends StatelessWidget {
           CupertinoPageRoute(
             builder: (context) => BlocProvider(
               bloc: SupplierCommodityPageBloc(), 
-              child: BlocProvider(bloc: SupplierPageShoppingCarBloc(), child: SupplierCommodityPage(supplierInfoVo)) 
+              child: BlocProvider(bloc: SupplierPageShoppingCarBloc(), child: SupplierCommodityPage(supplierInfoVo, '')) 
             )
           )
         );

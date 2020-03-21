@@ -21,10 +21,12 @@ class ShopPagesShopPageEvaluateRightList extends StatelessWidget {
   final ShopPagesBloc bloc;
   final bool isAdmin;
   final int commodityTypeListLength;
+  final int type;
   ShopPagesShopPageEvaluateRightList(
     this.bloc,
     this.isAdmin,
-    this.commodityTypeListLength
+    this.commodityTypeListLength,
+    this.type
   );
   @override
   Widget build(BuildContext context) {
@@ -45,12 +47,14 @@ class ShopPagesShopPageEvaluateRightList extends StatelessWidget {
           } else {
             CommodityPageByCommodityTypeVo commodityPageByCommodityTypeVo = sanpshop.data;
             if (commodityPageByCommodityTypeVo.data.list.length == 0) {
-              return isAdmin ? 
-                _buildAddCommodity(bloc, context) : 
-                Container(
-                  width: ScreenUtil().setWidth(750),
-                  child: ShopPageSearchDefaultPage(),
-                );
+              return type != 1 ? 
+                      isAdmin ? 
+                        _buildAddCommodity(bloc, context) : 
+                        Container(
+                          width: ScreenUtil().setWidth(750),
+                          child: ShopPageSearchDefaultPage(),
+                        ) :
+                        Container();
             } else {
               return EasyRefresh.custom(
                 footer: BallPulseFooter(
@@ -73,7 +77,7 @@ class ShopPagesShopPageEvaluateRightList extends StatelessWidget {
                         if (sanpshop.data) {
                           return Column(
                             children: <Widget>[
-                              isAdmin ? _buildAddCommodity(bloc, context) : Container(),
+                              type != 1 ? isAdmin ? _buildAddCommodity(bloc, context) : Container() : Container(),
                               TheEndBaseline()
                             ],
                           );
@@ -98,14 +102,18 @@ class ShopPagesShopPageEvaluateRightList extends StatelessWidget {
   Widget _buildGoodsItem (CommodityList commodityList, BuildContext context, ShopPagesBloc bloc, ShareShopPageBloc shareShopPageBloc, ShareShopPageCommodityAdminBloc shareShopPageCommodityAdminBloc) {
     return InkWell(
       onTap: () {
-        if (isAdmin) {
+        if (type != 1 && isAdmin) {
           shareShopPageCommodityAdminBloc.getItems(commodityList.detail);
           Navigator.push(context, CupertinoPageRoute(builder: (context) => ShareShopPageCommodityDetail(commodityList.detail, commodityList.id, shareShopPageCommodityAdminBloc, bloc, false, shareShopPageBloc)));
         } else {
-          Navigator.push(context, CupertinoPageRoute(builder: (context) => ShopPagesShopPageEvaluateDetails(commodityList.detail)));
+          Navigator.push(context, CupertinoPageRoute(builder: (context) => ShopPagesShopPageEvaluateDetails(commodityList.detail, type)));
         }
       },
-      onLongPress: isAdmin ? () => _onLongPressShowDeleteAndEditDialog(context, shareShopPageBloc, commodityList, bloc) : null,
+      onLongPress: () {
+        if (isAdmin && type != 1) {
+           _onLongPressShowDeleteAndEditDialog(context, shareShopPageBloc, commodityList, bloc);
+        }
+      },
       child: Container(
         height: ScreenUtil().setHeight(200),
         child: Card(

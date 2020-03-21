@@ -159,6 +159,7 @@ class StoreItem {
   int status;
   int id;
   String lat;
+  int type;
 
   StoreItem(
       {this.likeVolume,
@@ -172,6 +173,7 @@ class StoreItem {
       this.status,
       this.id,
       this.lat,
+      this.type,
       this.starCode});
 
   StoreItem.fromJson(Map<String, dynamic> json) {
@@ -186,6 +188,7 @@ class StoreItem {
     lat = json['lat'];
     phone = json['phone'];
     status = json['status'];
+    type = json['type'];
     starCode = json['starCode'];
   }
 
@@ -203,6 +206,7 @@ class StoreItem {
     data['id'] = this.id;
     data['lat'] = this.lat;
     data['starCode'] = this.starCode;
+    data['type'] = this.type;
     return data;
   }
 
@@ -219,6 +223,7 @@ class StoreItem {
         brief: item.brief,
         id: item.id,
         lat: item.lat,
+        type: item.type,
         starCode: item.starCode
       ));
     });

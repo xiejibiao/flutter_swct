@@ -87,6 +87,7 @@ class MyStorePageItem {
   double area;
   String phone;
   int starCode;
+  int type;
 
   MyStorePageItem(
       {this.id,
@@ -116,6 +117,7 @@ class MyStorePageItem {
       this.reason,
       this.area,
       this.phone,
+      this.type,
       this.starCode});
 
   MyStorePageItem.fromJson(Map<String, dynamic> json) {
@@ -147,6 +149,7 @@ class MyStorePageItem {
     area = json['area'];
     phone = json['phone'];
     starCode = json['starCode'];
+    type = json['type'];
   }
 
   Map<String, dynamic> toJson() {
@@ -179,6 +182,7 @@ class MyStorePageItem {
     data['area'] = this.area;
     data['phone'] = this.phone;
     data['starCode'] = this.starCode;
+    data['type'] = this.type;
     return data;
   }
 }

@@ -123,11 +123,22 @@ class ShareShopPage extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
                           Text(myStorePageItem.storeName),
-                          Text(myStorePageItem.isChecked == 1 ? '持证上线' : '无证照上线'),
+                          Text(myStorePageItem.isChecked == 1 ? '持证上线' : '无证照上线')
                         ],
                       ),
                     ),
-                    _buildButtom(myStorePageItem.isChecked, TextUtil.isEmpty(myStorePageItem.licenseCode) ? false : true, context, myStorePageItem, bloc, shopPagesBloc)
+                    Container(
+                      width: ScreenUtil().setWidth(445),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          myStorePageItem.type == 1 ? 
+                            ImageIcon(AssetImage('assets/image_icon/icon_league_store.png'), color: Colors.blue) :
+                            ImageIcon(AssetImage('assets/image_icon/icon_shop.png'), color: Colors.blue), 
+                          _buildButtom(myStorePageItem.isChecked, TextUtil.isEmpty(myStorePageItem.licenseCode) ? false : true, context, myStorePageItem, bloc, shopPagesBloc)
+                        ]
+                      )
+                    )
                   ],
                 )
               ],
@@ -148,7 +159,7 @@ class ShareShopPage extends StatelessWidget {
           break;
         /// 产品上架
         case 1:
-          return _buildProductsOnShelvesButtom(context, myStorePageItem.id, shopPagesBloc);
+          return _buildProductsOnShelvesButtom(context, myStorePageItem, shopPagesBloc);
           break;
         /// 审核失败
         default:
@@ -162,109 +173,91 @@ class ShareShopPage extends StatelessWidget {
   /// 审核中
   Widget _buildAuditInProgressButtom() {
     return Container(
-      width: ScreenUtil().setWidth(445),
-      alignment: Alignment.bottomRight,
-      child: Container(
-        alignment: Alignment.center,
-        width: ScreenUtil().setWidth(180),
-        child: ImageIcon(AssetImage('assets/image_icon/icon_audit_in_progress.png'), size: 50, color: Colors.blue),
-      ),
+      alignment: Alignment.center,
+      width: ScreenUtil().setWidth(180),
+      child: ImageIcon(AssetImage('assets/image_icon/icon_audit_in_progress.png'), size: 50, color: Colors.blue),
     );
   }
 
   /// 产品上架
-  Widget _buildProductsOnShelvesButtom(BuildContext context, int id, ShopPagesBloc bloc) {
-    return Row(
-      children: <Widget>[
-        Container(
-          height: ScreenUtil().setHeight(70),
-          width: ScreenUtil().setWidth(445),
-          alignment: Alignment.bottomRight,
-          child: InkWell(
-            child: Container(
-              alignment: Alignment.center,
-              width: ScreenUtil().setWidth(180),
-              height: ScreenUtil().setHeight(50),
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.grey[300]),
-                borderRadius: BorderRadius.circular(8),
-                color: Colors.blue[300]
-              ),
-              child: Text('产品与订单', style: TextStyle(color: Colors.white)),
-            ),
-            onTap: () {
-              Navigator.push(context, CupertinoPageRoute(builder: (context) => ShareShopPageCommodityAdmin(id, bloc)));
-            },
-          ),
-        )
-      ],
+  Widget _buildProductsOnShelvesButtom(BuildContext context, MyStorePageItem myStorePageItem, ShopPagesBloc bloc) {
+    return InkWell(
+      child: Container(
+        alignment: Alignment.center,
+        width: ScreenUtil().setWidth(180),
+        height: ScreenUtil().setHeight(50),
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.grey[300]),
+          borderRadius: BorderRadius.circular(8),
+          color: Colors.blue[300]
+        ),
+        child: Text('产品与订单', style: TextStyle(color: Colors.white)),
+      ),
+      onTap: () {
+        Navigator.push(context, CupertinoPageRoute(builder: (context) => ShareShopPageCommodityAdmin(myStorePageItem, bloc)));
+      },
     );
   }
 
   /// 审核失败
   Widget _buildAuditFailureButtom(MyStorePageItem myStorePageItem, BuildContext context, ShareShopPageBloc bloc) {
-    return Container(
-      height: ScreenUtil().setHeight(70),
-      width: ScreenUtil().setWidth(445),
-      alignment: Alignment.bottomRight,
-      child: InkWell(
-        child: Container(
-          alignment: Alignment.center,
-          width: ScreenUtil().setWidth(180),
-          height: ScreenUtil().setHeight(50),
-          decoration: BoxDecoration(
-            border: Border.all(color: Colors.grey[300]),
-            borderRadius: BorderRadius.circular(8),
-            color: Colors.grey[300]
-          ),
-          child: Text('审核失败'),
+    return InkWell(
+      child: Container(
+        alignment: Alignment.center,
+        width: ScreenUtil().setWidth(180),
+        height: ScreenUtil().setHeight(50),
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.grey[300]),
+          borderRadius: BorderRadius.circular(8),
+          color: Colors.grey[300]
         ),
-        onTap: () {
-          showDialog(
-            context: context,
-            barrierDismissible: false,
-            builder: (BuildContext context) {
-              return MessageDialog(
-                widget: Text(TextUtil.isEmpty(myStorePageItem.reason) ? '' : myStorePageItem.reason, style: TextStyle(fontSize: ScreenUtil().setSp(32))),
-                onCloseEvent: () {
-                  Navigator.pop(context);
-                },
-                onPositivePressEvent: () {
-                  Navigator.pop(context);
-                  Navigator.push(context, CupertinoPageRoute(builder:( context) => BlocProvider(bloc: ShareShopPageBloc(), child: ShareShopPageAuthentication(id: myStorePageItem.id, bloc: bloc))));
-                },
-                negativeText: '取消',
-                positiveText: '重新认证',
-              );
-            }
-          );
-        },
+        child: Text(
+          '审核失败',
+          style: TextStyle(
+            color: Colors.red
+          ),
+        ),
       ),
+      onTap: () {
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (BuildContext context) {
+            return MessageDialog(
+              widget: Text(TextUtil.isEmpty(myStorePageItem.reason) ? '' : myStorePageItem.reason, style: TextStyle(fontSize: ScreenUtil().setSp(32))),
+              onCloseEvent: () {
+                Navigator.pop(context);
+              },
+              onPositivePressEvent: () {
+                Navigator.pop(context);
+                Navigator.push(context, CupertinoPageRoute(builder:( context) => BlocProvider(bloc: ShareShopPageBloc(), child: ShareShopPageAuthentication(id: myStorePageItem.id, bloc: bloc))));
+              },
+              negativeText: '取消',
+              positiveText: '重新认证',
+            );
+          }
+        );
+      },
     );
   }
 
   /// 认证
   Widget _buildAuthenticationButtom(BuildContext context, int id, ShareShopPageBloc bloc) {
-    return Container(
-      height: ScreenUtil().setHeight(70),
-      width: ScreenUtil().setWidth(445),
-      alignment: Alignment.bottomRight,
-      child: InkWell(
-        child: Container(
-          alignment: Alignment.center,
-          width: ScreenUtil().setWidth(180),
-          height: ScreenUtil().setHeight(50),
-          decoration: BoxDecoration(
-            border: Border.all(color: Colors.grey[300]),
-            borderRadius: BorderRadius.circular(8),
-            color: Colors.green[500]
-          ),
-          child: Text('认证', style: TextStyle(color: Colors.white)),
+    return InkWell(
+      child: Container(
+        alignment: Alignment.center,
+        width: ScreenUtil().setWidth(180),
+        height: ScreenUtil().setHeight(50),
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.grey[300]),
+          borderRadius: BorderRadius.circular(8),
+          color: Colors.green[500]
         ),
-        onTap: () {
-          Navigator.push(context, CupertinoPageRoute(builder:( context) => BlocProvider(bloc: ShareShopPageBloc(), child: ShareShopPageAuthentication(id: id, bloc: bloc))));
-        },
+        child: Text('认证', style: TextStyle(color: Colors.white)),
       ),
+      onTap: () {
+        Navigator.push(context, CupertinoPageRoute(builder:( context) => BlocProvider(bloc: ShareShopPageBloc(), child: ShareShopPageAuthentication(id: id, bloc: bloc))));
+      },
     );
   }
 } 

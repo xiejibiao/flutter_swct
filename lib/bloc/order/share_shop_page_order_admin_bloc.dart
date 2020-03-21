@@ -5,6 +5,7 @@ import 'package:flutter_swcy/service/service_method.dart';
 import 'package:flutter_swcy/vo/commen_vo.dart';
 import 'package:flutter_swcy/vo/order/get_order_page_by_storeId_vo.dart';
 import 'package:flutter_swcy/vo/order/get_shop_order_detail_by_orderId_vo.dart';
+import 'package:flutter_swcy/vo/supplier/league_store_order_page_vo.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:rxdart/subjects.dart';
 
@@ -161,9 +162,75 @@ class ShareShopPageOrderAdminBloc extends BlocBase {
     });
   }
 
+  int _leagueStoreOrderPageNumber = 0;
+  int _leagueStoreOrderPageSize = 10;
+  
+  LeagueStoreOrderPageVo _leagueStoreOrderPageVo;
+  BehaviorSubject<LeagueStoreOrderPageVo> _leagueStoreOrderPageVoController = BehaviorSubject<LeagueStoreOrderPageVo>();
+  Sink<LeagueStoreOrderPageVo> get _leagueStoreOrderPageVoSink => _leagueStoreOrderPageVoController.sink;
+  Stream<LeagueStoreOrderPageVo> get leagueStoreOrderPageVoStream => _leagueStoreOrderPageVoController.stream;
+  getLeagueStoreOrderPage(int storeId, BuildContext context) {
+    getToken().then((token) {
+      _leagueStoreOrderPageNumber = 0;
+      var formData = {
+        "storeId": storeId,
+        "pageNumber": _leagueStoreOrderPageNumber,
+        "pageSize": _leagueStoreOrderPageSize
+      };
+      requestPost('getLeagueStoreOrderPage', token: token, context: context, formData: formData).then((val) {
+        _leagueStoreOrderPageVo = null;
+        _leagueStoreOrderPageVo = LeagueStoreOrderPageVo.fromJson(val);
+        _leagueStoreOrderPageVoSink.add(_leagueStoreOrderPageVo);
+      });
+    });
+  }
+
+  onLoadLeagueStoreOrderPage(int storeId, BuildContext context) {
+    if ((_leagueStoreOrderPageVo.data.pageNumber + 1) < _leagueStoreOrderPageVo.data.totalPage) {
+      _leagueStoreOrderPageNumber++;
+      getToken().then((token) {
+        var formData = {
+          "storeId": storeId,
+          "pageNumber": _leagueStoreOrderPageNumber,
+          "pageSize": _leagueStoreOrderPageSize
+        };
+        requestPost('getLeagueStoreOrderPage', token: token, context: context, formData: formData).then((val) {
+          List<LeagueStoreOrderPageVoList> tempList = _leagueStoreOrderPageVo.data.list;
+          _leagueStoreOrderPageVo = LeagueStoreOrderPageVo.fromJson(val);
+          _leagueStoreOrderPageVo.data.list.insertAll(0, tempList);
+          _leagueStoreOrderPageVoSink.add(_leagueStoreOrderPageVo);
+        });
+      });
+    }
+  }
+
+  leagueStoreOrderConfirmReceipt(String id, BuildContext context) {
+    getToken().then((token) {
+      var formData = {
+        "id": id
+      };
+      requestPost('leagueStoreOrderConfirmReceipt', token: token, context: context, formData: formData).then((val) {
+        print(val);
+        CommenVo commenVo = CommenVo.fromJson(val);
+        if (commenVo.code == '200') {
+          _leagueStoreOrderPageVo.data.list.forEach((item) {
+            if (item.id == id) {
+              item.status = 4;
+            }
+          });
+          _leagueStoreOrderPageVoSink.add(_leagueStoreOrderPageVo);
+          showToast('收货成功');
+        } else {
+          showToast('收货异常');
+        }
+      });
+    });
+  }
+
   @override
   void dispose() {
     _getOrderPageByStoreIdVoController.close();
     _getShopOrderDetailByOrderIdVoController.close();
+    _leagueStoreOrderPageVoController.close();
   }
 }

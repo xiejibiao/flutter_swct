@@ -26,8 +26,8 @@ class HomeVo {
   String id;
   String avatar;
   String nikeName;
-  int groupPower;
-  int personPower;
+  double groupPower;
+  double personPower;
   int score;
   List<HomeAdType0Vos> homeAdType0Vos;
   List<HomeAdType0Vos> homeAdType1Vos;

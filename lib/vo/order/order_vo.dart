@@ -72,6 +72,7 @@ class OrderVo {
   String logisticsNum;
   int addressId;
   String address;
+  int storeType;
 
   OrderVo(
       {this.id,
@@ -87,6 +88,7 @@ class OrderVo {
       this.uid,
       this.logisticsNum,
       this.addressId,
+      this.storeType,
       this.address});
 
   OrderVo.fromJson(Map<String, dynamic> json) {
@@ -104,6 +106,7 @@ class OrderVo {
     logisticsNum = json['logisticsNum'];
     addressId = json['addressId'];
     address = json['address'];
+    storeType = json['storeType'];
   }
 
   Map<String, dynamic> toJson() {
@@ -122,6 +125,7 @@ class OrderVo {
     data['logisticsNum'] = this.logisticsNum;
     data['addressId'] = this.addressId;
     data['address'] = this.address;
+    data['storeType'] = this.storeType;
     return data;
   }
 }

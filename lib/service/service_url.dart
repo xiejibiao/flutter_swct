@@ -1,5 +1,5 @@
-const serviceBaseUrl = 'http://192.168.192.110:8086';
-// const serviceBaseUrl = 'http://api.swcy.top';
+// const serviceBaseUrl = 'http://192.168.192.110:8086';
+const serviceBaseUrl = 'http://api.swcy.top';
 const servicePath = {
   'login': serviceBaseUrl + '/account/login',                                                         // 登录
   'getSmsCode': serviceBaseUrl + '/account/getSmsCode',                                               // 获取验证码
@@ -69,4 +69,10 @@ const servicePath = {
   'supplierUnifiedOrderWxPay': serviceBaseUrl + '/wxApi/supplierUnifiedOrderWxPay',                   // 供应商统一下单
   'getSettingStars': serviceBaseUrl + '/setting/getSettingStars',                                     // 获取共享星级
   'commendQrcode': serviceBaseUrl + '/mp/commendQrcode',                                              // 获取分享码
+  'createLeagueStore': serviceBaseUrl + '/store/createLeagueStore',                                   // 添加盟店
+  'leagueStoreGetSupplier': serviceBaseUrl + '/supplier/leagueStoreGetSupplier',                      // 盟店获取相同类型的供应商
+  'leagueStoreAddCommodity': serviceBaseUrl + '/store/leagueStoreAddCommodity',                       // 盟店添加商品
+  'getLeagueStoreOrderPage': serviceBaseUrl + '/supplier/getLeagueStoreOrderPage',                    // 获取盟店订单
+  'getLeagueStoreOrderDetails': serviceBaseUrl + '/supplier/getLeagueStoreOrderDetails',              // 获取盟店订单详情
+  'leagueStoreOrderConfirmReceipt': serviceBaseUrl + '/supplier/leagueStoreOrderConfirmReceipt',      // 盟店订单确认收货
 };

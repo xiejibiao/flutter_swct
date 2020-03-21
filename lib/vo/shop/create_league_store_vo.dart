@@ -1,14 +1,14 @@
-class AddStoreForunlicensedVo {
+class CreateLeagueStoreVo {
   String code;
   String message;
-  AddStoreForunlicensed data;
+  CreateLeagueStoreVoData data;
 
-  AddStoreForunlicensedVo({this.code, this.message, this.data});
+  CreateLeagueStoreVo({this.code, this.message, this.data});
 
-  AddStoreForunlicensedVo.fromJson(Map<String, dynamic> json) {
+  CreateLeagueStoreVo.fromJson(Map<String, dynamic> json) {
     code = json['code'];
     message = json['message'];
-    data = json['data'] != null ? new AddStoreForunlicensed.fromJson(json['data']) : null;
+    data = json['data'] != null ? new CreateLeagueStoreVoData.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -22,12 +22,11 @@ class AddStoreForunlicensedVo {
   }
 }
 
-class AddStoreForunlicensed {
+class CreateLeagueStoreVoData {
   int id;
   String uid;
   int brandId;
   String storeName;
-  String brief;
   String address;
   String lat;
   String lng;
@@ -48,17 +47,18 @@ class AddStoreForunlicensed {
   String legalPerson;
   int isChecked;
   String reason;
-  dynamic area;
+  double area;
   String phone;
   int starCode;
+  String brief;
   int type;
+  int status;
 
-  AddStoreForunlicensed(
+  CreateLeagueStoreVoData(
       {this.id,
       this.uid,
       this.brandId,
       this.storeName,
-      this.brief,
       this.address,
       this.lat,
       this.lng,
@@ -81,15 +81,16 @@ class AddStoreForunlicensed {
       this.reason,
       this.area,
       this.phone,
+      this.starCode,
+      this.brief,
       this.type,
-      this.starCode});
+      this.status});
 
-  AddStoreForunlicensed.fromJson(Map<String, dynamic> json) {
+  CreateLeagueStoreVoData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     uid = json['uid'];
     brandId = json['brandId'];
     storeName = json['storeName'];
-    brief = json['brief'];
     address = json['address'];
     lat = json['lat'];
     lng = json['lng'];
@@ -113,7 +114,9 @@ class AddStoreForunlicensed {
     area = json['area'];
     phone = json['phone'];
     starCode = json['starCode'];
+    brief = json['brief'];
     type = json['type'];
+    status = json['status'];
   }
 
   Map<String, dynamic> toJson() {
@@ -122,7 +125,6 @@ class AddStoreForunlicensed {
     data['uid'] = this.uid;
     data['brandId'] = this.brandId;
     data['storeName'] = this.storeName;
-    data['brief'] = this.brief;
     data['address'] = this.address;
     data['lat'] = this.lat;
     data['lng'] = this.lng;
@@ -146,7 +148,9 @@ class AddStoreForunlicensed {
     data['area'] = this.area;
     data['phone'] = this.phone;
     data['starCode'] = this.starCode;
+    data['brief'] = this.brief;
     data['type'] = this.type;
+    data['status'] = this.status;
     return data;
   }
 }

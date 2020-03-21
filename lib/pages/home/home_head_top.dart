@@ -101,7 +101,7 @@ class HomeHeadTop extends StatelessWidget {
     );
   }
 
-  Card _buildGradeCard (String title, String iconPath, int sum) {
+  Card _buildGradeCard (String title, String iconPath, double sum) {
     return Card(
       elevation: 5.0,
       child: Padding(

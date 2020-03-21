@@ -15,8 +15,10 @@ import 'package:flutter_swcy/vo/supplier/supplier_commodity_page_vo.dart';
 
 class SupplierCommodityPage extends StatelessWidget {
   final SupplierInfoVo supplierInfoVo;
+  final String storeId;
   SupplierCommodityPage(
-    this.supplierInfoVo
+    this.supplierInfoVo,
+    this.storeId
   );
 
   final List<Tab> _tabs = [
@@ -45,7 +47,7 @@ class SupplierCommodityPage extends StatelessWidget {
     final SupplierCommodityPageBloc _bloc = BlocProvider.of<SupplierCommodityPageBloc>(context);
     final SupplierPageShoppingCarBloc _supplierPageShoppingCarBloc = BlocProvider.of<SupplierPageShoppingCarBloc>(context);
     _bloc.getSupplierCommodityPage(supplierInfoVo.id);
-    _supplierPageShoppingCarBloc.initSupplierKEY('${supplierInfoVo.id}');
+    _supplierPageShoppingCarBloc.initSupplierKEY('${supplierInfoVo.id}', storeId);
     return DefaultTabController(
       length: 2,
       child: Scaffold(
@@ -142,7 +144,7 @@ class SupplierCommodityPage extends StatelessWidget {
             if (index == 0) {
               _supplierAMapNavi();
             } else {
-              Navigator.push(context, CupertinoPageRoute(builder: (context) => SupplierPageShoppingCar(_supplierPageShoppingCarBloc, supplierInfoVo.name)));
+              Navigator.push(context, CupertinoPageRoute(builder: (context) => SupplierPageShoppingCar(_supplierPageShoppingCarBloc, supplierInfoVo.name, int.parse(storeId), supplierInfoVo.id)));
             }
           },
         ),

@@ -1,17 +1,23 @@
 import 'dart:convert';
 
 import 'package:common_utils/common_utils.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swcy/bloc/bloc_provider.dart';
+import 'package:flutter_swcy/bloc/supplier_commodity_page_bloc.dart';
+import 'package:flutter_swcy/bloc/supplier_page_shoppingCar_bloc.dart';
 import 'package:flutter_swcy/common/dialog_router.dart';
 import 'package:flutter_swcy/common/loading_dialog.dart';
 import 'package:flutter_swcy/common/preference_utils.dart';
 import 'package:flutter_swcy/common/shared_preferences.dart';
+import 'package:flutter_swcy/pages/person/supplier/supplier_commodity_page.dart';
 import 'package:flutter_swcy/service/service_method.dart';
 import 'package:flutter_swcy/vo/commen_vo.dart';
 import 'package:flutter_swcy/vo/shop/commodity_info_vo.dart';
 import 'package:flutter_swcy/vo/shop/commodity_page_by_commodity_type_vo.dart';
 import 'package:flutter_swcy/vo/shop/commodity_shopingcar_vo.dart';
+import 'package:flutter_swcy/vo/shop/create_league_store_vo.dart';
+import 'package:flutter_swcy/vo/shop/leagueStore_getSupplier_vo.dart';
 import 'package:flutter_swcy/vo/shop/shop_type_and_essential_message_vo.dart';
 import 'package:flutter_swcy/vo/unified_order_vo.dart';
 import 'package:oktoast/oktoast.dart';
@@ -71,7 +77,9 @@ class ShopPagesBloc extends BlocBase {
   }
 
   // 获取门店分类，详情，是否关注
+  int _storeId = 0;
   getShopTypeAndEssentialMessage(BuildContext context, int id, bool isAdmin) {
+    _storeId = id;
     getToken().then((token) async {
       var formData = {
         'id': id
@@ -535,6 +543,47 @@ class ShopPagesBloc extends BlocBase {
         showToast('支付异常');
       }
     });
+  }
+
+  /// 添加盟店
+  Future<CreateLeagueStoreVo> createLeagueStore(int storeId, BuildContext context) {
+    return getToken().then((token) {
+      var formData = {
+        "storeId": storeId
+      };
+      return requestPost('createLeagueStore', formData: formData, token: token, context: context).then((val) {
+        return CreateLeagueStoreVo.fromJson(val);
+      });
+    });
+  }
+
+  /// 盟店获取相同类型的供应商
+  leagueStoreGetSupplier(int industryId, int storeId, BuildContext context) {
+    getToken().then((token) {
+      var formData = {
+          "industryId": industryId
+        };
+        requestPost('leagueStoreGetSupplier', formData: formData, token: token, context: context).then((val) {
+          LeagueStoreGetSupplierVo leagueStoreGetSupplierVo = LeagueStoreGetSupplierVo.fromJson(val);
+          if (leagueStoreGetSupplierVo.code == '200') {
+            Navigator.push(
+              context, 
+              CupertinoPageRoute(
+                builder: (context) => BlocProvider(
+                  bloc: SupplierCommodityPageBloc(), 
+                  child: BlocProvider(bloc: SupplierPageShoppingCarBloc(), child: SupplierCommodityPage(leagueStoreGetSupplierVo.data, storeId.toString()))
+                )
+              )
+            ).then((data) {
+              // getCommodityPageByCommodityTypeId(true);
+              getShopTypeAndEssentialMessage(context, _storeId, true);
+            });
+          } else {
+            showToast(leagueStoreGetSupplierVo.message);
+          }
+        });
+    });
+    
   }
 
   @override

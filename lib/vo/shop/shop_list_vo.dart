@@ -68,6 +68,7 @@ class ShopData {
   int starCode;
   int id;
   String lat;
+  int type;
 
   ShopData(
       {this.likeVolume,
@@ -79,6 +80,7 @@ class ShopData {
       this.photo,
       this.id,
       this.lat,
+      this.type,
       this.starCode});
 
   ShopData.fromJson(Map<String, dynamic> json) {
@@ -91,6 +93,7 @@ class ShopData {
     photo = json['photo'];
     id = json['id'];
     lat = json['lat'];
+    type = json['type'];
     starCode = json['starCode'];
   }
 
@@ -105,6 +108,7 @@ class ShopData {
     data['photo'] = this.photo;
     data['id'] = this.id;
     data['lat'] = this.lat;
+    data['type'] = this.type;
     data['starCode'] = this.starCode;
     return data;
   }
