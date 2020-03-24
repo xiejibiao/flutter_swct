@@ -16,20 +16,22 @@ class SupplierCommodityPageCommodity extends StatelessWidget {
   final List<SupplierCommodityPageVoData> _listSupplierCommodityPageVoData;
   final SupplierCommodityPageBloc _bloc;
   final SupplierPageShoppingCarBloc _supplierPageShoppingCarBloc;
+  final bool isPurchase;
   SupplierCommodityPageCommodity(
     this._listSupplierCommodityPageVoData,
     this._bloc,
-    this._supplierPageShoppingCarBloc
+    this._supplierPageShoppingCarBloc,
+    this.isPurchase
   );
   @override
   Widget build(BuildContext context) {
     return Container(
       width: ScreenUtil().setWidth(750),
-      child: Row(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           _buildLeftNavigationListItem(),
-          _buildRightCommodityListItem()
+          Expanded(child: _buildRightCommodityListItem())
         ],
       ),
     );
@@ -38,6 +40,9 @@ class SupplierCommodityPageCommodity extends StatelessWidget {
   /// 左侧导航栏
   Widget _buildLeftNavigationListItem () {
     return Container(
+      alignment: Alignment.centerRight,
+      width: ScreenUtil().setWidth(750),
+      height: ScreenUtil().setHeight(80),
       decoration: BoxDecoration(
         border: Border(
           right: BorderSide(
@@ -45,8 +50,8 @@ class SupplierCommodityPageCommodity extends StatelessWidget {
           )
         )
       ),
-      width: ScreenUtil().setWidth(180),
       child: ListView.builder(
+        scrollDirection: Axis.horizontal,
         itemCount: _listSupplierCommodityPageVoData.length,
         itemBuilder: (context, index) {
           return StreamBuilder(
@@ -58,9 +63,8 @@ class SupplierCommodityPageCommodity extends StatelessWidget {
                   _bloc.changeLeftIndex(index);
                 },
                 child: Container(
-                  padding: EdgeInsets.all(8.0),
-                  alignment: Alignment.centerLeft,
-                  height: ScreenUtil().setHeight(100),
+                  width: ScreenUtil().setWidth(_calculationWidth( _listSupplierCommodityPageVoData.length)),
+                  alignment: Alignment.center,
                   decoration: BoxDecoration(
                     color: index == sanpshop.data ? Colors.blue : Colors.white,
                     border: Border(
@@ -85,6 +89,16 @@ class SupplierCommodityPageCommodity extends StatelessWidget {
     );
   }
 
+  double _calculationWidth(int itemLength) {
+    double width;
+    if (itemLength == 0) {
+      width = 750;
+    } else {
+      width = itemLength >= 4 ? 200 : 750 / itemLength;width = itemLength >= 4 ? 200 : 750 / itemLength;
+    }
+    return width;
+  }
+
   /// 右侧商品列表
   Widget _buildRightCommodityListItem () {
     return StreamBuilder(
@@ -93,11 +107,11 @@ class SupplierCommodityPageCommodity extends StatelessWidget {
       builder: (context, sanpshop) {
         return _listSupplierCommodityPageVoData[sanpshop.data].lgmnPage.list.length == 0 ?
                 Container(
-                  width: ScreenUtil().setWidth(570),
+                  width: ScreenUtil().setWidth(750),
                   child: ShopPageSearchDefaultPage(),
                 ) :
                 Container(
-                  width: ScreenUtil().setWidth(570),
+                  width: ScreenUtil().setWidth(750),
                   child: EasyRefresh.custom(
                     footer: BallPulseFooter(
                       enableHapticFeedback: true,
@@ -113,6 +127,7 @@ class SupplierCommodityPageCommodity extends StatelessWidget {
                               child: Card(
                                 child: Container(
                                   height: ScreenUtil().setWidth(190),
+                                  width: ScreenUtil().setWidth(750),
                                   child: Row(
                                     children: <Widget>[
                                       ClipRRect(
@@ -125,6 +140,7 @@ class SupplierCommodityPageCommodity extends StatelessWidget {
                                         ),
                                       ),
                                       Container(
+                                        width: ScreenUtil().setWidth(565),
                                         padding: EdgeInsets.only(left: 10.0),
                                         child: Column(
                                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -152,7 +168,7 @@ class SupplierCommodityPageCommodity extends StatelessWidget {
                                               ),  
                                             ),
                                             Container(
-                                              width: ScreenUtil().setWidth(360),
+                                              width: ScreenUtil().setWidth(565),
                                               child: Row(
                                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                 children: <Widget>[
@@ -167,7 +183,7 @@ class SupplierCommodityPageCommodity extends StatelessWidget {
                                                       ),
                                                     ),
                                                   ),
-                                                  StreamBuilder(
+                                                  isPurchase ? StreamBuilder(
                                                     stream: _supplierPageShoppingCarBloc.commodityInfoVoListStream,
                                                     builder: (context, cleanOrAddSanpshop) {
                                                       if (cleanOrAddSanpshop.hasData && cleanOrAddSanpshop.data.length > 0) {
@@ -187,7 +203,7 @@ class SupplierCommodityPageCommodity extends StatelessWidget {
                                                         );
                                                       }
                                                     }
-                                                  )
+                                                  ) : Container()
                                                 ],
                                               ),
                                             )

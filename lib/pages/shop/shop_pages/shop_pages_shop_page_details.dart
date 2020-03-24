@@ -1,5 +1,6 @@
 import 'package:common_utils/common_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_swcy/bloc/bloc_provider.dart';
 import 'package:flutter_swcy/bloc/shop/shop_pages_bloc.dart';
 import 'package:flutter_swcy/common/commodity_detail_util.dart';
@@ -19,20 +20,24 @@ class ShopPagesShopPageDetails extends StatelessWidget {
             return showLoading();
           } else {
             ShopTypeAndEssentialMessageVo shopTypeAndEssentialMessageVo = sanpshop.data;
-            if (TextUtil.isEmpty(shopTypeAndEssentialMessageVo.data.swcyStoreEntity.description)) {
-              return ShopPageSearchDefaultPage();
+            if (shopTypeAndEssentialMessageVo.data.swcyStoreEntity.type == 1) {
+              return Html(data: shopTypeAndEssentialMessageVo.data.swcyStoreEntity.description);
             } else {
-              List<Widget> _detailWidgets = [];
               if (TextUtil.isEmpty(shopTypeAndEssentialMessageVo.data.swcyStoreEntity.description)) {
-                _detailWidgets.add(ShopPageSearchDefaultPage());
+                return ShopPageSearchDefaultPage();
               } else {
-                _detailWidgets = getDetailWidgets(details: shopTypeAndEssentialMessageVo.data.swcyStoreEntity.description);
+                List<Widget> _detailWidgets = [];
+                if (TextUtil.isEmpty(shopTypeAndEssentialMessageVo.data.swcyStoreEntity.description)) {
+                  _detailWidgets.add(ShopPageSearchDefaultPage());
+                } else {
+                  _detailWidgets = getDetailWidgets(details: shopTypeAndEssentialMessageVo.data.swcyStoreEntity.description);
+                }
+                return SingleChildScrollView(
+                  child: Column(
+                    children: _detailWidgets,
+                  ),
+                );
               }
-              return SingleChildScrollView(
-                child: Column(
-                  children: _detailWidgets,
-                ),
-              );
             }
           }
         },

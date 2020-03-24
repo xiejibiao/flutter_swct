@@ -9,6 +9,7 @@ class PersonAboutPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final PersonPageBloc _bloc = BlocProvider.of<PersonPageBloc>(context);
+    _bloc.getVersion();
     return Scaffold(
       appBar: AppBar(
         title: Text('关于'),
@@ -18,7 +19,7 @@ class PersonAboutPage extends StatelessWidget {
           Expanded(
             child: Column(
               children: <Widget>[
-                _abotListTile(context),
+                _abotListTile(context, _bloc),
                 SizedBox(height: 50.0),
                 _logoutButton(context, _bloc)
               ],
@@ -63,13 +64,22 @@ class PersonAboutPage extends StatelessWidget {
     );
   }
 
-  Column _abotListTile (BuildContext context) {
+  Column _abotListTile (BuildContext context, PersonPageBloc bloc) {
     return Column(
       children: <Widget>[
         Container(
           child: ListTile(
             title: Text('当前版本'),
-            trailing: Text('V_2.3.4'),
+            trailing: StreamBuilder(
+              stream: bloc.versionStream,
+              builder: (context, sanpshop) {
+                if (sanpshop.hasData) {
+                  return Text(sanpshop.data);
+                } else {
+                  return Text('');
+                }
+              }
+            ),
           ),
           decoration: BoxDecoration (
             border: Border(

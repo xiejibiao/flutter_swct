@@ -174,12 +174,56 @@ class SupplierPageListItem extends StatelessWidget {
                 SizedBox(width: ScreenUtil().setWidth(10)),
                 Container(
                   width: ScreenUtil().setWidth(300),
-                  child: Text(
-                    supplierInfoVo.name,
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(34),
-                    ),
-                    overflow: TextOverflow.fade,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        supplierInfoVo.name,
+                        style: TextStyle(
+                          fontSize: ScreenUtil().setSp(34),
+                        ),
+                        overflow: TextOverflow.fade,
+                      ),
+                      supplierInfoVo.brief == null ? 
+                        Text('') : 
+                        Text(
+                          supplierInfoVo.brief,
+                          style: TextStyle(
+                            fontSize: ScreenUtil().setSp(26),
+                            color: Colors.grey
+                          ),
+                          overflow: TextOverflow.fade,
+                        ),
+                        supplierInfoVo.status == 1 ? 
+                          Stack(
+                            children: <Widget> [
+                              Positioned(
+                                child: Text(
+                                  '${supplierInfoVo.starCode}',
+                                  style: TextStyle(
+                                    color: Colors.blue,
+                                    fontSize: ScreenUtil().setSp(32)
+                                  )
+                                ),
+                                top: 0,
+                                right: 15,
+                              ),
+                              Container(
+                                alignment: Alignment.centerLeft,
+                                width: ScreenUtil().setWidth(100),
+                                child: ImageIcon(
+                                  AssetImage(
+                                    'assets/image_icon/icon_store_share.png',
+                                  ),
+                                  size: 25,
+                                  color: Colors.blue,
+                                ),
+                              )
+                            ]
+                          ) :
+                          Container()
+                    ],
                   )
                 )
               ]
@@ -193,7 +237,7 @@ class SupplierPageListItem extends StatelessWidget {
           CupertinoPageRoute(
             builder: (context) => BlocProvider(
               bloc: SupplierCommodityPageBloc(), 
-              child: BlocProvider(bloc: SupplierPageShoppingCarBloc(), child: SupplierCommodityPage(supplierInfoVo, '')) 
+              child: BlocProvider(bloc: SupplierPageShoppingCarBloc(), child: SupplierCommodityPage(supplierInfoVo, '', false)) 
             )
           )
         );

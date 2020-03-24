@@ -58,7 +58,7 @@ class StorePageBloc extends BlocBase {
   
   Future loadMoreStore(int industryId, String lat, String lng, int pageNumber, int pageSize) {
     var formData = {
-      'industryId': industryId,
+      'industryId': [industryId],
       'lat': lat,
       'lng': lng,
       'pageNumber': pageNumber,

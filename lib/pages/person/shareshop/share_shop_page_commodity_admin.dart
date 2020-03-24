@@ -35,7 +35,7 @@ class _ShareShopPageCommodityAdminState extends State<ShareShopPageCommodityAdmi
       appBar: AppBar(
         title: Text('商品管理'),
         actions: <Widget>[
-          widget.myStorePageItem.type != 1 ?
+          widget.myStorePageItem.type == 0 ?
             InkWell(
               child: Container(
                 width: ScreenUtil().setWidth(100),
@@ -48,9 +48,7 @@ class _ShareShopPageCommodityAdminState extends State<ShareShopPageCommodityAdmi
                   barrierDismissible: false,
                   builder: (BuildContext context) {
                     return MessageDialog(
-                      widget: widget.myStorePageItem.type == 2 ? 
-                                Text('已存在同类型盟店，确定继续添加盟店？', style: TextStyle(fontSize: ScreenUtil().setSp(32))) :
-                                Text('确定添加盟店？', style: TextStyle(fontSize: ScreenUtil().setSp(32))),
+                      widget: Text('确定添加盟店？', style: TextStyle(fontSize: ScreenUtil().setSp(32))),
                       onCloseEvent: () {
                         Navigator.pop(context);
                       },
@@ -60,7 +58,7 @@ class _ShareShopPageCommodityAdminState extends State<ShareShopPageCommodityAdmi
                           if (createLeagueStoreVo.code == '200') {
                             showToast('创建盟店成功，请等待审核');
                           } else {
-                            showToast('创建失败');
+                            showToast(createLeagueStoreVo.message);
                           }
                         });
                       },

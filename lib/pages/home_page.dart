@@ -12,6 +12,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final HomePageBloc _bloc = BlocProvider.of<HomePageBloc>(context);
     _bloc.getHomePage(context);
+    _bloc.getSwcyVersion(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('三维创业'),

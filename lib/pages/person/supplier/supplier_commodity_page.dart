@@ -16,9 +16,11 @@ import 'package:flutter_swcy/vo/supplier/supplier_commodity_page_vo.dart';
 class SupplierCommodityPage extends StatelessWidget {
   final SupplierInfoVo supplierInfoVo;
   final String storeId;
+  final bool isPurchase;
   SupplierCommodityPage(
     this.supplierInfoVo,
-    this.storeId
+    this.storeId,
+    this.isPurchase
   );
 
   final List<Tab> _tabs = [
@@ -69,7 +71,8 @@ class SupplierCommodityPage extends StatelessWidget {
               } else {
                 return TabBarView(
                   children: <Widget>[
-                    SupplierCommodityPageCommodity(_listSupplierCommodityPageVoData, _bloc, _supplierPageShoppingCarBloc),
+                    SupplierCommodityPageCommodity(_listSupplierCommodityPageVoData, _bloc, _supplierPageShoppingCarBloc, isPurchase),
+                    // SupplierCommodityPageCommodity(_listSupplierCommodityPageVoData, _bloc),
                     SupplierCommodityPageDetail(supplierInfoVo.description)
                   ],
                 );
@@ -77,7 +80,7 @@ class SupplierCommodityPage extends StatelessWidget {
             }
           },
         ),
-        bottomNavigationBar: BottomNavigationBar(
+        bottomNavigationBar: isPurchase ? BottomNavigationBar(
           unselectedItemColor: Colors.blue,
           unselectedFontSize: 14,
           items: [
@@ -147,7 +150,7 @@ class SupplierCommodityPage extends StatelessWidget {
               Navigator.push(context, CupertinoPageRoute(builder: (context) => SupplierPageShoppingCar(_supplierPageShoppingCarBloc, supplierInfoVo.name, int.parse(storeId), supplierInfoVo.id)));
             }
           },
-        ),
+        ) : null
       ),
     );
   }

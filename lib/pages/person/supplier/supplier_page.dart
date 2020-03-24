@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_swcy/bloc/bloc_provider.dart';
 import 'package:flutter_swcy/bloc/supplier_page_bloc.dart';
-import 'package:flutter_swcy/bloc/supplier_page_order_bloc.dart';
+// import 'package:flutter_swcy/bloc/supplier_page_order_bloc.dart';
 import 'package:flutter_swcy/common/loading.dart';
 import 'package:flutter_swcy/pages/person/supplier/supplier_page_list.dart';
-import 'package:flutter_swcy/pages/person/supplier/supplier_page_order.dart';
+// import 'package:flutter_swcy/pages/person/supplier/supplier_page_order.dart';
 import 'package:flutter_swcy/pages/shop/shop_page_search_default_page.dart';
 import 'package:flutter_swcy/vo/supplier/get_supplier_page_vo.dart';
 
@@ -46,16 +46,16 @@ class _SupplierPageState extends State<SupplierPage> with TickerProviderStateMix
             return Scaffold(
               appBar: AppBar(
                 title: Text('供应商'),
-                actions: <Widget>[
-                  IconButton(
-                    onPressed: () {
-                      Navigator.push(context, CupertinoPageRoute(builder: (context) => BlocProvider(bloc: SupplierPageOrderBloc(), child: SupplierPageOrder())));
-                    },
-                    icon: ImageIcon(
-                      AssetImage('assets/image_icon/icon_order.png')
-                    ),
-                  )
-                ],
+                // actions: <Widget>[
+                //   IconButton(
+                //     onPressed: () {
+                //       Navigator.push(context, CupertinoPageRoute(builder: (context) => BlocProvider(bloc: SupplierPageOrderBloc(), child: SupplierPageOrder())));
+                //     },
+                //     icon: ImageIcon(
+                //       AssetImage('assets/image_icon/icon_order.png')
+                //     ),
+                //   )
+                // ],
                 bottom: TabBar(
                   isScrollable: true,
                   controller: _tabController,

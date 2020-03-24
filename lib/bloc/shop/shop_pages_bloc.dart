@@ -101,6 +101,13 @@ class ShopPagesBloc extends BlocBase {
     });
   }
 
+  /// 返回上一页时，清空门店分类，详情，是否关注
+  cleanShopTypeAndEssentialMessageVo() {
+    leftIndex = 0;
+    ShopTypeAndEssentialMessageVo shopTypeAndEssentialMessageVo;
+    _shopTypeAndEssentialMessageVoSink.add(shopTypeAndEssentialMessageVo);
+  }
+
   // 获取门店商品列表
   getCommodityPageByCommodityTypeId(bool isAdmin) async {
     _isTheEndSink.add(false);
@@ -571,7 +578,7 @@ class ShopPagesBloc extends BlocBase {
               CupertinoPageRoute(
                 builder: (context) => BlocProvider(
                   bloc: SupplierCommodityPageBloc(), 
-                  child: BlocProvider(bloc: SupplierPageShoppingCarBloc(), child: SupplierCommodityPage(leagueStoreGetSupplierVo.data, storeId.toString()))
+                  child: BlocProvider(bloc: SupplierPageShoppingCarBloc(), child: SupplierCommodityPage(leagueStoreGetSupplierVo.data, storeId.toString(), true))
                 )
               )
             ).then((data) {

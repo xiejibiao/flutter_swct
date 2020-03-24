@@ -5,6 +5,7 @@ import 'package:flutter_easyrefresh/ball_pulse_footer.dart';
 import 'package:flutter_easyrefresh/ball_pulse_header.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_swcy/bloc/bloc_provider.dart';
 import 'package:flutter_swcy/bloc/person/share_shop_page_bloc.dart';
 import 'package:flutter_swcy/bloc/person/share_shop_page_commodity_admin_bloc.dart';
@@ -12,14 +13,17 @@ import 'package:flutter_swcy/bloc/shop/shop_pages_bloc.dart';
 import 'package:flutter_swcy/common/loading.dart';
 import 'package:flutter_swcy/common/message_dialog.dart';
 import 'package:flutter_swcy/common/the_end_baseline.dart';
+import 'package:flutter_swcy/pages/person/person_sms_page_detail.dart';
 import 'package:flutter_swcy/pages/person/shareshop/share_shop_page_add.dart';
 import 'package:flutter_swcy/pages/person/shareshop/share_shop_page_authentication.dart';
 import 'package:flutter_swcy/pages/person/shareshop/share_shop_page_commodity_admin.dart';
 import 'package:flutter_swcy/pages/person/shareshop/share_shop_page_commodity_detail.dart';
 import 'package:flutter_swcy/pages/shop/shop_page_search_default_page.dart';
 import 'package:flutter_swcy/vo/shop/my_store_page_vo.dart';
+import 'dart:math' as math;
 
 class ShareShopPage extends StatelessWidget {
+  final SlidableController slidableController = SlidableController();
   @override
   Widget build(BuildContext context) {
     final ShareShopPageBloc _bloc = BlocProvider.of<ShareShopPageBloc>(context);
@@ -81,71 +85,124 @@ class ShareShopPage extends StatelessWidget {
   }
 
   Widget _buildStoreItem(MyStorePageItem myStorePageItem, ShareShopPageBloc bloc, ShopPagesBloc shopPagesBloc, ShareShopPageCommodityAdminBloc shareShopPageCommodityAdminBloc, BuildContext context) {
-    return InkWell(
-      onTap: () {
-        shareShopPageCommodityAdminBloc.getItems(myStorePageItem.description);
-        Navigator.push(context, CupertinoPageRoute(builder: (context) => ShareShopPageCommodityDetail(myStorePageItem.description, myStorePageItem.id, shareShopPageCommodityAdminBloc, shopPagesBloc, true, bloc)));
-      },
-      onLongPress: () {
-        Navigator.push(context, CupertinoPageRoute(builder: (context) => BlocProvider(child: ShareShopPageAdd(bloc, myStorePageItem), bloc: ShareShopPageBloc()))).then((data) {
-          if (data != null) {
-            bloc.resetStoreItem(data.data);
-          }
-        });
-      },
-      child: Container(
-        width: ScreenUtil().setWidth(750),
-        height: ScreenUtil().setHeight(200),
-        child: Card(
-          child: Container(
-            padding: EdgeInsets.all(10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
-                  child: Image.network(
-                    myStorePageItem.photo,
-                    fit: BoxFit.fill,
-                    width: ScreenUtil().setWidth(200),
-                    height: ScreenUtil().setWidth(200),
-                  ),
-                ),
-                SizedBox(width: ScreenUtil().setWidth(20)),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Container(
-                      height: ScreenUtil().setHeight(70),
-                      child: Column(
+    return Stack(
+      children: <Widget>[
+        InkWell(
+          onTap: myStorePageItem.type != 1 ? 
+            () {
+              shareShopPageCommodityAdminBloc.getItems(myStorePageItem.description);
+              Navigator.push(context, CupertinoPageRoute(builder: (context) => ShareShopPageCommodityDetail(myStorePageItem.description, myStorePageItem.id, shareShopPageCommodityAdminBloc, shopPagesBloc, true, bloc)));
+            } : 
+            () {
+              Navigator.push(context, CupertinoPageRoute(builder: (context) => PersonSmsPageDetail(myStorePageItem.description, false)));
+            },
+          onLongPress: myStorePageItem.type != 1 ? () {
+            Navigator.push(context, CupertinoPageRoute(builder: (context) => BlocProvider(child: ShareShopPageAdd(bloc, myStorePageItem), bloc: ShareShopPageBloc()))).then((data) {
+              if (data != null) {
+                bloc.resetStoreItem(data.data);
+              }
+            });
+          } : null,
+          child: Slidable(
+            controller: slidableController,
+            child: Container(
+              width: ScreenUtil().setWidth(750),
+              height: ScreenUtil().setHeight(200),
+              child: Card(
+                child: Container(
+                  padding: EdgeInsets.all(10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: Image.network(
+                          myStorePageItem.photo,
+                          fit: BoxFit.fill,
+                          width: ScreenUtil().setWidth(200),
+                          height: ScreenUtil().setWidth(200),
+                        ),
+                      ),
+                      SizedBox(width: ScreenUtil().setWidth(20)),
+                      Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
-                          Text(myStorePageItem.storeName),
-                          Text(myStorePageItem.isChecked == 1 ? '持证上线' : '无证照上线')
+                          Container(
+                            height: ScreenUtil().setHeight(70),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Text(myStorePageItem.storeName),
+                                Text(myStorePageItem.isChecked == 1 ? '持证上线' : '无证照上线')
+                              ],
+                            ),
+                          ),
+                          Container(
+                            alignment: Alignment.centerRight,
+                            width: ScreenUtil().setWidth(445),
+                            child: _buildButtom(myStorePageItem.isChecked, TextUtil.isEmpty(myStorePageItem.licenseCode) ? false : true, context, myStorePageItem, bloc, shopPagesBloc),
+                            // child: Row(
+                            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            //   children: <Widget>[
+                            //     myStorePageItem.type == 1 ? 
+                            //       ImageIcon(AssetImage('assets/image_icon/icon_league_store.png'), color: Colors.blue) :
+                            //       ImageIcon(AssetImage('assets/image_icon/icon_shop.png'), color: Colors.blue), 
+                            //     _buildButtom(myStorePageItem.isChecked, TextUtil.isEmpty(myStorePageItem.licenseCode) ? false : true, context, myStorePageItem, bloc, shopPagesBloc)
+                            //   ]
+                            // )
+                          )
                         ],
                       ),
-                    ),
-                    Container(
-                      width: ScreenUtil().setWidth(445),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          myStorePageItem.type == 1 ? 
-                            ImageIcon(AssetImage('assets/image_icon/icon_league_store.png'), color: Colors.blue) :
-                            ImageIcon(AssetImage('assets/image_icon/icon_shop.png'), color: Colors.blue), 
-                          _buildButtom(myStorePageItem.isChecked, TextUtil.isEmpty(myStorePageItem.licenseCode) ? false : true, context, myStorePageItem, bloc, shopPagesBloc)
-                        ]
-                      )
+                    ],
+                  ),
+                ),
+              ),
+            ), 
+            actionPane: SlidableScrollActionPane(),
+            secondaryActions: <Widget>[
+              IconSlideAction(
+                iconWidget: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Icon(Icons.delete_forever, color: Colors.red),
+                    Text(
+                      '删除',
+                      style: TextStyle(
+                        color: Colors.red
+                      ),
                     )
-                  ],
-                )
-              ],
-            ),
+                  ]
+                ),
+                onTap: () => _delStoreItem(myStorePageItem.id, context, bloc),
+              )
+            ],
+            actionExtentRatio: 0.25,
           ),
         ),
-      ),
+        Positioned(
+          bottom: 20,
+          right: -5,
+          child: Transform.rotate(
+            angle: (-math.pi) / 4,
+            child: Container(
+              width: ScreenUtil().setWidth(120),
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: myStorePageItem.type == 1 ? Colors.blue : Color(0xFF19BE6B),
+                borderRadius: BorderRadius.circular(8)
+              ),
+              child: Text(
+                myStorePageItem.type == 1 ? '盟店' : '共享店',
+                style: TextStyle(
+                  color: Colors.white
+                ),
+              )
+            ),
+          )
+        )
+      ]
     );
   }
 
@@ -194,7 +251,9 @@ class ShareShopPage extends StatelessWidget {
         child: Text('产品与订单', style: TextStyle(color: Colors.white)),
       ),
       onTap: () {
-        Navigator.push(context, CupertinoPageRoute(builder: (context) => ShareShopPageCommodityAdmin(myStorePageItem, bloc)));
+        Navigator.push(context, CupertinoPageRoute(builder: (context) => ShareShopPageCommodityAdmin(myStorePageItem, bloc))).then((val) {
+          bloc.cleanShopTypeAndEssentialMessageVo();
+        });
       },
     );
   }
@@ -260,4 +319,26 @@ class ShareShopPage extends StatelessWidget {
       },
     );
   }
-} 
+
+  /// 删除共享店
+  _delStoreItem(int storeId, BuildContext context, ShareShopPageBloc bloc) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return MessageDialog(
+          widget: Text('确定删除？', style: TextStyle(fontSize: ScreenUtil().setSp(32))),
+          onCloseEvent: () {
+            Navigator.pop(context);
+          },
+          onPositivePressEvent: () {
+            Navigator.pop(context);
+            bloc.delStoreItem(storeId, context);
+          },
+          negativeText: '取消',
+          positiveText: '确认',
+        );
+      }
+    );
+  }
+}

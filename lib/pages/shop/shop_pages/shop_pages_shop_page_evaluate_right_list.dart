@@ -54,7 +54,7 @@ class ShopPagesShopPageEvaluateRightList extends StatelessWidget {
                           width: ScreenUtil().setWidth(750),
                           child: ShopPageSearchDefaultPage(),
                         ) :
-                        Container();
+                        ShopPageSearchDefaultPage();
             } else {
               return EasyRefresh.custom(
                 footer: BallPulseFooter(
@@ -205,7 +205,7 @@ class ShopPagesShopPageEvaluateRightList extends StatelessWidget {
         onTap: () async {
           shareShopPageBloc.upperShelfAndLowerShelf(commodityList.id, bloc);
         },
-        child: Container(
+        child: type != 1 ? Container(
           padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
           decoration: BoxDecoration(
             color: commodityList.status == 0 ? Colors.green : Color.fromRGBO(255,218,68, 1.0),
@@ -215,7 +215,7 @@ class ShopPagesShopPageEvaluateRightList extends StatelessWidget {
             borderRadius: BorderRadius.circular(20.0)
           ),
           child: commodityList.status == 0 ? Text('点击上架', style: TextStyle(color: Colors.white)) : Text('点击下架'),
-        ),
+        ) : Container(),
       );
     } else {
       return StreamBuilder(

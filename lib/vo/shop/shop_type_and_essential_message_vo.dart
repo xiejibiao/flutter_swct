@@ -73,6 +73,7 @@ class SwcyStoreEntity {
   String photo;
   String phone;
   String description;
+  int type;
 
   SwcyStoreEntity(
       {this.id,
@@ -90,7 +91,8 @@ class SwcyStoreEntity {
       this.createTime,
       this.photo,
       this.phone,
-      this.description});
+      this.description,
+      this.type});
 
   SwcyStoreEntity.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -109,6 +111,7 @@ class SwcyStoreEntity {
     photo = json['photo'];
     phone = json['phone'];
     description = json['description'];
+    type = json['type'];
   }
 
   Map<String, dynamic> toJson() {
@@ -129,6 +132,7 @@ class SwcyStoreEntity {
     data['photo'] = this.photo;
     data['phone'] = this.phone;
     data['description'] = this.description;
+    data['type'] = this.type;
     return data;
   }
 }

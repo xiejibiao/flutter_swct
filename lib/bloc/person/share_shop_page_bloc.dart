@@ -528,6 +528,24 @@ class ShareShopPageBloc extends BlocBase {
     _myStorePageVoSink.add(_myStorePageVo);
   }
 
+  /// 删除共享店
+  delStoreItem(int storeId, BuildContext context) {
+    getToken().then((token) {
+      var formData = {
+        'storeId': storeId
+      };
+      requestPost('delStoreById', context: context, formData: formData, token: token).then((val) {
+        CommenVo commenVo = CommenVo.fromJson(val);
+        if (commenVo.code == '200') {
+          showToast(commenVo.message);
+          getMyStorePage(context);
+        } else {
+          showToast(commenVo.message);
+        }
+      });
+    });
+  }
+
   @override
   void dispose() {
     _myStorePageVoController.close();

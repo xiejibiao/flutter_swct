@@ -224,7 +224,8 @@ class StoreItem {
         id: item.id,
         lat: item.lat,
         type: item.type,
-        starCode: item.starCode
+        starCode: item.starCode,
+        status: item.status
       ));
     });
     return list;

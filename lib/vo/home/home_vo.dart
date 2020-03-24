@@ -26,8 +26,8 @@ class HomeVo {
   String id;
   String avatar;
   String nikeName;
-  double groupPower;
-  double personPower;
+  double personalCommission;
+  double teamCommission;
   int score;
   List<HomeAdType0Vos> homeAdType0Vos;
   List<HomeAdType0Vos> homeAdType1Vos;
@@ -36,8 +36,8 @@ class HomeVo {
       {this.id,
       this.avatar,
       this.nikeName,
-      this.groupPower,
-      this.personPower,
+      this.personalCommission,
+      this.teamCommission,
       this.score,
       this.homeAdType0Vos,
       this.homeAdType1Vos});
@@ -46,8 +46,8 @@ class HomeVo {
     id = json['id'];
     avatar = json['avatar'];
     nikeName = json['nikeName'];
-    groupPower = json['groupPower'];
-    personPower = json['personPower'];
+    personalCommission = json['personalCommission'];
+    teamCommission = json['teamCommission'];
     score = json['score'];
     if (json['homeAdType0Vos'] != null) {
       homeAdType0Vos = new List<HomeAdType0Vos>();
@@ -68,8 +68,8 @@ class HomeVo {
     data['id'] = this.id;
     data['avatar'] = this.avatar;
     data['nikeName'] = this.nikeName;
-    data['groupPower'] = this.groupPower;
-    data['personPower'] = this.personPower;
+    data['personalCommission'] = this.personalCommission;
+    data['teamCommission'] = this.teamCommission;
     data['score'] = this.score;
     if (this.homeAdType0Vos != null) {
       data['homeAdType0Vos'] =

@@ -6,6 +6,7 @@ const servicePath = {
   'register': serviceBaseUrl + '/account/register',                                                   // 注册/重置密码
   'exitLogin': serviceBaseUrl + '/account/exitLogin',                                                 // 退出登录
   'getHomePage': serviceBaseUrl + '/home/getHomePage',                                                // 获取首页数据
+  'getSwcyVersion': serviceBaseUrl + '/home/getSwcyVersion',                                          // 获取APP版本
   'getStoreIndustryList': serviceBaseUrl + '/store/getStoreIndustryList',                             // 获取门店类型
   'getPageStore': serviceBaseUrl + '/store/getPageStore',                                             // 获取门店列表
   'getPageSearchStore': serviceBaseUrl + '/store/getPageSearchStore',                                 // 搜索门店列表
@@ -75,4 +76,5 @@ const servicePath = {
   'getLeagueStoreOrderPage': serviceBaseUrl + '/supplier/getLeagueStoreOrderPage',                    // 获取盟店订单
   'getLeagueStoreOrderDetails': serviceBaseUrl + '/supplier/getLeagueStoreOrderDetails',              // 获取盟店订单详情
   'leagueStoreOrderConfirmReceipt': serviceBaseUrl + '/supplier/leagueStoreOrderConfirmReceipt',      // 盟店订单确认收货
+  'delStoreById': serviceBaseUrl + '/store/delStoreById',                                             // 删除共享店
 };

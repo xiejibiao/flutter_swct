@@ -6,6 +6,7 @@ import 'package:flutter_swcy/bloc/shop/shop_pages_bloc.dart';
 import 'package:flutter_swcy/pages/shop/shop_pages/shop_pages_shop_page.dart';
 import 'package:flutter_swcy/vo/shop/news_get_page_store_vo.dart';
 import 'package:oktoast/oktoast.dart';
+import 'dart:math' as math;
 
 class StorePageListItem extends StatelessWidget {
   final StoreMap storeMap;
@@ -99,101 +100,126 @@ class SliverListItem extends StatelessWidget {
     return SliverList(
       delegate: SliverChildBuilderDelegate((context, index) {
           return InkWell(
-            child: Container(
-              height: ScreenUtil().setHeight(220),
-              child: Card(
-                child: Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(8.0),
-                        child: Image.network(
-                          list[index].photo,
-                          fit: BoxFit.cover,
-                          height: ScreenUtil().setWidth(200),
-                          width: ScreenUtil().setWidth(200),
-                        ),
-                      ),
-                      SizedBox(width: ScreenUtil().setWidth(10)),
-                      Container(
-                        width: ScreenUtil().setWidth(300),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              list[index].storeName,
-                              style: TextStyle(
-                                fontSize: ScreenUtil().setSp(34),
-                              ),
-                              overflow: TextOverflow.ellipsis,
+            child: Stack(
+              children: <Widget> [
+                Container(
+                  height: ScreenUtil().setHeight(220),
+                  child: Card(
+                    child: Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(8.0),
+                            child: Image.network(
+                              list[index].photo,
+                              fit: BoxFit.cover,
+                              height: ScreenUtil().setWidth(200),
+                              width: ScreenUtil().setWidth(200),
                             ),
-                            list[index].brief == null ? 
-                              Text('') : 
-                              Text(
-                                list[index].brief,
-                                style: TextStyle(
-                                  fontSize: ScreenUtil().setSp(26),
-                                  color: Colors.grey
+                          ),
+                          SizedBox(width: ScreenUtil().setWidth(10)),
+                          Container(
+                            width: ScreenUtil().setWidth(300),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  list[index].storeName,
+                                  style: TextStyle(
+                                    fontSize: ScreenUtil().setSp(34),
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
                                 ),
-                                overflow: TextOverflow.fade,
-                              ),
-                              list[index].status == 1 ? 
-                                Stack(
-                                  children: <Widget> [
-                                    Positioned(
-                                      child: Text(
-                                        '${list[index].starCode}',
-                                        style: TextStyle(
-                                          color: Colors.blue,
-                                          fontSize: ScreenUtil().setSp(32)
+                                list[index].brief == null ? 
+                                  Text('') : 
+                                  Text(
+                                    list[index].brief,
+                                    style: TextStyle(
+                                      fontSize: ScreenUtil().setSp(26),
+                                      color: Colors.grey
+                                    ),
+                                    overflow: TextOverflow.fade,
+                                  ),
+                                  list[index].status == 1 ? 
+                                    Stack(
+                                      children: <Widget> [
+                                        Positioned(
+                                          child: Text(
+                                            '${list[index].starCode}',
+                                            style: TextStyle(
+                                              color: Colors.blue,
+                                              fontSize: ScreenUtil().setSp(32)
+                                            )
+                                          ),
+                                          top: 0,
+                                          right: 15,
+                                        ),
+                                        Container(
+                                          alignment: Alignment.centerLeft,
+                                          width: ScreenUtil().setWidth(100),
+                                          child: ImageIcon(
+                                            AssetImage(
+                                              'assets/image_icon/icon_store_share.png',
+                                            ),
+                                            size: 25,
+                                            color: Colors.blue,
+                                          ),
                                         )
-                                      ),
-                                      top: 0,
-                                      right: 15,
-                                    ),
-                                    Container(
-                                      alignment: Alignment.centerLeft,
-                                      width: ScreenUtil().setWidth(100),
-                                      child: ImageIcon(
-                                        AssetImage(
-                                          'assets/image_icon/icon_store_share.png',
+                                      ]
+                                    ) :
+                                    Container()
+                              ]
+                            )
+                          ),
+                          SizedBox(width: ScreenUtil().setWidth(10)),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              list[index].juli == null
+                                      ? Text('')
+                                      : Text(
+                                          '${list[index].juli / 1000} 公里',
+                                          style: TextStyle(
+                                              fontSize: ScreenUtil().setSp(26),
+                                              color: Colors.grey,
+                                            ),
                                         ),
-                                        size: 25,
-                                        color: Colors.blue,
-                                      ),
-                                    )
-                                  ]
-                                ) :
-                                Container()
-                          ]
-                        )
+                              // list[index].type == 1 ? 
+                              //   ImageIcon(AssetImage('assets/image_icon/icon_league_store.png'), color: Colors.blue) :
+                              //   ImageIcon(AssetImage('assets/image_icon/icon_shop.png'), color: Colors.blue) 
+                            ],
+                          )
+                        ]
                       ),
-                      SizedBox(width: ScreenUtil().setWidth(10)),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          list[index].juli == null
-                                  ? Text('')
-                                  : Text(
-                                      '${list[index].juli / 1000} 公里',
-                                      style: TextStyle(
-                                          fontSize: ScreenUtil().setSp(26),
-                                          color: Colors.grey,
-                                        ),
-                                    ),
-                          list[index].type == 1 ? 
-                            ImageIcon(AssetImage('assets/image_icon/icon_league_store.png'), color: Colors.blue) :
-                            ImageIcon(AssetImage('assets/image_icon/icon_shop.png'), color: Colors.blue) 
-                        ],
-                      )
-                    ]
+                    )
                   ),
+                ),
+                Positioned(
+                  bottom: 20,
+                  right: -5,
+                  child: Transform.rotate(
+                    angle: (-math.pi) / 4,
+                    child: Container(
+                      width: ScreenUtil().setWidth(120),
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: list[index].type == 1 ? Colors.blue : Color(0xFF19BE6B),
+                        borderRadius: BorderRadius.circular(8)
+                      ),
+                      child: Text(
+                        list[index].type == 1 ? '盟店' : '共享店',
+                        style: TextStyle(
+                          color: Colors.white
+                        ),
+                      )
+                    ),
+                  )
                 )
-              ),
+              ]
             ),
             onTap: list[index].status == 1 ? 
               () {

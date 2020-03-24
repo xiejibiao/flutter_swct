@@ -39,7 +39,7 @@ class _PersonSmsPageNoticeSmsState extends State<PersonSmsPageNoticeSms> {
                       return Card(
                         child: ListTile(
                           onTap: () {
-                            Navigator.push(context, CupertinoPageRoute(builder: (context) => PersonSmsPageDetail(_bloc.noticeSmsVo.data.list[index].content)));
+                            Navigator.push(context, CupertinoPageRoute(builder: (context) => PersonSmsPageDetail(_bloc.noticeSmsVo.data.list[index].content, true)));
                           },
                           title: Text(_bloc.noticeSmsVo.data.list[index].title),
                           subtitle: Text(DateUtil.getDateStrByMs(_bloc.noticeSmsVo.data.list[index].createTime)),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_swcy/bloc/bloc_provider.dart';
 import 'package:flutter_swcy/bloc/index_page_bloc.dart';
+import 'package:flutter_swcy/common/message_dialog.dart';
 import 'package:flutter_swcy/pages/home_page.dart';
 // import 'package:flutter_swcy/pages/shop_page.dart';
 import 'package:flutter_swcy/pages/order_page.dart';
@@ -46,22 +47,43 @@ class IndexPage extends StatelessWidget {
       initialData: 0,
       stream: _bloc.indexPageStream,
       builder: (context, sanpshop) {
-        return Scaffold(
-          backgroundColor: Color.fromRGBO(244, 245, 245, 1.0),
-          body: IndexedStack(
-            index: sanpshop.data,
-            children: _bottomTabView,
-          ),
-          bottomNavigationBar: BottomNavigationBar(
-            selectedFontSize: ScreenUtil().setSp(26),
-            unselectedFontSize: ScreenUtil().setSp(26),
-            items: _bottomTabs,
-            type: BottomNavigationBarType.fixed,
-            currentIndex: sanpshop.data,
-            onTap: (index) {
-              _bloc.thisCurrentIndex(index);
-            },
-          ),
+        return WillPopScope(
+          child: Scaffold(
+            backgroundColor: Color.fromRGBO(244, 245, 245, 1.0),
+            body: IndexedStack(
+              index: sanpshop.data,
+              children: _bottomTabView,
+            ),
+            bottomNavigationBar: BottomNavigationBar(
+              selectedFontSize: ScreenUtil().setSp(26),
+              unselectedFontSize: ScreenUtil().setSp(26),
+              items: _bottomTabs,
+              type: BottomNavigationBarType.fixed,
+              currentIndex: sanpshop.data,
+              onTap: (index) {
+                _bloc.thisCurrentIndex(index);
+              },
+            ),
+          ), 
+          onWillPop: () {
+            return showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (BuildContext context) {
+                return MessageDialog(
+                  widget: Text('确定退出程序吗', style: TextStyle(fontSize: ScreenUtil().setSp(32))),
+                  onCloseEvent: () {
+                    Navigator.pop(context, false);
+                  },
+                  onPositivePressEvent: () {
+                    Navigator.pop(context, true);
+                  },
+                  negativeText: '取消',
+                  positiveText: '确认',
+                );
+              }
+            );
+          }
         );
       },
     );

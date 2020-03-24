@@ -69,6 +69,7 @@ class ShopData {
   int id;
   String lat;
   int type;
+  int status;
 
   ShopData(
       {this.likeVolume,
@@ -81,7 +82,8 @@ class ShopData {
       this.id,
       this.lat,
       this.type,
-      this.starCode});
+      this.starCode,
+      this.status});
 
   ShopData.fromJson(Map<String, dynamic> json) {
     likeVolume = json['likeVolume'];
@@ -95,6 +97,7 @@ class ShopData {
     lat = json['lat'];
     type = json['type'];
     starCode = json['starCode'];
+    status = json['status'];
   }
 
   Map<String, dynamic> toJson() {
@@ -110,6 +113,7 @@ class ShopData {
     data['lat'] = this.lat;
     data['type'] = this.type;
     data['starCode'] = this.starCode;
+    data['status'] = this.status;
     return data;
   }
 }

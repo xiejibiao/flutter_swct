@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_swcy/bloc/bloc_provider.dart';
 import 'package:flutter_swcy/bloc/login_page_bloc.dart';
 import 'package:flutter_swcy/bloc/person/person_info_page_bloc.dart';
+import 'package:flutter_swcy/common/preference_utils.dart';
 import 'package:flutter_swcy/common/shared_preferences.dart';
 import 'package:flutter_swcy/pages/login/login_page.dart';
 import 'package:flutter_swcy/service/service_method.dart';
@@ -18,6 +19,12 @@ import 'package:rxdart/rxdart.dart';
 class PersonPageBloc extends BlocBase {
 
   bool isFirst = true;
+  final String _versionKEY = 'VERSION_KEY';
+
+  /// 版本
+  BehaviorSubject<String> _versionController = BehaviorSubject<String>();
+  Sink<String> get _versionSink => _versionController.sink;
+  Stream<String> get versionStream => _versionController.stream;
 
   // 我的
   BehaviorSubject<PersonVo> _personVoController = BehaviorSubject<PersonVo>();
@@ -290,6 +297,12 @@ class PersonPageBloc extends BlocBase {
     }
   }
 
+  getVersion() {
+    PreferenceUtils.instance.getString(key: _versionKEY).then((versionVal) {
+      _versionSink.add(versionVal);
+    });
+  }
+
   @override
   void dispose() {
     _personVoController.close();
@@ -300,5 +313,6 @@ class PersonPageBloc extends BlocBase {
     _noticeSmsVoController.close();
     _complaintsController.close();
     _isLogoutLoadingController.close();
+    _versionController.close();
   }
 }
