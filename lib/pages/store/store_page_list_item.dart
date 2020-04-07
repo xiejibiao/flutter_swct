@@ -198,11 +198,11 @@ class SliverListItem extends StatelessWidget {
                     )
                   ),
                 ),
-                Positioned(
-                  bottom: 20,
+                list[index].type == 1 ? Positioned(
+                  bottom: 10,
                   right: -5,
                   child: Transform.rotate(
-                    angle: (-math.pi) / 4,
+                    angle: (-math.pi) / 180,
                     child: Container(
                       width: ScreenUtil().setWidth(120),
                       alignment: Alignment.center,
@@ -218,7 +218,7 @@ class SliverListItem extends StatelessWidget {
                       )
                     ),
                   )
-                )
+                ) : Container()
               ]
             ),
             onTap: list[index].status == 1 ? 

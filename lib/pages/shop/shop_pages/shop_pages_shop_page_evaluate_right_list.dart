@@ -165,23 +165,25 @@ class ShopPagesShopPageEvaluateRightList extends StatelessWidget {
             color: Colors.grey
           ),
         ),
-        commodityList.stock == null ? 
-          Text('库存: 0',
-            style: TextStyle(
-              color: Colors.grey
-            )
-          ) :
-          commodityList.stock <= 0 ? 
-            Text('库存: 缺货',
+        type == 1 ? 
+          Container() : 
+          commodityList.stock == null ? 
+            Text('库存: 0',
               style: TextStyle(
                 color: Colors.grey
               )
             ) :
-            Text('库存: ${commodityList.stock}',
-              style: TextStyle(
-                color: Colors.grey
-              )
-            ),
+            commodityList.stock <= 0 ? 
+              Text('库存: 缺货',
+                style: TextStyle(
+                  color: Colors.grey
+                )
+              ) :
+              Text('库存: ${commodityList.stock}',
+                style: TextStyle(
+                  color: Colors.grey
+                )
+              ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
@@ -380,25 +382,45 @@ class ShopPagesShopPageEvaluateRightList extends StatelessWidget {
 
   /// 加入购物车
   Widget _addSupingCarItem(CommodityList commodityList) {
+    Color textColor;
+    Color bgColor;
+    if (type == 1) {
+      textColor = Colors.black;
+      bgColor = Color.fromRGBO(255,218,68, 1.0);
+    } else {
+      if (commodityList.stock != null && commodityList.stock > 0) {
+        textColor = Colors.black;
+        bgColor = Color.fromRGBO(255,218,68, 1.0);
+      } else {
+        textColor = Colors.white;
+        bgColor = Colors.grey;
+      }
+    }
     return InkWell(
-      onTap: commodityList.stock == null || commodityList.stock < 1 ? null : () async {
-        await bloc.saveCommodityToShoppingCar(id: commodityList.id, name: commodityList.name, count: 1, price: commodityList.price, cover: commodityList.cover, specs: commodityList.specs);
+      onTap: () async {
+        if (type == 1) {
+          await bloc.saveCommodityToShoppingCar(id: commodityList.id, name: commodityList.name, count: 1, price: commodityList.price, cover: commodityList.cover, specs: commodityList.specs);
+        } else {
+          if (commodityList.stock != null && commodityList.stock > 0) {
+            await bloc.saveCommodityToShoppingCar(id: commodityList.id, name: commodityList.name, count: 1, price: commodityList.price, cover: commodityList.cover, specs: commodityList.specs);
+          }
+        }
       },
       child: Container(
         width: ScreenUtil().setWidth(160),
         height: ScreenUtil().setHeight(45),
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: commodityList.stock == null || commodityList.stock < 1 ? Colors.grey : Color.fromRGBO(255,218,68, 1.0),
+          color: bgColor,
           border: Border.all(
-            color: commodityList.stock == null || commodityList.stock < 1 ? Colors.grey : Color.fromRGBO(255,218,68, 1.0)
+            color: bgColor
           ),
           borderRadius: BorderRadius.circular(20.0)
         ),
         child: Text(
           '加入购物车',
           style: TextStyle(
-            color: commodityList.stock == null || commodityList.stock < 1 ? Colors.white : Colors.black
+            color: textColor
           ),
         ),
       )

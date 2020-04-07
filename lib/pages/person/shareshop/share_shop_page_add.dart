@@ -17,9 +17,11 @@ import 'package:oktoast/oktoast.dart';
 class ShareShopPageAdd extends StatefulWidget {
   final ShareShopPageBloc bloc;
   final MyStorePageItem myStorePageItem;
+  final String titleName;
   ShareShopPageAdd(
     this.bloc,
-    this.myStorePageItem
+    this.myStorePageItem,
+    this.titleName
   );
   _ShareShopPageAddState createState() => _ShareShopPageAddState();
 }
@@ -103,7 +105,7 @@ class _ShareShopPageAddState extends State<ShareShopPageAdd> {
     final ShareShopPageBloc _newBloc = BlocProvider.of<ShareShopPageBloc>(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text('添加共享店'),
+        title: Text(widget.titleName),
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -217,7 +219,7 @@ class _ShareShopPageAddState extends State<ShareShopPageAdd> {
                           labelText: '行业类型',
                         ),
                       ),
-                      onTap: () async {
+                      onTap: widget.titleName == '修改共享店' ? null : () async {
                         _industryConroller.text = _industryList[_industryIndex].name;
                         _industryTempConroller.text = '{"id": "${_industryList[_industryIndex].id}", "name": "${_industryList[_industryIndex].name}"}';
                         showModalBottomSheet(

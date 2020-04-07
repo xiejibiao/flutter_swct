@@ -62,16 +62,16 @@ class PersonTeamList {
   String avatar;
   String nikeName;
   String phone;
-  int achievement;
+  double personPower;
 
-  PersonTeamList({this.uid, this.avatar, this.nikeName, this.phone, this.achievement});
+  PersonTeamList({this.uid, this.avatar, this.nikeName, this.phone, this.personPower});
 
   PersonTeamList.fromJson(Map<String, dynamic> json) {
     uid = json['uid'];
     avatar = json['avatar'];
     nikeName = json['nikeName'];
     phone = json['phone'];
-    achievement = json['achievement'];
+    personPower = json['personPower'];
   }
 
   Map<String, dynamic> toJson() {
@@ -80,7 +80,7 @@ class PersonTeamList {
     data['avatar'] = this.avatar;
     data['nikeName'] = this.nikeName;
     data['phone'] = this.phone;
-    data['achievement'] = this.achievement;
+    data['personPower'] = this.personPower;
     return data;
   }
 }

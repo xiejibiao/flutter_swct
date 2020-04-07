@@ -37,7 +37,7 @@ class ShareShopPage extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.add, size: 32),
             onPressed: () {
-              Navigator.push(context, CupertinoPageRoute(builder: (context) => BlocProvider(child: ShareShopPageAdd(_bloc, null), bloc: ShareShopPageBloc())));
+              Navigator.push(context, CupertinoPageRoute(builder: (context) => BlocProvider(child: ShareShopPageAdd(_bloc, null, '添加共享店'), bloc: ShareShopPageBloc())));
             },
           )
         ],
@@ -97,7 +97,7 @@ class ShareShopPage extends StatelessWidget {
               Navigator.push(context, CupertinoPageRoute(builder: (context) => PersonSmsPageDetail(myStorePageItem.description, false)));
             },
           onLongPress: myStorePageItem.type != 1 ? () {
-            Navigator.push(context, CupertinoPageRoute(builder: (context) => BlocProvider(child: ShareShopPageAdd(bloc, myStorePageItem), bloc: ShareShopPageBloc()))).then((data) {
+            Navigator.push(context, CupertinoPageRoute(builder: (context) => BlocProvider(child: ShareShopPageAdd(bloc, myStorePageItem, '修改共享店'), bloc: ShareShopPageBloc()))).then((data) {
               if (data != null) {
                 bloc.resetStoreItem(data.data);
               }
@@ -107,7 +107,7 @@ class ShareShopPage extends StatelessWidget {
             controller: slidableController,
             child: Container(
               width: ScreenUtil().setWidth(750),
-              height: ScreenUtil().setHeight(200),
+              height: ScreenUtil().setHeight(240),
               child: Card(
                 child: Container(
                   padding: EdgeInsets.all(10),
@@ -182,10 +182,10 @@ class ShareShopPage extends StatelessWidget {
           ),
         ),
         Positioned(
-          bottom: 20,
+          bottom: 10,
           right: -5,
           child: Transform.rotate(
-            angle: (-math.pi) / 4,
+            angle: (-math.pi) / 180,
             child: Container(
               width: ScreenUtil().setWidth(120),
               alignment: Alignment.center,
@@ -238,23 +238,54 @@ class ShareShopPage extends StatelessWidget {
 
   /// 产品上架
   Widget _buildProductsOnShelvesButtom(BuildContext context, MyStorePageItem myStorePageItem, ShopPagesBloc bloc) {
-    return InkWell(
-      child: Container(
-        alignment: Alignment.center,
-        width: ScreenUtil().setWidth(180),
-        height: ScreenUtil().setHeight(50),
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey[300]),
-          borderRadius: BorderRadius.circular(8),
-          color: Colors.blue[300]
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: <Widget>[
+        Stack(
+          children: <Widget> [
+            Positioned(
+              child: Text(
+                '${myStorePageItem.starCode}',
+                style: TextStyle(
+                  color: Colors.blue,
+                  fontSize: ScreenUtil().setSp(32)
+                )
+              ),
+              top: 0,
+              right: 15,
+            ),
+            Container(
+              alignment: Alignment.centerLeft,
+              width: ScreenUtil().setWidth(100),
+              child: ImageIcon(
+                AssetImage(
+                  'assets/image_icon/icon_store_share.png',
+                ),
+                size: 25,
+                color: Colors.blue,
+              ),
+            )
+          ]
         ),
-        child: Text('产品与订单', style: TextStyle(color: Colors.white)),
-      ),
-      onTap: () {
-        Navigator.push(context, CupertinoPageRoute(builder: (context) => ShareShopPageCommodityAdmin(myStorePageItem, bloc))).then((val) {
-          bloc.cleanShopTypeAndEssentialMessageVo();
-        });
-      },
+        InkWell(
+          child: Container(
+            alignment: Alignment.center,
+            width: ScreenUtil().setWidth(180),
+            height: ScreenUtil().setHeight(50),
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.grey[300]),
+              borderRadius: BorderRadius.circular(8),
+              color: Colors.blue[300]
+            ),
+            child: Text('产品与订单', style: TextStyle(color: Colors.white)),
+          ),
+          onTap: () {
+            Navigator.push(context, CupertinoPageRoute(builder: (context) => ShareShopPageCommodityAdmin(myStorePageItem, bloc))).then((val) {
+              bloc.cleanShopTypeAndEssentialMessageVo();
+            });
+          },
+        )
+      ]
     );
   }
 

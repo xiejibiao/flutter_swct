@@ -57,7 +57,7 @@ class PersonTeamPageList extends StatelessWidget {
           ),
           title: Text('${personTeamList.nikeName}'),
           subtitle: personTeamList.phone == null ? Container() : Text('${personTeamList.phone}'),
-          trailing: Text('${personTeamList.achievement}'),
+          trailing: Text('${personTeamList.personPower}'),
         ),
       ),
     );
