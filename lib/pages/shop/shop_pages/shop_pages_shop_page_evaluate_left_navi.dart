@@ -93,7 +93,7 @@ class ShopPagesShopPageEvaluateLeftNavi extends StatelessWidget {
       bool isSelected = bloc.thisIndexIsSelected(index);
       return InkWell(
         onTap: () {
-          bloc.setLeftIndex(index, isAdmin);
+          bloc.setLeftIndex(index, isAdmin, id);
         },
         onLongPress: () {
           if (isAdmin && type != 1) {

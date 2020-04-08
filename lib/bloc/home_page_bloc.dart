@@ -32,7 +32,7 @@ class HomePageBloc extends BlocBase {
     }
   }
 
-  String appVersion = '2.4.7';
+  String appVersion = '2.4.8';
   getSwcyVersion(BuildContext context) {
     PreferenceUtils.instance.saveString(key: _versionKEY, value: appVersion);
     requestPost('getSwcyVersion').then((val) {

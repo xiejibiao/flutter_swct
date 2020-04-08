@@ -19,6 +19,7 @@ import 'package:flutter_swcy/vo/shop/commodity_page_by_commodity_type_vo.dart';
 
 class ShopPagesShopPageEvaluateRightList extends StatelessWidget {
   final ShopPagesBloc bloc;
+  final int storeId;
   final bool isAdmin;
   final int commodityTypeListLength;
   final int type;
@@ -26,7 +27,8 @@ class ShopPagesShopPageEvaluateRightList extends StatelessWidget {
     this.bloc,
     this.isAdmin,
     this.commodityTypeListLength,
-    this.type
+    this.type,
+    this.storeId
   );
   @override
   Widget build(BuildContext context) {
@@ -89,7 +91,7 @@ class ShopPagesShopPageEvaluateRightList extends StatelessWidget {
                   )
                 ],
                 onLoad: () async {
-                  await bloc.loadMoreCommodityPageByCommodityTypeId(isAdmin);
+                  await bloc.loadMoreCommodityPageByCommodityTypeId(isAdmin, storeId);
                 }
               );
             }

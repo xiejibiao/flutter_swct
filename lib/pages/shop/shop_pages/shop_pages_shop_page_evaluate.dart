@@ -37,7 +37,7 @@ class _ShopPagesShopPageEvaluateState extends State<ShopPagesShopPageEvaluate> {
                   children: <Widget>[
                     ShopPagesShopPageEvaluateLeftNavi(widget.commodityTypeList, widget.storeItem.id, widget.bloc, widget.isAdmin, widget.storeItem.type),
                     Expanded(
-                      child: BlocProvider(bloc: ShareShopPageBloc(), child: BlocProvider(bloc: ShareShopPageCommodityAdminBloc(), child: ShopPagesShopPageEvaluateRightList(widget.bloc, widget.isAdmin, widget.commodityTypeList.length, widget.storeItem.type)))
+                      child: BlocProvider(bloc: ShareShopPageBloc(), child: BlocProvider(bloc: ShareShopPageCommodityAdminBloc(), child: ShopPagesShopPageEvaluateRightList(widget.bloc, widget.isAdmin, widget.commodityTypeList.length, widget.storeItem.type, widget.storeItem.id)))
                     )
                   ],
                 ) : 
@@ -45,7 +45,7 @@ class _ShopPagesShopPageEvaluateState extends State<ShopPagesShopPageEvaluate> {
                   children: <Widget>[
                     ShopPagesShopPageEvaluateLeftNavi(widget.commodityTypeList, widget.myStorePageItem.id, widget.bloc, widget.isAdmin, widget.myStorePageItem.type),
                     Expanded(
-                      child: BlocProvider(bloc: ShareShopPageBloc(), child: BlocProvider(bloc: ShareShopPageCommodityAdminBloc(), child: ShopPagesShopPageEvaluateRightList(widget.bloc, widget.isAdmin, widget.commodityTypeList.length, widget.myStorePageItem.type)))
+                      child: BlocProvider(bloc: ShareShopPageBloc(), child: BlocProvider(bloc: ShareShopPageCommodityAdminBloc(), child: ShopPagesShopPageEvaluateRightList(widget.bloc, widget.isAdmin, widget.commodityTypeList.length, widget.myStorePageItem.type, widget.storeItem.id)))
                     )
                   ],
                 );

@@ -67,11 +67,11 @@ class ShopPagesBloc extends BlocBase {
   }
 
   // 修改左侧分类的当前下标
-  setLeftIndex(int index, bool isAdmin) {
+  setLeftIndex(int index, bool isAdmin, int storeId) {
     if (leftIndex != index) {
       leftIndex = index;
       commodityTypeId = commodityTypeList[index].id;
-      getCommodityPageByCommodityTypeId(isAdmin);
+      getCommodityPageByCommodityTypeId(isAdmin, storeId);
       _leftIndexSink.add(index);
     }
   }
@@ -91,7 +91,7 @@ class ShopPagesBloc extends BlocBase {
         _isFollowSink.add(_isFollow);
         if (shopTypeAndEssentialMessageVo.data.commodityTypeList.length > 0) {
           commodityTypeId = shopTypeAndEssentialMessageVo.data.commodityTypeList[leftIndex].id;
-          await getCommodityPageByCommodityTypeId(isAdmin);
+          await getCommodityPageByCommodityTypeId(isAdmin, id);
         } else {
           setIsTheEnd(1);
           _commodityPageByCommodityTypeVoSink.add(null);
@@ -109,10 +109,11 @@ class ShopPagesBloc extends BlocBase {
   }
 
   // 获取门店商品列表
-  getCommodityPageByCommodityTypeId(bool isAdmin) async {
+  getCommodityPageByCommodityTypeId(bool isAdmin, int storeId) async {
     _isTheEndSink.add(false);
     pageNumber = 0;
     var formData = {
+      'storeId': storeId,
       'commodityTypeId': commodityTypeId,
       'pageNumber': pageNumber,
       'pageSize': pageSize,
@@ -125,10 +126,11 @@ class ShopPagesBloc extends BlocBase {
     });
   }
 
-  loadMoreCommodityPageByCommodityTypeId(bool isAdmin) async {
+  loadMoreCommodityPageByCommodityTypeId(bool isAdmin, int storeId) async {
     if ((pageNumber + 1) < commodityPageByCommodityTypeVo.data.totalPage) {
       pageNumber++;
       var formData = {
+        'storeId': storeId,
         'commodityTypeId': commodityTypeId,
         'pageNumber': pageNumber,
         'pageSize': pageSize,
