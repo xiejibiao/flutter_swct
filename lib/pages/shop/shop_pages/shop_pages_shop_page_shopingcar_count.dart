@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_swcy/bloc/shop/shop_pages_bloc.dart';
 import 'package:flutter_swcy/vo/shop/commodity_info_vo.dart';
@@ -23,7 +24,7 @@ class ShopPagesShopPageShopingcarCount extends StatelessWidget {
       child: Row(
         children: <Widget>[
           _reduceBtn(shopPagesBloc),
-          _countArea(),
+          _countArea(shopPagesBloc),
           _addBtn(shopPagesBloc)
         ],
       ),
@@ -74,13 +75,42 @@ class ShopPagesShopPageShopingcarCount extends StatelessWidget {
     );
   }
 
-  Widget _countArea() {
+  Widget _countArea(ShopPagesBloc bloc) {
     return Container(
       width: ScreenUtil().setWidth(70),
       height: ScreenUtil().setHeight(45),
       alignment: Alignment.center,
       color: Colors.white,
-      child: Text('${commodityInfoVo.count}'),
+      child: TextField(
+        controller: TextEditingController.fromValue(
+          TextEditingValue(
+            text: '${commodityInfoVo.count}',
+            selection: TextSelection.fromPosition(
+              TextPosition(
+                affinity: TextAffinity.downstream,
+                offset: '${commodityInfoVo.count}'.length
+              )
+            )
+          ),
+        ),
+        keyboardType: TextInputType.number,
+        obscureText: false,
+        decoration: InputDecoration(
+          border: InputBorder.none,
+        ),
+        onChanged: (val) {
+          if (val != '') {
+            RegExp exp = RegExp('^\\d{1,4}\$');
+            if (exp.hasMatch(val)) {
+              bloc.editCount(id: commodityInfoVo.id, count: int.parse(val));
+            } else {
+              bloc.editCount(id: commodityInfoVo.id, count: int.parse(val.substring(0, 4)));
+            }
+          } else {
+            bloc.editCount(id: commodityInfoVo.id, count: 1);
+          }
+        },
+      ),
     );
   }
 }

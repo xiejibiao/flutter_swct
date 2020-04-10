@@ -115,7 +115,7 @@ class SupplierPageShoppingCar extends StatelessWidget {
                                           color: Colors.grey[300]
                                         )
                                       ),
-                                      width: ScreenUtil().setWidth(160),
+                                      width: ScreenUtil().setWidth(180),
                                       height: ScreenUtil().setWidth(50),
                                       child: Row(
                                         children: <Widget>[
@@ -147,15 +147,51 @@ class SupplierPageShoppingCar extends StatelessWidget {
                                             ),
                                           ),
                                           Container(
+                                            width: ScreenUtil().setWidth(65),
+                                            height: ScreenUtil().setHeight(45),
                                             alignment: Alignment.center,
-                                            width: ScreenUtil().setWidth(50),
-                                            child: Text(
-                                              '${list[index].count}',
-                                              style: TextStyle(
-                                                fontSize: ScreenUtil().setSp(28)
-                                              )
+                                            color: Colors.white,
+                                            child: TextField(
+                                              controller: TextEditingController.fromValue(
+                                                TextEditingValue(
+                                                  text: '${list[index].count}',
+                                                  selection: TextSelection.fromPosition(
+                                                    TextPosition(
+                                                      affinity: TextAffinity.downstream,
+                                                      offset: '${list[index].count}'.length
+                                                    )
+                                                  )
+                                                ),
+                                              ),
+                                              keyboardType: TextInputType.number,
+                                              obscureText: false,
+                                              decoration: InputDecoration(
+                                                border: InputBorder.none,
+                                              ),
+                                              onChanged: (val) {
+                                                if (val != '') {
+                                                  RegExp exp = RegExp('^\\d{1,4}\$');
+                                                  if (exp.hasMatch(val)) {
+                                                    _bloc.editCount(id: list[index].id, count: int.parse(val));
+                                                  } else {
+                                                    _bloc.editCount(id: list[index].id, count: int.parse(val.substring(0, 4)));
+                                                  }
+                                                } else {
+                                                  _bloc.editCount(id: list[index].id, count: 1);
+                                                }
+                                              },
                                             ),
                                           ),
+                                          // Container(
+                                          //   alignment: Alignment.center,
+                                          //   width: ScreenUtil().setWidth(50),
+                                          //   child: Text(
+                                          //     '${list[index].count}',
+                                          //     style: TextStyle(
+                                          //       fontSize: ScreenUtil().setSp(28)
+                                          //     )
+                                          //   ),
+                                          // ),
                                           InkWell(
                                             onTap: () {
                                               _bloc.increaseOrReduceOperation(id: list[index].id, isIncrease: true);

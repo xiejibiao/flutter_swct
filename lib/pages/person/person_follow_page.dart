@@ -16,7 +16,7 @@ class PersonFollowPage extends StatelessWidget {
     _bloc.getMyFollowPage(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text('我的关注'),
+        title: Text('我的收藏'),
       ),
       body: StreamBuilder(
         stream: _bloc.shopDataStream,

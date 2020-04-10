@@ -15,7 +15,7 @@ import 'package:oktoast/oktoast.dart';
 import 'package:rxdart/rxdart.dart';
 
 class ShareShopPageBloc extends BlocBase {
-  static const String QI_NIU_URI = 'http://qncdn.gdsdec.com/';
+  // static const String QI_NIU_URI = 'http://qncdn.gdsdec.com/';
   bool isEnd = false;
   int _pageNumber = 0, _pageSize = 10;
 
@@ -34,6 +34,11 @@ class ShareShopPageBloc extends BlocBase {
   BehaviorSubject<Location> _locationController = BehaviorSubject<Location>();
   Sink<Location> get _locationSink => _locationController.sink;
   Stream<Location> get locationStream => _locationController.stream;
+
+  /// 提交Loading
+  BehaviorSubject<bool> _loadingController = BehaviorSubject<bool>();
+  Sink<bool> get _loadingSink => _loadingController.sink;
+  Stream<bool> get loadingStream => _loadingController.stream;
 
   // 我的共享店列表
   getMyStorePage(BuildContext context, {int pageSize}) async {
@@ -287,6 +292,7 @@ class ShareShopPageBloc extends BlocBase {
     @required int starCode,
     @required int id,
   }) async {
+    _loadingSink.add(true);
     await getToken().then((token) async {
       var formData = {
         'id': id,
@@ -307,6 +313,7 @@ class ShareShopPageBloc extends BlocBase {
         'brief': brief,
       };
       await requestPost('addStoreForUnlicensed', context: context, token: token, formData: formData).then((val) {
+        _loadingSink.add(false);
         AddStoreForunlicensedVo addStoreForunlicensedVo = AddStoreForunlicensedVo.fromJson(val);
         if (addStoreForunlicensedVo.code == '200') {
           showToast('上传成功');
@@ -551,5 +558,6 @@ class ShareShopPageBloc extends BlocBase {
     _myStorePageVoController.close();
     _shorePhotoController.close();
     _locationController.close();
+    _loadingController.close();
   }
 }

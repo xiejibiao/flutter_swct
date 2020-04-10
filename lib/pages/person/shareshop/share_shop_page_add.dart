@@ -371,83 +371,91 @@ class _ShareShopPageAddState extends State<ShareShopPageAdd> {
 
   // 提交，添加认证按钮
   Widget _buildButtom(ShareShopPageBloc bloc) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        FlatButton(
-          splashColor: Colors.white,
-          highlightColor: Colors.white,
-          child: Container(
-            alignment: Alignment.center,
-            width: ScreenUtil().setWidth(300),
-            height: ScreenUtil().setHeight(80),
-            decoration: BoxDecoration(
-              color: Colors.blue,
-              borderRadius: BorderRadius.circular(30)
-            ),
-            child: Text(
-              '提交',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: ScreenUtil().setSp(32)
+    return StreamBuilder(
+      initialData: false,
+      stream: bloc.loadingStream,
+      builder: (context, sanpshop) {
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            FlatButton(
+              splashColor: Colors.white,
+              highlightColor: Colors.white,
+              child: Container(
+                alignment: Alignment.center,
+                width: ScreenUtil().setWidth(650),
+                height: ScreenUtil().setHeight(80),
+                decoration: BoxDecoration(
+                  color: sanpshop.data ? Colors.blue[200] : Colors.blue,
+                  borderRadius: BorderRadius.circular(30)
+                ),
+                child: Text(
+                  sanpshop.data ? '提交中...' : '提交',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: ScreenUtil().setSp(32)
+                  ),
+                ),
               ),
+              onPressed: sanpshop.data ? 
+                          null : 
+                          () {
+                            // 行业
+                            if (TextUtil.isEmpty(_industryTempConroller.text)) {
+                              showToast('请选择行业');
+                            } else if (TextUtil.isEmpty(_starCodeTempConroller.text)) {
+                              showToast('请选择共享星级');
+                            } else {
+                              StoreIndustryListFromCacheVo storeIndustryListFromCacheVo = StoreIndustryListFromCacheVo.fromJson(json.decode(_industryTempConroller.text));
+                              _industryId = storeIndustryListFromCacheVo.id;
+                              _industryName = storeIndustryListFromCacheVo.name;
+                              _starCode = int.parse(_starCodeTempConroller.text);
+                              _formKey.currentState.save();
+                              if (widget.myStorePageItem == null) {
+                                bloc.submitEssentialMsg(
+                                          context: context,
+                                          photo: _photo, 
+                                          address: _address, 
+                                          provinceName: _provinceName, 
+                                          cityName: _cityName, 
+                                          areaName: _areaName, 
+                                          industryName: _industryName, 
+                                          legalPerson: _legalPerson,
+                                          name: _name,
+                                          brief: _brief,
+                                          area: _area, 
+                                          industryId: _industryId,
+                                          lat: _lat,
+                                          lng: _lng,
+                                          starCode: _starCode,
+                                          phone: _phone,
+                                          id: null);
+                              } else {
+                                bloc.submitEssentialMsg(
+                                          context: context,
+                                          photo: _photo, 
+                                          address: _address, 
+                                          provinceName: _provinceName, 
+                                          cityName: _cityName, 
+                                          areaName: _areaName, 
+                                          industryName: _industryName, 
+                                          legalPerson: _legalPerson,
+                                          name: _name, 
+                                          brief: _brief,
+                                          area: _area, 
+                                          industryId: _industryId,
+                                          lat: _lat,
+                                          lng: _lng,
+                                          starCode: _starCode,
+                                          phone: _phone,
+                                          id: widget.myStorePageItem.id);
+                              }
+                            }
+                          },
             ),
-          ),
-          onPressed: () {
-            // 行业
-            if (TextUtil.isEmpty(_industryTempConroller.text)) {
-              showToast('请选择行业');
-            } else if (TextUtil.isEmpty(_starCodeTempConroller.text)) {
-              showToast('请选择共享星级');
-            } else {
-              StoreIndustryListFromCacheVo storeIndustryListFromCacheVo = StoreIndustryListFromCacheVo.fromJson(json.decode(_industryTempConroller.text));
-              _industryId = storeIndustryListFromCacheVo.id;
-              _industryName = storeIndustryListFromCacheVo.name;
-              _starCode = int.parse(_starCodeTempConroller.text);
-              _formKey.currentState.save();
-              if (widget.myStorePageItem == null) {
-                bloc.submitEssentialMsg(
-                          context: context,
-                          photo: _photo, 
-                          address: _address, 
-                          provinceName: _provinceName, 
-                          cityName: _cityName, 
-                          areaName: _areaName, 
-                          industryName: _industryName, 
-                          legalPerson: _legalPerson,
-                          name: _name,
-                          brief: _brief,
-                          area: _area, 
-                          industryId: _industryId,
-                          lat: _lat,
-                          lng: _lng,
-                          starCode: _starCode,
-                          phone: _phone,
-                          id: null);
-              } else {
-                bloc.submitEssentialMsg(
-                          context: context,
-                          photo: _photo, 
-                          address: _address, 
-                          provinceName: _provinceName, 
-                          cityName: _cityName, 
-                          areaName: _areaName, 
-                          industryName: _industryName, 
-                          legalPerson: _legalPerson,
-                          name: _name, 
-                          brief: _brief,
-                          area: _area, 
-                          industryId: _industryId,
-                          lat: _lat,
-                          lng: _lng,
-                          starCode: _starCode,
-                          phone: _phone,
-                          id: widget.myStorePageItem.id);
-              }
-            }
-          },
-        ),
-      ],
+          ],
+        );
+      }
     );
   }
 }

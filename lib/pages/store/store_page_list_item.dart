@@ -128,7 +128,7 @@ class SliverListItem extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Text(
-                                  list[index].storeName,
+                                  list[index].storeName, 
                                   style: TextStyle(
                                     fontSize: ScreenUtil().setSp(34),
                                   ),

@@ -170,6 +170,18 @@ class SupplierPageShoppingCarBloc extends BlocBase {
     _notifyChanges(carts);
   }
 
+  /// 输入修改数量
+  editCount({@required int id, @required int count}) {
+    List<dynamic> carts = json.decode(_shoppingCarStringList);
+    // 已经存在的情况下才增加减少，修改数量值
+    carts.forEach((cart) {
+      if (cart['id'] == id) {
+        cart['count'] = count;
+      }
+    });
+    _notifyChanges(carts);
+  }
+
   /// 获取已勾选的商品
   getCheckTrueSupplierCommoditys() {
     _tempCommodityInfoVos.clear();

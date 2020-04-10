@@ -392,6 +392,18 @@ class ShopPagesBloc extends BlocBase {
     _notifyChanges(carts);
   }
 
+  /// 输入修改数量
+  editCount({@required int id, @required int count}) {
+    List<dynamic> carts = json.decode(_shoppingCarStringList);
+    // 已经存在的情况下才增加减少，修改数量值
+    carts.forEach((cart) {
+      if (cart['id'] == id) {
+        cart['count'] = count;
+      }
+    });
+    _notifyChanges(carts);
+  }
+
   /// 移除购物车内的某个商品
   removeCarts({@required int id}) {
     List<dynamic> carts = _shoppingCarStringList == '[]' ? [] : json.decode(_shoppingCarStringList);

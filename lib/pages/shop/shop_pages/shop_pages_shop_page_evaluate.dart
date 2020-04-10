@@ -45,7 +45,7 @@ class _ShopPagesShopPageEvaluateState extends State<ShopPagesShopPageEvaluate> {
                   children: <Widget>[
                     ShopPagesShopPageEvaluateLeftNavi(widget.commodityTypeList, widget.myStorePageItem.id, widget.bloc, widget.isAdmin, widget.myStorePageItem.type),
                     Expanded(
-                      child: BlocProvider(bloc: ShareShopPageBloc(), child: BlocProvider(bloc: ShareShopPageCommodityAdminBloc(), child: ShopPagesShopPageEvaluateRightList(widget.bloc, widget.isAdmin, widget.commodityTypeList.length, widget.myStorePageItem.type, widget.storeItem.id)))
+                      child: BlocProvider(bloc: ShareShopPageBloc(), child: BlocProvider(bloc: ShareShopPageCommodityAdminBloc(), child: ShopPagesShopPageEvaluateRightList(widget.bloc, widget.isAdmin, widget.commodityTypeList.length, widget.myStorePageItem.type, widget.myStorePageItem.id)))
                     )
                   ],
                 );
