@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_swcy/bloc/bloc_provider.dart';
 import 'package:flutter_swcy/bloc/person_page_bloc.dart';
 import 'package:flutter_swcy/common/loading.dart';
+import 'package:flutter_swcy/pages/person/person_assets_page_flowing.dart';
 import 'package:flutter_swcy/vo/person/assets_vo.dart';
 
 class PersonAssetsPage extends StatelessWidget {
@@ -14,6 +15,14 @@ class PersonAssetsPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('我的资产'),
+        actions: <Widget>[
+          IconButton(
+            icon: ImageIcon(AssetImage('assets/image_icon/icon_flowing.png')),
+            onPressed: () {
+              Navigator.push(context, CupertinoPageRoute(builder: (context) => PersonAssetsPageFlowing()));
+            },
+          )
+        ],
       ),
       body: StreamBuilder(
         stream: _bloc.assetsVoStream,

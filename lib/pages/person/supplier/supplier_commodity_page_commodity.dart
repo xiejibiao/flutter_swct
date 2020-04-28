@@ -126,7 +126,7 @@ class SupplierCommodityPageCommodity extends StatelessWidget {
                               },
                               child: Card(
                                 child: Container(
-                                  height: ScreenUtil().setWidth(190),
+                                  height: ScreenUtil().setWidth(200),
                                   width: ScreenUtil().setWidth(750),
                                   child: Row(
                                     children: <Widget>[
@@ -153,13 +153,13 @@ class SupplierCommodityPageCommodity extends StatelessWidget {
                                                 fontSize: ScreenUtil().setSp(32)
                                               ),
                                             ),
-                                            Text(
-                                              '型号：${_listSupplierCommodityPageVoData[sanpshop.data].lgmnPage.list[index].model}',
-                                              style: TextStyle(
-                                                color: Colors.grey,
-                                                fontSize: ScreenUtil().setSp(28)
-                                              ),
-                                            ),
+                                            // Text(
+                                            //   '型号：${_listSupplierCommodityPageVoData[sanpshop.data].lgmnPage.list[index].model}',
+                                            //   style: TextStyle(
+                                            //     color: Colors.grey,
+                                            //     fontSize: ScreenUtil().setSp(28)
+                                            //   ),
+                                            // ),
                                             Text(
                                               '规格：${_listSupplierCommodityPageVoData[sanpshop.data].lgmnPage.list[index].specs}',
                                               style: TextStyle(
@@ -167,6 +167,15 @@ class SupplierCommodityPageCommodity extends StatelessWidget {
                                                 fontSize: ScreenUtil().setSp(28)
                                               ),  
                                             ),
+                                            _listSupplierCommodityPageVoData[sanpshop.data].lgmnPage.list[index].notes == null || _listSupplierCommodityPageVoData[sanpshop.data].lgmnPage.list[index].notes == '' ? 
+                                              Container() :
+                                              Text(
+                                                '注：${_listSupplierCommodityPageVoData[sanpshop.data].lgmnPage.list[index].notes}',
+                                                style: TextStyle(
+                                                  color: Colors.grey,
+                                                  fontSize: ScreenUtil().setSp(28)
+                                                ),  
+                                              ),
                                             Container(
                                               width: ScreenUtil().setWidth(565),
                                               child: Row(

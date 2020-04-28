@@ -13,6 +13,7 @@ import 'package:flutter_swcy/vo/person/person_team_achievement_vo.dart';
 import 'package:flutter_swcy/vo/person/person_team_list_vo.dart';
 import 'package:flutter_swcy/vo/person/person_vo.dart';
 import 'package:flutter_swcy/vo/person/sms_vo.dart';
+import 'package:flutter_swcy/vo/person/store_flowing_vo.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -297,6 +298,71 @@ class PersonPageBloc extends BlocBase {
     }
   }
 
+  /// 获取共享店收益流水
+  // getStoreFlowing() {
+  //   getToken().then((token) {
+  //     var formData = {
+  //       'pageNumber': 0,
+  //       'pageSize': 10
+  //     };
+  //     requestPost('getStoreFlowing', formData: )
+  //   });
+  // }
+
+  StoreFlowingVo storeFlowingVo;
+  BehaviorSubject<StoreFlowingVo> _storeFlowingVoController = BehaviorSubject<StoreFlowingVo>();
+  Sink<StoreFlowingVo> get _storeFlowingVoSink => _storeFlowingVoController.sink;
+  Stream<StoreFlowingVo> get storeFlowingVoStream => _storeFlowingVoController.stream;
+  BehaviorSubject<bool> _isEndController = BehaviorSubject<bool>();
+  Sink<bool> get _isEndSink => _isEndController.sink;
+  Stream<bool> get isEndStream => _isEndController.stream;
+  int pageNumber = 0;
+  int pageSize = 10;
+  bool isEnd = false;
+  getStoreFlowing(BuildContext context) async {
+    getToken().then((token) async {
+      this.pageNumber = 0;
+      var formData = {
+        'pageNumber': pageNumber,
+        'pageSize': pageSize,
+      };
+      requestPost('getStoreFlowing', token: token, formData: formData, context: context).then((val) {
+        StoreFlowingVo tempVo = StoreFlowingVo.fromJson(val);
+        this.storeFlowingVo = tempVo;
+        setIsEnd(tempVo.data.totalPage);
+        _storeFlowingVoSink.add(storeFlowingVo);
+      });
+    });
+  }
+
+  loadStoreFlowing(BuildContext context) async {
+    if (!isEnd) {
+      return await getToken().then((token) async {
+        this.pageNumber++;
+        var formData = {
+          'pageNumber': pageNumber,
+          'pageSize': pageSize
+        };
+        await requestPost('getStoreFlowing', token: token, formData: formData, context: context).then((val){
+          StoreFlowingVo tempVo = StoreFlowingVo.fromJson(val);
+          setIsEnd(tempVo.data.totalPage);
+          this.storeFlowingVo.data.list.addAll(tempVo.data.list);
+          _storeFlowingVoSink.add(storeFlowingVo);
+        });
+      });
+    }
+  }
+
+  setIsEnd(int totalPage) {
+    if (totalPage == pageNumber + 1) {
+      _isEndSink.add(true);
+      isEnd = true;
+    } else {
+      _isEndSink.add(false);
+      isEnd = false;
+    }
+  }
+
   getVersion() {
     PreferenceUtils.instance.getString(key: _versionKEY).then((versionVal) {
       _versionSink.add(versionVal);
@@ -314,5 +380,7 @@ class PersonPageBloc extends BlocBase {
     _complaintsController.close();
     _isLogoutLoadingController.close();
     _versionController.close();
+    _storeFlowingVoController.close();
+    _isEndController.close();
   }
 }

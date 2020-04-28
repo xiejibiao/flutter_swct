@@ -373,7 +373,7 @@ class ShareShopPageBloc extends BlocBase {
   }
 
   /// 添加商品
-  addCommodity(BuildContext context, String cover, String name, double price, String specs, int stock, int typeId, ShopPagesBloc bloc) {
+  addCommodity(BuildContext context, String cover, String name, double price, String specs, int stock, String notes, int typeId, ShopPagesBloc bloc) {
     if (_checkAddCommodityParameter(cover, name, price, specs)) {
       var formData = {
         'cover': cover,
@@ -381,7 +381,8 @@ class ShareShopPageBloc extends BlocBase {
         'price': price,
         'specs': specs,
         'typeId': typeId,
-        'stock': stock
+        'stock': stock,
+        'notes': notes
       };
       requestPost('addCommodity', formData: formData).then((val) {
         CommodityVo commodityVo = CommodityVo.fromJson(val);
@@ -414,7 +415,7 @@ class ShareShopPageBloc extends BlocBase {
   }
 
   /// 修改商品
-  editCommodity(BuildContext context, String cover, int id, String name, double price, String specs, int stock, int typeId, ShopPagesBloc bloc) {
+  editCommodity(BuildContext context, String cover, int id, String name, double price, String specs, int stock, String notes, int typeId, ShopPagesBloc bloc) {
     if (_checkAddCommodityParameter(cover, name, price, specs)) {
       var formData = {
         'cover': cover,
@@ -423,7 +424,8 @@ class ShareShopPageBloc extends BlocBase {
         'price': price,
         'specs': specs,
         'typeId': typeId,
-        'stock': stock
+        'stock': stock,
+        'notes': notes
       };
       requestPost('editCommodity', formData: formData).then((val) {
         CommodityVo commodityVo = CommodityVo.fromJson(val);
@@ -452,7 +454,8 @@ class ShareShopPageBloc extends BlocBase {
       price: commodityVo.data.price,
       status: commodityVo.data.status,
       createTime: commodityVo.data.createTime,
-      delFlag: commodityVo.data.delFlag
+      delFlag: commodityVo.data.delFlag,
+      notes: commodityVo.data.notes
     );
     return commodityList;
   }

@@ -82,7 +82,8 @@ class ShopPagesBloc extends BlocBase {
     _storeId = id;
     getToken().then((token) async {
       var formData = {
-        'id': id
+        'id': id,
+        'isAdmin': isAdmin
       };
       await requestPost('getShopTypeAndEssentialMessage', formData: formData, token: token, context: context).then((data) async {
         ShopTypeAndEssentialMessageVo shopTypeAndEssentialMessageVo = ShopTypeAndEssentialMessageVo.fromJson(data);
@@ -330,9 +331,18 @@ class ShopPagesBloc extends BlocBase {
         _allSelectedPrice += e.count * e.price;
       }
     });
-    _allPriceSink.add(_allSelectedPrice);
+    _allPriceSink.add(formatNum(_allSelectedPrice, 2));
     _allCommodityCountSink.add(_allSelectedCount);
     _isAllCheckSink.add(_isAllChecked);
+  }
+
+  double formatNum(double number,int postion) {
+    if((number.toString().length-number.toString().lastIndexOf(".") - 1) < postion){
+      //小数点后有几位小数
+      return double.parse(number.toStringAsFixed(postion).substring(0,number.toString().lastIndexOf(".") + postion + 1).toString());
+    }else{
+      return double.parse(number.toString().substring(0, number.toString().lastIndexOf(".") + postion + 1).toString());
+    }
   }
 
   /// 保存物品到购物车

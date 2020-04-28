@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 // import 'package:flutter_swcy/bloc/bloc_provider.dart';
 // import 'package:flutter_swcy/bloc/person/person_info_receiving_address_bloc.dart';
@@ -163,22 +164,24 @@ class SupplierPageShoppingCar extends StatelessWidget {
                                                   )
                                                 ),
                                               ),
-                                              keyboardType: TextInputType.number,
+                                              keyboardType: TextInputType.numberWithOptions(decimal: true),
+                                              inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
                                               obscureText: false,
                                               decoration: InputDecoration(
                                                 border: InputBorder.none,
+                                                contentPadding: EdgeInsets.only(top: 0)
                                               ),
                                               onChanged: (val) {
-                                                if (val != '') {
+                                                // if (val != '') {
                                                   RegExp exp = RegExp('^\\d{1,4}\$');
                                                   if (exp.hasMatch(val)) {
                                                     _bloc.editCount(id: list[index].id, count: int.parse(val));
                                                   } else {
                                                     _bloc.editCount(id: list[index].id, count: int.parse(val.substring(0, 4)));
                                                   }
-                                                } else {
-                                                  _bloc.editCount(id: list[index].id, count: 1);
-                                                }
+                                                // } else {
+                                                //   _bloc.editCount(id: list[index].id, count: 1);
+                                                // }
                                               },
                                             ),
                                           ),

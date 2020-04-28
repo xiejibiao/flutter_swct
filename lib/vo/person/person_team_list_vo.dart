@@ -63,8 +63,9 @@ class PersonTeamList {
   String nikeName;
   String phone;
   double personPower;
+  double consumptionAmount;
 
-  PersonTeamList({this.uid, this.avatar, this.nikeName, this.phone, this.personPower});
+  PersonTeamList({this.uid, this.avatar, this.nikeName, this.phone, this.personPower, this.consumptionAmount});
 
   PersonTeamList.fromJson(Map<String, dynamic> json) {
     uid = json['uid'];
@@ -72,6 +73,7 @@ class PersonTeamList {
     nikeName = json['nikeName'];
     phone = json['phone'];
     personPower = json['personPower'];
+    consumptionAmount = json['consumptionAmount'];
   }
 
   Map<String, dynamic> toJson() {
@@ -81,6 +83,7 @@ class PersonTeamList {
     data['nikeName'] = this.nikeName;
     data['phone'] = this.phone;
     data['personPower'] = this.personPower;
+    data['consumptionAmount'] = this.consumptionAmount;
     return data;
   }
 }

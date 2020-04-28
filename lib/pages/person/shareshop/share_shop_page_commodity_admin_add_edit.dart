@@ -25,7 +25,7 @@ class ShareShopPageCommodityAdminAddEdit extends StatefulWidget {
 
 class _ShareShopPageCommodityAdminAddEditState extends State<ShareShopPageCommodityAdminAddEdit> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  String _cover, _name, _specs;
+  String _cover, _name, _specs, _notes;
   int _stock;
   double _price;
   @override
@@ -100,6 +100,17 @@ class _ShareShopPageCommodityAdminAddEditState extends State<ShareShopPageCommod
                         WhitelistingTextInputFormatter(RegExp("^[0-9,.]*\$")),
                       ],
                     ),
+                    TextFormField(
+                      initialValue: widget.item == null ? '' : '${widget.item.notes}',
+                      decoration: InputDecoration(
+                        labelText: '注',
+                      ),
+                      onSaved: (value) {
+                        if (!TextUtil.isEmpty(value)) {
+                          _notes = value;
+                        }
+                      },
+                    ),
                     SizedBox(height: ScreenUtil().setHeight(100)),
                     InkWell(
                       child: Container(
@@ -122,10 +133,10 @@ class _ShareShopPageCommodityAdminAddEditState extends State<ShareShopPageCommod
                         _formKey.currentState.save();
                         switch (widget.isAdd) {
                           case true:
-                            _shareShopPageBloc.addCommodity(context, _cover, _name, _price, _specs, _stock, widget.commodityTypeId, widget.bloc);
+                            _shareShopPageBloc.addCommodity(context, _cover, _name, _price, _specs, _stock, _notes, widget.commodityTypeId, widget.bloc);
                             break;
                           default:
-                            _shareShopPageBloc.editCommodity(context, _cover, widget.item.id, _name, _price, _specs, _stock, widget.commodityTypeId, widget.bloc);
+                            _shareShopPageBloc.editCommodity(context, _cover, widget.item.id, _name, _price, _specs, _stock, _notes, widget.commodityTypeId, widget.bloc);
                         }
                       },
                     )

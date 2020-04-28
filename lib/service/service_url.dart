@@ -50,6 +50,7 @@ const servicePath = {
   'deleteReceivingAddressById': serviceBaseUrl + '/person/deleteReceivingAddressById',                // 删除收货地址
   'updateReceivingAddress': serviceBaseUrl + '/person/updateReceivingAddress',                        // 修改收货地址
   'authenticationPhone': serviceBaseUrl + '/person/authenticationPhone',                              // 认证手机号
+  'getStoreFlowing': serviceBaseUrl + '/person/getStoreFlowing',                                      // 获取共享店收益流水
   'getOrderPage': serviceBaseUrl + '/order/getOrderPage',                                             // 获取订单列表
   'getOrderDetailById': serviceBaseUrl + '/order/getOrderDetailById',                                 // 获取订单详情
   'confirmReceipt': serviceBaseUrl + '/order/confirmReceipt',                                         // 确认收货

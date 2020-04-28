@@ -69,6 +69,7 @@ class CommodityList {
   int status;
   int createTime;
   int delFlag;
+  String notes;
 
   CommodityList(
       {this.id,
@@ -81,7 +82,8 @@ class CommodityList {
       this.price,
       this.status,
       this.createTime,
-      this.delFlag});
+      this.delFlag,
+      this.notes});
 
   CommodityList.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -95,6 +97,7 @@ class CommodityList {
     status = json['status'];
     createTime = json['createTime'];
     delFlag = json['delFlag'];
+    notes = json['notes'];
   }
 
   Map<String, dynamic> toJson() {
@@ -110,6 +113,7 @@ class CommodityList {
     data['status'] = this.status;
     data['createTime'] = this.createTime;
     data['delFlag'] = this.delFlag;
+    data['notes'] = this.notes;
     return data;
   }
 }

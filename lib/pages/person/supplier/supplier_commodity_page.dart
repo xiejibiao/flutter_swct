@@ -12,6 +12,7 @@ import 'package:flutter_swcy/pages/person/supplier/supplier_page_shoppingCar.dar
 import 'package:flutter_swcy/pages/shop/shop_page_search_default_page.dart';
 import 'package:flutter_swcy/vo/supplier/get_supplier_page_vo.dart';
 import 'package:flutter_swcy/vo/supplier/supplier_commodity_page_vo.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SupplierCommodityPage extends StatelessWidget {
   final SupplierInfoVo supplierInfoVo;
@@ -102,6 +103,16 @@ class SupplierCommodityPage extends StatelessWidget {
               icon: Container()
             ),
             BottomNavigationBarItem(
+              icon: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Icon(Icons.phone, color: Colors.blue),
+                  Text('联系供应商', style: TextStyle(color: Colors.blue, fontSize: ScreenUtil().setSp(28)))
+                ],
+              ),
+              title: Container()
+            ),
+            BottomNavigationBarItem(
               title: Stack(
                 children: <Widget>[
                   Container(
@@ -127,7 +138,7 @@ class SupplierCommodityPage extends StatelessWidget {
                     builder: (context, sanpshop) {
                       return Positioned(
                         top: 0,
-                        right: 70,
+                        right: 50,
                         child: Text(
                           '${sanpshop.data}',
                           style: TextStyle(
@@ -146,6 +157,8 @@ class SupplierCommodityPage extends StatelessWidget {
           onTap: (index) {
             if (index == 0) {
               _supplierAMapNavi();
+            } else if (index == 1) {
+              _dial(supplierInfoVo.phone);
             } else {
               Navigator.push(context, CupertinoPageRoute(builder: (context) => SupplierPageShoppingCar(_supplierPageShoppingCarBloc, supplierInfoVo.name, int.parse(storeId), supplierInfoVo.id)));
             }
@@ -159,5 +172,15 @@ class SupplierCommodityPage extends StatelessWidget {
     double lat = double.parse(supplierInfoVo.lat);
     double lng = double.parse(supplierInfoVo.lng);
     AMapNavi().startNavi(lat: lat, lon: lng, naviType: AMapNavi.drive);
+  }
+
+  /// 拨打电话
+  _dial(String phone) async {
+    var url = 'tel:$phone';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw '供应商填写电话错误 $url';
+    }
   }
 }

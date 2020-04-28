@@ -167,26 +167,16 @@ class ShopPagesShopPageEvaluateRightList extends StatelessWidget {
             color: Colors.grey
           ),
         ),
-        type == 1 ? 
-          Container() : 
-          commodityList.stock == null ? 
-            Text('库存: 0',
-              style: TextStyle(
-                color: Colors.grey
-              )
-            ) :
-            commodityList.stock <= 0 ? 
-              Text('库存: 缺货',
-                style: TextStyle(
-                  color: Colors.grey
-                )
-              ) :
-              Text('库存: ${commodityList.stock}',
-                style: TextStyle(
-                  color: Colors.grey
-                )
-              ),
+        commodityList.notes == null || commodityList.notes == '' ? 
+          Container() :
+          Text(
+            '注: ${commodityList.notes}',
+            style: TextStyle(
+              color: Colors.grey
+            ),
+          ),
         Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             Text(
@@ -196,6 +186,25 @@ class ShopPagesShopPageEvaluateRightList extends StatelessWidget {
                 fontSize: ScreenUtil().setSp(28)
               ),
             ),
+            type == 1 ? 
+              Container() : 
+              commodityList.stock == null ? 
+                Text('库存: 0',
+                  style: TextStyle(
+                    color: Colors.grey
+                  )
+                ) :
+                commodityList.stock <= 0 ? 
+                  Text('库存: 缺货',
+                    style: TextStyle(
+                      color: Colors.grey
+                    )
+                  ) :
+                  Text('库存: ${commodityList.stock}',
+                    style: TextStyle(
+                      color: Colors.grey
+                    )
+                  ),
             _addShopingcar(commodityList, bloc, shareShopPageBloc)
           ],
         )

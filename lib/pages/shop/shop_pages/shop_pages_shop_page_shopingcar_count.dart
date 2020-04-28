@@ -93,22 +93,24 @@ class ShopPagesShopPageShopingcarCount extends StatelessWidget {
             )
           ),
         ),
-        keyboardType: TextInputType.number,
+        keyboardType: TextInputType.numberWithOptions(decimal: true),
+        inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
         obscureText: false,
         decoration: InputDecoration(
           border: InputBorder.none,
+          contentPadding: EdgeInsets.only(top: 0)
         ),
         onChanged: (val) {
-          if (val != '') {
+          // if (val != '') {
             RegExp exp = RegExp('^\\d{1,4}\$');
             if (exp.hasMatch(val)) {
               bloc.editCount(id: commodityInfoVo.id, count: int.parse(val));
             } else {
               bloc.editCount(id: commodityInfoVo.id, count: int.parse(val.substring(0, 4)));
             }
-          } else {
-            bloc.editCount(id: commodityInfoVo.id, count: 1);
-          }
+          // } else {
+          //   bloc.editCount(id: commodityInfoVo.id, count: 1);
+          // }
         },
       ),
     );

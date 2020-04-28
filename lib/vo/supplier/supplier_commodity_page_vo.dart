@@ -99,6 +99,7 @@ class SupplierCommodityInfoVo {
   String detail;
   double retailPrice;
   String specs;
+  String notes;
 
   SupplierCommodityInfoVo(
       {this.id,
@@ -109,7 +110,8 @@ class SupplierCommodityInfoVo {
       this.cover,
       this.detail,
       this.retailPrice,
-      this.specs});
+      this.specs,
+      this.notes});
 
   SupplierCommodityInfoVo.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -121,6 +123,7 @@ class SupplierCommodityInfoVo {
     detail = json['detail'];
     retailPrice = json['retailPrice'];
     specs = json['specs'];
+    notes = json['notes'];
   }
 
   Map<String, dynamic> toJson() {
@@ -134,6 +137,7 @@ class SupplierCommodityInfoVo {
     data['detail'] = this.detail;
     data['retailPrice'] = this.retailPrice;
     data['specs'] = this.specs;
+    data['notes'] = this.notes;
     return data;
   }
 }
