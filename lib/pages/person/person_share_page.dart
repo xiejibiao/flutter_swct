@@ -5,6 +5,7 @@ import 'package:flutter_swcy/bloc/person/person_info_page_bloc.dart';
 import 'package:flutter_swcy/common/loading.dart';
 // import 'package:flutter_swcy/service/service_url.dart';
 import 'package:flutter_swcy/vo/person/person_info_vo.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 // import 'package:qr_flutter/qr_flutter.dart';
 import 'package:transparent_image/transparent_image.dart';
 
@@ -28,14 +29,19 @@ class PersonSharePage extends StatelessWidget {
                 if (commendQrcodeStrSanpshop.hasData) {
                   return Column(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
+                    children: <Widget>[                      
                       Container(
                         child: Stack(
                           children: <Widget>[
-                            FadeInImage.memoryNetwork(
-                              placeholder: kTransparentImage,
-                              image: commendQrcodeStrSanpshop.data,
-                            ),
+//                            FadeInImage.memoryNetwork(
+//                              placeholder: kTransparentImage,
+//                              image: 'https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=gQEe8TwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAyaHFNTmNQQXlmQ0YxMDAwME0wN3EAAgTjPqVfAwQAAAAA',
+//                            ),
+//                            FadeInImage.memoryNetwork(
+//                              placeholder: kTransparentImage,
+//                              image: commendQrcodeStrSanpshop.data,
+//                            ),
+                            QrImage(data: commendQrcodeStrSanpshop.data),
                             Center(
                               child: ClipRRect(
                                   borderRadius: BorderRadius.circular(6),
