@@ -7,7 +7,7 @@ import 'package:flutter_swcy/common/loading.dart';
 import 'package:flutter_swcy/vo/person/person_info_vo.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 // import 'package:qr_flutter/qr_flutter.dart';
-import 'package:transparent_image/transparent_image.dart';
+// import 'package:transparent_image/transparent_image.dart';
 
 class PersonSharePage extends StatelessWidget {
   @override

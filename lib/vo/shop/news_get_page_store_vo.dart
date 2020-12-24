@@ -160,6 +160,7 @@ class StoreItem {
   int id;
   String lat;
   int type;
+  int storeId;
 
   StoreItem(
       {this.likeVolume,
@@ -174,7 +175,8 @@ class StoreItem {
       this.id,
       this.lat,
       this.type,
-      this.starCode});
+      this.starCode,
+      this.storeId});
 
   StoreItem.fromJson(Map<String, dynamic> json) {
     likeVolume = json['likeVolume'];
@@ -190,6 +192,7 @@ class StoreItem {
     status = json['status'];
     type = json['type'];
     starCode = json['starCode'];
+    storeId = json['storeId'];
   }
 
   Map<String, dynamic> toJson() {
@@ -207,6 +210,7 @@ class StoreItem {
     data['lat'] = this.lat;
     data['starCode'] = this.starCode;
     data['type'] = this.type;
+    data['storeId'] = this.storeId;
     return data;
   }
 

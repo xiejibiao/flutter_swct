@@ -42,8 +42,13 @@ class ShopPagesShopPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ShopPagesBloc _bloc = BlocProvider.of<ShopPagesBloc>(context);
-    _bloc.setCommodityKey(storeItem.id);
-    _bloc.getShopTypeAndEssentialMessage(context, storeItem.id, false);
+    if (storeItem.type == 1) {
+      _bloc.setCommodityKey(storeItem.storeId);
+      _bloc.getShopTypeAndEssentialMessage(context, storeItem.storeId, false);
+    } else {
+      _bloc.setCommodityKey(storeItem.id);
+      _bloc.getShopTypeAndEssentialMessage(context, storeItem.id, false);
+    }
     return DefaultTabController(
       length: 2,
       child: StreamBuilder(
@@ -53,7 +58,7 @@ class ShopPagesShopPage extends StatelessWidget {
             ShopTypeAndEssentialMessageVo shopTypeAndEssentialMessageVo = sanpshop.data;
             return Scaffold(
               appBar: AppBar(
-                title: Text(storeItem.storeName),
+                title: Text(shopTypeAndEssentialMessageVo.data.swcyStoreEntity.storeName),
                 bottom: TabBar(
                   tabs: _tabs,
                   unselectedLabelColor: Colors.black38,

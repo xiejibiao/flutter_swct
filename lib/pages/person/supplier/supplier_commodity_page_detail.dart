@@ -7,8 +7,10 @@ class SupplierCommodityPageDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Html(
-      data: description,
+    return SingleChildScrollView(
+      child: Html(
+        data: description,
+      ),
     );
   }
 }

@@ -13,8 +13,10 @@ class SupplierCommodityPageCommodityDetail extends StatelessWidget {
       appBar: AppBar(
         title: Text('商品详情'),
       ),
-      body: Html(
-        data: detail,
+      body: SingleChildScrollView(
+        child: Html(
+          data: detail,
+        ),
       ),
     );
   }

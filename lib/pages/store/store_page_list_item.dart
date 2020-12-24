@@ -223,6 +223,10 @@ class SliverListItem extends StatelessWidget {
             ),
             onTap: list[index].status == 1 ? 
               () {
+                if (list[index].type == 1 && list[index].storeId == null) {
+                  showToast('盟店异常。请联系管理员');
+                  return;
+                }
                 Navigator.push(context, CupertinoPageRoute(builder: (context) => BlocProvider(bloc: ShopPagesBloc(), child: ShopPagesShopPage(list[index]))));
               } : 
               () {

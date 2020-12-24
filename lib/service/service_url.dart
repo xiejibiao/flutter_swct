@@ -1,4 +1,4 @@
-// const serviceBaseUrl = 'http://192.168.192.110:8086';
+// const serviceBaseUrl = 'http://10.20.1.151:8086';
 const serviceBaseUrl = 'http://api.swcy.top';
 const servicePath = {
   'login': serviceBaseUrl + '/account/login',                                                         // 登录
